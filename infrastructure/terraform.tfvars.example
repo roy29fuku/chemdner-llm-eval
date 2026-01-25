@@ -1,0 +1,15 @@
+# GCP Project ID (required)
+project_id = "chemdner-biobert-training"
+
+# Region and Zone
+region = "us-central1"
+zone   = "us-central1-a"
+
+# Machine configuration
+machine_type = "a2-standard-4"
+gpu_type     = "nvidia-tesla-a100"
+gpu_count    = 1
+disk_size    = 100
+
+# Instance name
+instance_name = "biobert-chemdner-training"

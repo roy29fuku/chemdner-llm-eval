@@ -8,7 +8,18 @@ CHEMDNER (Chemical Document Named Entity Recognition) は、PubMedアブスト�
 
 - **データセット**: 10,000 PubMed abstracts, 84,355 chemical entity mentions
 - **評価対象モデル**: GPT-4.1, GPT-5.2
-- **2013年最高スコア**: F1 = 87.39
+
+### ベンチマークスコア
+
+| 年 | 手法 | F1 | 備考 |
+|----|------|-----|------|
+| 2013 | tmChem (CRF + 辞書 + ルール) | 87.39% | BioCreative IV 1位 |
+| 2019 | [BioBERT](https://academic.oup.com/bioinformatics/article/36/4/1234/5566506) | 89.7% | Transformer初期 |
+| 2020 | [BioBERT-MRC](https://ar5iv.labs.arxiv.org/html/2009.01560) | 92.92% | NERをMRC問題に変換 |
+| 2022 | [ChemDataExtractor 2.1](https://pubs.acs.org/doi/full/10.1021/acs.jcim.1c01199) | 89.7% | 有機・無機統合モデル |
+| 2024 | [MatSciBERT-MRC](https://jcheminf.biomedcentral.com/articles/10.1186/s13321-024-00874-5) | **94.30%** | 現在のSOTA |
+
+**理論上限**: 約91%（人間のアノテーター間一致率）
 
 ## データセット
 
@@ -93,8 +104,16 @@ docker compose up --build
 ├── src/
 │   ├── data_loader.py    # データセット読み込み
 │   ├── inference.py      # LLM推論
-│   └── evaluate.py       # 評価スクリプト
+│   ├── evaluate.py       # 評価スクリプト
+│   └── biobert/          # BioBERTモジュール
+│       ├── config.py     # ハイパーパラメータ
+│       ├── data_prep.py  # データ変換
+│       ├── train.py      # 学習スクリプト
+│       └── inference.py  # 推論スクリプト
+├── infrastructure/       # Terraform設定（GCP）
+├── scripts/              # 実行スクリプト
 ├── outputs/              # 結果出力
+├── experiments/          # 実験レポート
 └── README.md
 ```
 
@@ -129,14 +148,37 @@ experiments/
 
 ## 実験結果
 
-### Exp001: Few-shot (4例) - 2026-01-25
+### サマリー（2026-01-25）
 
-| Model   | Micro-P | Micro-R | Micro-F1 |
-|---------|---------|---------|----------|
-| gpt-4.1 |  0.6885 |  0.7072 |   0.6978 |
-| gpt-5.2 |  0.7307 |  0.7060 |   0.7182 |
+#### LLMアプローチ（プロンプトエンジニアリング）
 
-詳細: [experiments/exp001.md](experiments/exp001.md)
+| # | 手法 | Precision | Recall | F1 | SOTAとの差 |
+|---|------|-----------|--------|-----|-----------|
+| Exp001 | Few-shot (4例) | 0.7307 | 0.7060 | 0.7182 | -22.5pt |
+| Exp002 | Responses API | 0.7256 | 0.7062 | 0.7158 | -22.7pt |
+| Exp003 | Chain-of-Thought | 0.7703 | 0.6401 | 0.6992 | -24.4pt |
+| Exp004 | Few-shot (8例) | 0.7064 | 0.7205 | 0.7134 | -22.9pt |
+| Exp005 | Self-verify | 0.8077 | 0.6917 | 0.7452 | -19.8pt |
+| Exp006a | MRC | 0.6091 | 0.7841 | 0.6856 | -25.7pt |
+| Exp006b | MRC + verify | 0.7559 | 0.7633 | 0.7596 | -18.3pt |
+| Exp007 | GLiNER-BioMed | 0.3628 | 0.5267 | 0.4297 | -50.0pt |
+
+**LLM最高**: GPT-5.2 + MRC + Self-verification = **F1 75.96%**
+
+#### Fine-tuningアプローチ
+
+| # | 手法 | Precision | Recall | F1 | SOTAとの差 |
+|---|------|-----------|--------|-----|-----------|
+| **Exp008** | **BioBERT fine-tuning** | **0.9085** | **0.9135** | **0.9110** | **-3.2pt** |
+
+**プロジェクト最高**: BioBERT v1.1 fine-tuning = **F1 91.10%**
+
+- ベースモデル: `dmis-lab/biobert-v1.1`
+- インフラ: GCP A100 GPU（Terraform管理）
+- 学習時間: 約25分
+- コスト: 約$2
+
+詳細: [experiments/summary.md](experiments/summary.md)
 
 ## 実行方法
 
