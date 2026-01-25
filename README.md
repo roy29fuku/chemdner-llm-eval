@@ -98,17 +98,62 @@ docker compose up --build
 └── README.md
 ```
 
+## 実験管理
+
+### ディレクトリ構造
+
+```
+outputs/
+├── exp001_fewshot4_evaluation/   # 実験ごとにディレクトリを分離
+│   ├── predictions_gpt-4_1.json
+│   └── predictions_gpt-5_2.json
+└── exp002_fewshot8_evaluation/   # 次の実験...
+
+experiments/
+├── exp001.md                     # 実験レポート
+└── exp002.md
+```
+
+### 命名規則
+
+- **出力ディレクトリ**: `outputs/exp{番号}_{説明}/`
+- **実験レポート**: `experiments/exp{番号}.md`
+
+### 実験レポートに含める内容
+
+1. 実験設定（モデル、パラメータ、Few-shot例数等）
+2. 結果（Precision, Recall, F1）
+3. 考察
+4. 再現用コマンド
+5. コスト
+
+## 実験結果
+
+### Exp001: Few-shot (4例) - 2026-01-25
+
+| Model   | Micro-P | Micro-R | Micro-F1 |
+|---------|---------|---------|----------|
+| gpt-4.1 |  0.6885 |  0.7072 |   0.6978 |
+| gpt-5.2 |  0.7307 |  0.7060 |   0.7182 |
+
+詳細: [experiments/exp001.md](experiments/exp001.md)
+
 ## 実行方法
 
 ```bash
 # 5件でテスト
 docker compose run --rm chemdner python src/inference.py --limit 5
 
-# 全件実行
-docker compose run --rm chemdner python src/inference.py
+# 全件実行（実験ごとに出力先を指定）
+docker compose run --rm chemdner python src/inference.py \
+  --parallel 50 \
+  --models gpt-4.1 gpt-5.2 \
+  --output-dir outputs/exp001_fewshot4_evaluation \
+  -y
 
 # 評価
-docker compose run --rm chemdner python src/evaluate.py
+docker compose run --rm chemdner python src/evaluate.py \
+  --input-dir outputs/exp001_fewshot4_evaluation
 ```
 
 ## 参考文献
