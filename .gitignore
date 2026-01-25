@@ -1,0 +1,17 @@
+# Environment
+.env
+
+# Data (large files)
+data/
+outputs/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# macOS
+.DS_Store
+
+# Docker
+*.log
