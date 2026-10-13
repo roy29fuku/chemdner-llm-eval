@@ -1,7 +1,7 @@
 """実際のコーパスを使うテスト。data/ に配布ファイルが無ければ飛ばす（`python -m chemdner_bench.corpus fetch` で取得）。
 
 件数の期待値は NCBI 配布版を数えたもの。公式（Krallinger et al. 2015, Table 1）より言及が
-training で 16 件・development で 3 件・evaluation で 5 件少ない。
+training で 16 件・development で 3 件・evaluation で 5 件少なく、evaluation ではさらに長さ 0 の注釈 4 件を除く。
 """
 
 import pytest
@@ -17,7 +17,7 @@ pytestmark = [
 EXPECTED = {  # split: (abstracts, mentions, 公式の mentions)
     "training": (3500, 29462, 29478),
     "development": (3500, 29523, 29526),
-    "evaluation": (3000, 25346, 25351),
+    "evaluation": (3000, 25342, 25351),
 }
 
 

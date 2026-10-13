@@ -3,7 +3,8 @@
 コーパスの本体は repo に置かない（明示されたライセンスが無く、本文は PubMed のアブストラクトのため）。
 NCBI が BioCreative VII の NLM-Chem トラックで配布している BioC 版を取得し、SHA-256 で原本と同一かを確かめてから使う。
 この配布ファイルは BioCreative IV（2013）の CHEMDNER を BioC に変換したもので、本文は公式とバイト単位で一致し、
-化学物質の言及は公式より 24 件少ない（training −16・development −3・evaluation −5）。
+化学物質の言及は公式より 24 件少ない（training −16・development −3・evaluation −5）。さらに evaluation には
+長さ 0 の注釈が 4 件（いずれも MULTIPLE）あり、位置が失われているので読み込みで除く（BC7 の公式評価スクリプトも除く）。
 
     uv run python -m chemdner_bench.corpus fetch            # NCBI から取得して data/ に置く
     uv run python -m chemdner_bench.corpus fetch --source <手元のファイル>   # 取得済みのファイルを使う
@@ -103,6 +104,8 @@ def parse_bioc(raw: bytes) -> list[Document]:
                 if infons.get("type") != "Chemical":
                     continue
                 for loc in a.findall("location"):
+                    if int(loc.get("length")) == 0:
+                        continue  # 位置が失われた注釈（evaluation に 4 件）。予測しようがないので除く
                     start = int(loc.get("offset")) - base
                     end = start + int(loc.get("length"))
                     mention = Mention(section, start, end, a.findtext("text") or "", infons.get("class") or "")

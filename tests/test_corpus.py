@@ -57,3 +57,8 @@ def test_span_text_mismatch_is_an_error():
     raw = BIOC.replace(b"<text>ATP</text>", b"<text>ADP</text>")
     with pytest.raises(ValueError, match="一致しない"):
         parse_bioc(raw)
+
+
+def test_zero_length_annotation_is_dropped():
+    raw = BIOC.replace(b'<location offset="16" length="4"/><text>NaCl</text>', b'<location offset="16" length="0"/><text/>')
+    assert [m.text for m in parse_bioc(raw)[0].mentions] == ["aspirin", "ATP"]
