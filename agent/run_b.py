@@ -149,9 +149,17 @@ exclude = ["OPENAI_*", "CODEX_API_KEY"]
     for k, v in env.items():
         args += ["-e", f"{k}={v}"]
     sh(args + [IMAGE, "sleep", "infinity"], capture=True)
-    sh(["docker", "exec", f"{name}-agent", "bash", "-lc",
-        "gcloud auth activate-service-account --key-file=/creds/key.json --quiet && gcloud config set project "
-        f"{project} --quiet && gcloud config set compute/region {REGION} --quiet"], capture=True)
+    # 作ったばかりの鍵は有効になるまで時間がかかることがあるので、確かめながら待つ
+    setup = ("gcloud auth activate-service-account --key-file=/creds/key.json --quiet && gcloud config set project "
+             f"{project} --quiet && gcloud config set compute/region {REGION} --quiet && "
+             "gcloud compute zones list --filter=region:us-central1 --limit=1 --format='value(name)'")
+    for attempt in range(12):
+        out = sh(["docker", "exec", f"{name}-agent", "bash", "-lc", setup], check=False, capture=True)
+        if out.returncode == 0 and out.stdout.strip():
+            break
+        time.sleep(15)
+    else:
+        raise RuntimeError(f"エージェントの gcloud が使えない: {out.stderr[-500:]}")
 
 
 def run_codex(name: str, run: Path, hours: float) -> int:
