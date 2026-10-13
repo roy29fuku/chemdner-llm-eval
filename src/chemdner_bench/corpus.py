@@ -11,7 +11,12 @@
 どちらも SHA-256 で原本と同一かを確かめる。evaluation には長さ 0 の正解が 4 件（いずれも MULTIPLE）あり、
 公式の時点で長さ 0 なので、そのまま読む（公式の採点ではどのシステムにも取れない FN になる）。
 
-    uv run python -m chemdner_bench.corpus fetch --official <official-2013 のディレクトリ>   # 公式配布物を data/ に写す
+test の正解の隔離: 公式配布物を写すとき、既定では test（evaluation）の正解を写さない。各条件のプロンプトや手法を
+凍結するまでは作業場所に test の正解を置かず、採点の直前に --with-test-gold で写す（写した時刻を記録する）。
+NCBI 版は 1 つのファイルに test の正解を含むので、隔離が要る間は data/ に置かない。
+
+    uv run python -m chemdner_bench.corpus fetch --official <official-2013 のディレクトリ>   # test の正解を除いて写す
+    uv run python -m chemdner_bench.corpus fetch --official <DIR> --with-test-gold          # 採点の直前に
     uv run python -m chemdner_bench.corpus fetch --ncbi                                      # NCBI 版を取得する
     uv run python -m chemdner_bench.corpus stats [--source ncbi]
 """
@@ -44,6 +49,10 @@ OFFICIAL_SHA256 = {
     "CHEMDNER_SAMPLE_JUNE25/chemdner_cem_prediction_1.txt": "8708353bf84c7f4efce35af71915283820a0ab448c01dbaf6fb3a35ffe1e3c59",
     "CHEMDNER_SAMPLE_JUNE25/chemdner_cem_prediction_1_EVAL.txt": "6e8d157561d6d32f0b1ca516f35d36cabb562b62b33acfb4ff5c79ae5f3fb75a",
 }
+
+# test（evaluation）の正解。隔離のため既定では写さない
+TEST_GOLD = ("chemdner_corpus/evaluation.annotations.txt", "chemdner_corpus/cem_ann_test_13-09-13.txt")
+TEST_GOLD_STAMP = "TEST_GOLD_FETCHED_AT"
 
 NCBI_URL = "https://ftp.ncbi.nlm.nih.gov/pub/lu/BC7-NLM-Chem-track/BC7T2-CHEMDNER-corpus_v2.BioC.xml.gz"
 NCBI_SHA256 = "2662ff1a984ce5202af557cce71548ce7a910003b77a41229c9d621b0b4bd086"
@@ -83,8 +92,15 @@ def ncbi_path() -> Path:
 
 
 def available(source: str) -> bool:
+    """その版の、test の正解を除くファイルが揃っているか。"""
     if source == "official":
-        return all((official_dir() / rel).exists() for rel in OFFICIAL_SHA256)
+        return all((official_dir() / rel).exists() for rel in OFFICIAL_SHA256 if rel not in TEST_GOLD)
+    return ncbi_path().exists()
+
+
+def has_test_gold(source: str = "official") -> bool:
+    if source == "official":
+        return all((official_dir() / rel).exists() for rel in TEST_GOLD)
     return ncbi_path().exists()
 
 
@@ -96,15 +112,23 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
-def fetch_official(source_dir: Path) -> Path:
-    """公式配布物を data/official-2013/ に写し、全ファイルの SHA-256 を確かめる。"""
+def fetch_official(source_dir: Path, with_test_gold: bool = False) -> Path:
+    """公式配布物を data/official-2013/ に写し、SHA-256 を確かめる。test の正解は with_test_gold のときだけ写す。"""
+    from datetime import datetime, timezone
+
     dest = data_dir() / "official-2013"
     for rel, digest in OFFICIAL_SHA256.items():
+        if rel in TEST_GOLD and not with_test_gold:
+            continue
         src = Path(source_dir) / rel
         if sha256(src) != digest:
             raise ValueError(f"{src} の SHA-256 が原本と一致しない")
         (dest / rel).parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(src, dest / rel)
+    if with_test_gold:
+        stamp = dest / TEST_GOLD_STAMP
+        with open(stamp, "a", encoding="utf-8") as f:
+            f.write(datetime.now(timezone.utc).isoformat(timespec="seconds") + "\n")
     return dest
 
 
@@ -177,7 +201,8 @@ def parse_bioc(raw: bytes) -> list[Document]:
     return docs
 
 
-def load(split: str, source: str = "official") -> list[Document]:
+def load(split: str, source: str = "official", gold: bool = True) -> list[Document]:
+    """分割を読む。gold=False なら本文だけを読み、言及は空にする（test の入力に使う。正解が無くても読める）。"""
     if split not in SPLITS:
         raise ValueError(f"split は {SPLITS} のどれか: {split}")
     if source not in SOURCES:
@@ -187,10 +212,18 @@ def load(split: str, source: str = "official") -> list[Document]:
         raise FileNotFoundError(f"{source} のコーパスが無い。先に `python -m chemdner_bench.corpus {hint}` を実行する")
     if source == "official":
         base = official_dir() / "chemdner_corpus"
-        return parse_official((base / f"{split}.abstracts.txt").read_text(encoding="utf-8"),
-                              (base / f"{split}.annotations.txt").read_text(encoding="utf-8"))
+        abstracts = (base / f"{split}.abstracts.txt").read_text(encoding="utf-8")
+        if not gold:
+            return parse_official(abstracts, "")
+        if split == "evaluation" and not has_test_gold():
+            raise FileNotFoundError("test の正解は隔離中で data/ に無い。採点の直前に `fetch --official <DIR> --with-test-gold` で写す")
+        return parse_official(abstracts, (base / f"{split}.annotations.txt").read_text(encoding="utf-8"))
     with tarfile.open(ncbi_path()) as tar:
-        return parse_bioc(tar.extractfile(f"BC7T2-CHEMDNER-corpus-{split}.BioC.xml").read())
+        docs = parse_bioc(tar.extractfile(f"BC7T2-CHEMDNER-corpus-{split}.BioC.xml").read())
+    if not gold:
+        for d in docs:
+            d.mentions = []
+    return docs
 
 
 def gold_spans(docs: list[Document]) -> dict[str, set[tuple[str, int, int]]]:
@@ -207,6 +240,7 @@ def main(argv: list[str] | None = None) -> int:
     g = p_fetch.add_mutually_exclusive_group(required=True)
     g.add_argument("--official", type=Path, metavar="DIR", help="公式配布物（official-2013/）のディレクトリから写す")
     g.add_argument("--ncbi", nargs="?", const=True, metavar="FILE", help="NCBI から取得する（取得済みのファイルを渡せばそれを使う）")
+    p_fetch.add_argument("--with-test-gold", action="store_true", help="test の正解も写す（採点の直前だけ。時刻を記録する）")
     p_stats = sub.add_parser("stats", help="分割ごとのアブストラクト数・言及数を表示する")
     p_stats.add_argument("--source", choices=SOURCES, default="official")
     p_out = sub.add_parser("gold", help="正解を採点器の形式（PMID<TAB>節:開始:終了）で、文書の一覧を 1 行 1 件で書き出す")
@@ -217,7 +251,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.command == "fetch":
         if args.official:
-            print(f"ok: {fetch_official(args.official)}")
+            print(f"ok: {fetch_official(args.official, args.with_test_gold)}"
+                  f"（test の正解: {'あり' if args.with_test_gold else '隔離中'}）")
         else:
             print(f"ok: {fetch_ncbi(None if args.ncbi is True else Path(args.ncbi))}")
     elif args.command == "gold":
@@ -228,6 +263,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"wrote {args.out} ({len(docs)} abstracts, {sum(len(d.mentions) for d in docs)} mentions)")
     else:
         for split in SPLITS:
+            if split == "evaluation" and not has_test_gold(args.source):
+                docs = load(split, args.source, gold=False)
+                print(f"{split:<12} abstracts {len(docs):>5,}  （test の正解は隔離中）")
+                continue
             docs = load(split, args.source)
             n_with = sum(1 for d in docs if d.mentions)
             print(f"{split:<12} abstracts {len(docs):>5,}  with mentions {n_with:>5,}  "

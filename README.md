@@ -38,6 +38,28 @@ BioCreative IV の CEM（chemical entity mention）と同じ定義で採点す�
 
 **公式と同じ採点であることの確認**: 2013 年の公式の評価の見本（CHEMDNER_SAMPLE_JUNE25。bc-evaluate の採点結果つき）を、official の範囲で再現する（29 文書・TP 226・FP 302・FN 334・micro P 0.42803 / R 0.40357 / F 0.41544。`tests/test_cem.py`）。補助として、BioCreative VII の公式評価スクリプト（strict の span 評価）とも突き合わせ、同じキーで数えると TP / FP / FN が完全に一致することを確かめている（`scripts/crosscheck_bc7_official.py`。このスクリプトは節を区別せず、長さ 0 の注釈を捨てる点が BC IV と違う）。
 
+## test の正解の隔離
+
+公式配布物を `fetch --official` で写すとき、既定では test（evaluation）の正解を写さない。各条件のプロンプトや手法を凍結するまでは作業場所に test の正解を置かず、採点の直前に `fetch --official <DIR> --with-test-gold` で写す（写した時刻を `data/official-2013/TEST_GOLD_FETCHED_AT` に記録する）。test の入力（本文）は正解なしで読める（`corpus.load("evaluation", gold=False)`）。NCBI 版は 1 つのファイルに test の正解を含むので、隔離が要る間は `data/` に置かない。
+
+## 条件 a: 答えそのものを聞く（zero-shot・インラインタグ）
+
+最もナイーブな使い方として、アブストラクト 1 件ごとに、固定の指示（課題の定義 `task/guidelines.md` と出力の形式）だけを与えて解かせる。例は与えず、プロンプトは調整しない。原文の化学物質名を `<chem>…</chem>` で囲んだ全文を JSON で返させ（OpenAI の Responses API・structured outputs）、位置に直して採点器の形式で予測を書き出す。
+
+- 課題の定義は、公式の注釈ガイドライン（Rabal & Krallinger 2013、Zenodo 4957519、CC BY 4.0）の要約。どの条件にも同じものを渡す
+- test で走らせる前に `freeze` で、指示・課題の定義・出力の形式の hash を `frozen/direct.json` に書いて commit する。test の実行は、凍結した内容と今のファイルが一致し、commit 済みのときだけ通る
+- 呼び出しごとに、応答のモデル名・応答 ID・状態・トークン数・費用を `calls.jsonl` に記録する（本文は入れない）。失敗（例外・未完了・空応答・解析の失敗）は黙って空の予測にせず、件数を `summary.json` に出す。もう一度走らせると失敗した文書だけを呼び直す。失敗が残っていると採点しない
+- `--max-cost`（米ドル）を超えたら新しい呼び出しを止める
+
+```sh
+uv run python -m chemdner_bench.direct run --split development --limit 100     # 既定は gpt-6-luna・effort medium
+uv run python -m chemdner_bench.direct score runs/direct/<run>
+uv run python -m chemdner_bench.direct freeze                                 # test の前に。frozen/direct.json を commit する
+uv run python -m chemdner_bench.direct run --split evaluation --rep 0
+```
+
+API キーは `.env` の `OPENAI_API_KEY` から読む（`.env` は git 管理しない）。実行の出力は `runs/`（git 管理しない）。
+
 ## 使い方
 
 [uv](https://docs.astral.sh/uv/) を使う。
@@ -59,12 +81,19 @@ uv run python scripts/crosscheck_bc7_official.py      # BC7 の公式評価ス�
 ```
 .
 ├── src/chemdner_bench/
-│   ├── corpus.py      コーパスの取得と読み込み
-│   └── cem.py         採点器
+│   ├── corpus.py      コーパスの取得と読み込み（test の正解の隔離を含む）
+│   ├── cem.py         採点器
+│   ├── llm.py         OpenAI の呼び出しと記録（料金表を含む）
+│   ├── inline_tags.py インラインタグと位置の相互変換
+│   └── direct.py      条件 a
+├── task/guidelines.md 課題の定義（公式ガイドラインの要約。全条件で共通）
+├── prompts/direct/    条件 a の指示
+├── frozen/            test の前に凍結した設定（commit する）
 ├── tests/
 ├── scripts/           公式評価スクリプトとの突き合わせなど
 ├── legacy/v1-2026-01/ 2026-01 の探索的な実験（当時のまま）
-└── data/              コーパスなどの取得物（git 管理しない）
+├── data/              コーパスなどの取得物（git 管理しない）
+└── runs/              実行の出力（git 管理しない）
 ```
 
 ## 引用
