@@ -27,7 +27,7 @@ PMID<TAB>A:start:end
 ```
 
 Check the format with `python3 /workspace/check_format.py /workspace/output/predictions.tsv`. It only checks the format; it does not score.
-
+{evaluation}
 ## Resources
 
 - **Google Cloud**: project `{project}`, region `us-central1`. `gcloud` and Terraform are already authenticated as the service account `agent-b@{project}.iam.gserviceaccount.com`. You can create and delete VMs, disks, and buckets. If a VM needs a service account, use `agent-vm@{project}.iam.gserviceaccount.com`.

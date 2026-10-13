@@ -63,7 +63,8 @@ def write_annotations(docs: list[Document], path: Path) -> None:
     path.write_text("".join(lines), encoding="utf-8")
 
 
-def prepare(run: Path, mode: str, project: str, hours: float, max_gpus: int, max_vcpus: int) -> list[Document]:
+def prepare(run: Path, mode: str, variant: str, project: str, hours: float, max_gpus: int,
+            max_vcpus: int) -> list[Document]:
     """作業場所を作り、test として渡す文書（正解つき・採点用）を返す。正解は作業場所に置かない。"""
     ws = run / "workspace"
     (ws / "data").mkdir(parents=True)
@@ -85,6 +86,9 @@ def prepare(run: Path, mode: str, project: str, hours: float, max_gpus: int, max
         guidelines = guidelines[guidelines.index("-->") + 3:].lstrip()  # 条件 a と同じく出典の注記は渡さない
     (ws / "guidelines.md").write_text(guidelines, encoding="utf-8")
     task = (AGENT / "task" / "task.md").read_text(encoding="utf-8")
+    # naive は採点の方法を伝えない。scored は採点の方法と「高い点を目指して」を足す（手法は示唆しない）
+    evaluation = (AGENT / "task" / "evaluation.md").read_text(encoding="utf-8") if variant == "scored" else ""
+    task = task.replace("{evaluation}", evaluation)
     for key, value in {"project": project, "hours": f"{hours:g}", "max_gpus": max_gpus, "max_vcpus": max_vcpus}.items():
         task = task.replace("{" + key + "}", str(value))
     (ws / "task.md").write_text(task, encoding="utf-8")
@@ -267,6 +271,7 @@ def main() -> int:
 
     p = argparse.ArgumentParser()
     p.add_argument("--mode", choices=("pilot", "main"), required=True)
+    p.add_argument("--variant", choices=("naive", "scored"), default="naive", help="課題文に採点の方法を書くか")
     p.add_argument("--hours", type=float, default=4)
     p.add_argument("--max-cost", type=float, default=10, help="Codex の API の費用の上限（米ドル）")
     p.add_argument("--max-gpus", type=int, default=1)
@@ -279,7 +284,7 @@ def main() -> int:
     args = p.parse_args()
     load_dotenv(ROOT / ".env")
 
-    name = f"b-{args.mode}-{args.model}-{args.effort}-r{args.rep}"
+    name = f"b-{args.mode}-{args.model}-{args.effort}{'' if args.variant == 'naive' else '-' + args.variant}-r{args.rep}"
     run = ROOT / "runs" / "agent" / name
     if run.exists():
         raise SystemExit(f"{run} がすでにある（消すか --rep を変える）")
@@ -288,7 +293,7 @@ def main() -> int:
     meta = {**vars(args), "started_at": started, "prompt": PROMPT, "image": IMAGE, "proxy_image": PROXY_IMAGE}
     before = inventory(args.project, args.account)
     meta["resources_before"] = before
-    test = prepare(run, args.mode, args.project, args.hours, args.max_gpus, args.max_vcpus)
+    test = prepare(run, args.mode, args.variant, args.project, args.hours, args.max_gpus, args.max_vcpus)
     key_id = None
     stop = threading.Event()
     dog = threading.Thread(target=watchdog, args=(args.project, args.account, stop, run / "logs" / "instances.jsonl",
