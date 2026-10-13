@@ -1,17 +1,18 @@
-"""条件 a-A: 答えそのものを LLM に聞く（インラインタグ）。
+"""条件 a: 答えそのものを LLM に聞く（zero-shot・インラインタグ）。
 
-アブストラクト 1 件ごとに、固定の指示（課題の定義を含む）と training から取った k 件の例を与え、原文に `<chem>` タグを
-入れた全文を JSON で返させる。返ってきた文を位置に直して、採点器（cem.py）の形式で予測を書き出す。
+最もナイーブな使い方として、アブストラクト 1 件ごとに、固定の指示（課題の定義と出力の形式）だけを与えて解かせる。
+例は与えず、プロンプトは調整しない。原文に `<chem>` タグを入れた全文を JSON で返させ、位置に直して、採点器（cem.py）の
+形式で予測を書き出す。
 
 test の隔離（docs/experiment-protocol.md）:
-- 例は training からだけ取る。指示と例の数・選び方は development で決める
-- test で走らせる前に `freeze` で指示・課題の定義・形式・k・seed・例の PMID の hash を frozen/direct.json に書き、commit する。
+- development は出力の形式が崩れないことの確認だけに使う
+- test で走らせる前に `freeze` で指示・課題の定義・形式の hash を frozen/direct.json に書き、commit する。
   test の実行は、凍結した内容と今のファイルが一致し、凍結のファイルが commit 済みのときだけ通す
 - test の入力は本文だけを読む（corpus.load(..., gold=False)）
 
-    uv run python -m chemdner_bench.direct run --split development --model gpt-6-luna --effort medium --k 8 --limit 50
-    uv run python -m chemdner_bench.direct freeze --k 8 --seed 0
-    uv run python -m chemdner_bench.direct run --split evaluation --model gpt-6-luna --effort medium --k 8 --rep 0
+    uv run python -m chemdner_bench.direct run --split development --limit 100
+    uv run python -m chemdner_bench.direct freeze
+    uv run python -m chemdner_bench.direct run --split evaluation --rep 0
     uv run python -m chemdner_bench.direct score runs/direct/<run>
 """
 
@@ -19,7 +20,6 @@ import argparse
 import asyncio
 import hashlib
 import json
-import random
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -55,41 +55,9 @@ def instructions() -> str:
     return INSTRUCTIONS.read_text(encoding="utf-8").replace("{guidelines}", guidelines.strip())
 
 
-def _overlaps(doc: Document) -> bool:
-    for section in ("T", "A"):
-        spans = sorted((m.start, m.end) for m in doc.mentions if m.section == section)
-        if any(s2 < e1 for (_, e1), (s2, _) in zip(spans, spans[1:])):
-            return True
-    return False
-
-
-def select_examples(training: list[Document], k: int, seed: int) -> list[Document]:
-    """training から k 件を決まった乱数で選ぶ。重なりのある言及はタグで表せないので、その文書は除く。"""
-    eligible = sorted((d for d in training if not _overlaps(d)), key=lambda d: d.pmid)
-    if k > len(eligible):
-        raise ValueError(f"k={k} は例に使える文書の数 {len(eligible)} を超える")
-    return random.Random(seed).sample(eligible, k)
-
-
-def as_input(doc: Document) -> str:
-    return json.dumps({"title": doc.title, "abstract": doc.abstract}, ensure_ascii=False)
-
-
-def as_answer(doc: Document) -> str:
-    def spans(section):
-        return [(m.start, m.end) for m in doc.mentions if m.section == section]
-    return json.dumps({"title": inline_tags.tag(doc.title, spans("T")),
-                       "abstract": inline_tags.tag(doc.abstract, spans("A"))}, ensure_ascii=False)
-
-
-def messages(examples: list[Document], doc: Document) -> list[dict]:
-    """例を user / assistant の往復として並べ、最後に対象の文書を置く（前置きが同じなのでキャッシュが効く）。"""
-    msgs: list[dict] = []
-    for ex in examples:
-        msgs.append({"role": "user", "content": as_input(ex)})
-        msgs.append({"role": "assistant", "content": as_answer(ex)})
-    msgs.append({"role": "user", "content": as_input(doc)})
-    return msgs
+def messages(doc: Document) -> list[dict]:
+    """対象の文書だけを渡す（zero-shot）。"""
+    return [{"role": "user", "content": json.dumps({"title": doc.title, "abstract": doc.abstract}, ensure_ascii=False)}]
 
 
 def predict(doc: Document, output_text: str) -> tuple[set[tuple[str, int, int]], dict]:
@@ -111,45 +79,38 @@ def predict(doc: Document, output_text: str) -> tuple[set[tuple[str, int, int]],
 @dataclass
 class Config:
     split: str
-    model: str
-    effort: str
-    k: int
-    seed: int = 0
+    model: str = "gpt-6-luna"
+    effort: str = "medium"
     rep: int = 0
     limit: int | None = None
     max_output_tokens: int = 16000
 
     def name(self) -> str:
         limit = f"-n{self.limit}" if self.limit else ""
-        return f"{self.split}-{self.model}-{self.effort}-k{self.k}-s{self.seed}-r{self.rep}{limit}"
+        return f"{self.split}-{self.model}-{self.effort}-r{self.rep}{limit}"
 
 
-def fingerprint(cfg: Config, examples: list[Document]) -> dict:
+def fingerprint() -> dict:
     return {
         "instructions_sha256": sha256_text(INSTRUCTIONS.read_text(encoding="utf-8")),
         "guidelines_sha256": sha256_text(GUIDELINES.read_text(encoding="utf-8")),
         "schema_sha256": sha256_text(json.dumps(SCHEMA, sort_keys=True)),
-        "k": cfg.k,
-        "seed": cfg.seed,
-        "example_pmids": [d.pmid for d in examples],
     }
 
 
-def freeze(k: int, seed: int) -> Path:
-    examples = select_examples(load("training"), k, seed)
-    data = {**fingerprint(Config("evaluation", "", "", k, seed), examples),
-            "frozen_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+def freeze() -> Path:
+    data = {**fingerprint(), "frozen_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
     FROZEN.parent.mkdir(parents=True, exist_ok=True)
     FROZEN.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return FROZEN
 
 
-def check_frozen(cfg: Config, examples: list[Document]) -> None:
+def check_frozen() -> None:
     """test で走らせてよいか。凍結の内容と今の状態が一致し、凍結のファイルが commit 済みであること。"""
     if not FROZEN.exists():
-        raise RuntimeError("test の前に `direct freeze` で指示と例を凍結し、frozen/direct.json を commit する")
+        raise RuntimeError("test の前に `direct freeze` で指示を凍結し、frozen/direct.json を commit する")
     frozen = json.loads(FROZEN.read_text(encoding="utf-8"))
-    current = fingerprint(cfg, examples)
+    current = fingerprint()
     diff = [key for key in current if frozen.get(key) != current[key]]
     if diff:
         raise RuntimeError(f"凍結した内容と違う: {diff}")
@@ -162,9 +123,8 @@ def check_frozen(cfg: Config, examples: list[Document]) -> None:
 
 async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None = None, out_root: Path = RUNS) -> Path:
     llm.check_model(cfg.model, cfg.effort)
-    examples = select_examples(load("training"), cfg.k, cfg.seed)
     if cfg.split == "evaluation":
-        check_frozen(cfg, examples)
+        check_frozen()
     elif cfg.split != "development":
         raise ValueError("a を走らせる分割は development か evaluation")
     docs = load(cfg.split, gold=False)  # 入力は本文だけ
@@ -180,12 +140,12 @@ async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None
             if r["ok"] and r.get("parse_error") is None:
                 done[r["key"]] = r
     (out / "config.json").write_text(json.dumps({
-        **cfg.__dict__, **fingerprint(cfg, examples), "sdk": _sdk_version(),
+        **cfg.__dict__, **fingerprint(), "sdk": _sdk_version(),
         "started_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     system = instructions()
-    cache_key = sha256_text(system + json.dumps(fingerprint(cfg, examples)))[:32]
+    cache_key = sha256_text(system)[:32]
     sem = asyncio.Semaphore(concurrency)
     spent = sum(r["cost_usd"] for r in done.values())
     stop = asyncio.Event()
@@ -198,7 +158,7 @@ async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None
             if stop.is_set():
                 return
             text, rec = await llm.respond(client, key=doc.pmid, model=cfg.model, effort=cfg.effort,
-                                          instructions=system, input=messages(examples, doc), json_schema=SCHEMA,
+                                          instructions=system, input=messages(doc), json_schema=SCHEMA,
                                           max_output_tokens=cfg.max_output_tokens, prompt_cache_key=cache_key)
         row = rec.to_dict()
         row["parse_error"] = None
@@ -300,25 +260,21 @@ def score_run(out: Path) -> dict:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m chemdner_bench.direct")
     sub = parser.add_subparsers(dest="command", required=True)
-    p_run = sub.add_parser("run", help="a-A を走らせる")
+    p_run = sub.add_parser("run", help="条件 a を走らせる")
     p_run.add_argument("--split", choices=("development", "evaluation"), required=True)
-    p_run.add_argument("--model", choices=llm.MODELS, required=True)
-    p_run.add_argument("--effort", required=True)
-    p_run.add_argument("--k", type=int, required=True, help="training から取る例の数")
-    p_run.add_argument("--seed", type=int, default=0, help="例の選び方の乱数")
+    p_run.add_argument("--model", choices=llm.MODELS, default="gpt-6-luna")
+    p_run.add_argument("--effort", default="medium")
     p_run.add_argument("--rep", type=int, default=0, help="反復の番号（出力のディレクトリ名に入る）")
     p_run.add_argument("--limit", type=int, help="先頭（PMID の順）から n 件だけ走らせる（試行用）")
     p_run.add_argument("--concurrency", type=int, default=16)
     p_run.add_argument("--max-cost", type=float, help="この額（米ドル）を超えたら新しい呼び出しを止める")
     p_run.add_argument("--max-output-tokens", type=int, default=16000)
-    p_freeze = sub.add_parser("freeze", help="test の前に指示と例を凍結する")
-    p_freeze.add_argument("--k", type=int, required=True)
-    p_freeze.add_argument("--seed", type=int, default=0)
+    sub.add_parser("freeze", help="test の前に指示を凍結する")
     p_score = sub.add_parser("score", help="走らせた結果を採点する")
     p_score.add_argument("run_dir", type=Path)
     args = parser.parse_args(argv)
     if args.command == "freeze":
-        print(f"wrote {freeze(args.k, args.seed)}（commit してから test を走らせる）")
+        print(f"wrote {freeze()}（commit してから test を走らせる）")
     elif args.command == "score":
         print(json.dumps(score_run(args.run_dir), indent=2))
     else:
@@ -326,7 +282,7 @@ def main(argv: list[str] | None = None) -> int:
         from openai import AsyncOpenAI
 
         load_dotenv(ROOT / ".env")
-        cfg = Config(args.split, args.model, args.effort, args.k, args.seed, args.rep, args.limit, args.max_output_tokens)
+        cfg = Config(args.split, args.model, args.effort, args.rep, args.limit, args.max_output_tokens)
         out = asyncio.run(run(cfg, AsyncOpenAI(max_retries=6), args.concurrency, args.max_cost))
         print(json.dumps(json.loads((out / "summary.json").read_text()), indent=2, ensure_ascii=False))
         print(f"出力: {out}")

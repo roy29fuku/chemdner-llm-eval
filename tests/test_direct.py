@@ -1,4 +1,4 @@
-"""条件 a-A の実行のテスト。API は呼ばず、偽のクライアントで応答を返す。"""
+"""条件 a（zero-shot）の実行のテスト。API は呼ばず、偽のクライアントで応答を返す。"""
 
 import asyncio
 import json
@@ -6,16 +6,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from chemdner_bench import direct
+from chemdner_bench import direct, inline_tags
 from chemdner_bench.corpus import Document, Mention
 from chemdner_bench.llm import CallRecord
 
-TRAIN = [
-    Document("1", "Aspirin study", "We gave aspirin.", [Mention("T", 0, 7, "Aspirin"), Mention("A", 8, 15, "aspirin")]),
-    Document("2", "No chemicals", "None here.", []),
-    Document("3", "Overlap", "methyl ether test", [Mention("A", 0, 6, "methyl"), Mention("A", 0, 12, "methyl ether")]),
-    Document("4", "ATP", "ATP and NaCl.", [Mention("T", 0, 3, "ATP"), Mention("A", 0, 3, "ATP"), Mention("A", 8, 12, "NaCl")]),
-]
 DEV = [
     Document("10", "Benzene in water", "Toluene was found.", [Mention("T", 0, 7, "Benzene"), Mention("A", 0, 7, "Toluene")]),
     Document("11", "Plain", "Nothing.", []),
@@ -26,11 +20,19 @@ DEV = [
 @pytest.fixture
 def corpus(monkeypatch):
     def fake_load(split, source="official", gold=True):
-        docs = {"training": TRAIN, "development": DEV, "evaluation": DEV}[split]
+        docs = {"development": DEV, "evaluation": DEV}[split]
         if not gold:
             return [Document(d.pmid, d.title, d.abstract, []) for d in docs]
         return docs
     monkeypatch.setattr(direct, "load", fake_load)
+
+
+def answer(doc: Document) -> str:
+    """正解をタグにした JSON（偽のモデルの応答）。"""
+    def spans(section):
+        return [(m.start, m.end) for m in doc.mentions if m.section == section]
+    return json.dumps({"title": inline_tags.tag(doc.title, spans("T")),
+                       "abstract": inline_tags.tag(doc.abstract, spans("A"))}, ensure_ascii=False)
 
 
 class FakeResponses:
@@ -51,28 +53,16 @@ class FakeResponses:
         status = "incomplete" if doc.pmid in self.incomplete else "completed"
         return SimpleNamespace(id=f"resp-{doc.pmid}", model="gpt-6-luna-2026", status=status,
                                incomplete_details=SimpleNamespace(reason="max_output_tokens") if status == "incomplete" else None,
-                               usage=usage, output_text=direct.as_answer(doc))
+                               usage=usage, output_text=answer(doc))
 
 
 def client(**kw):
     return SimpleNamespace(responses=FakeResponses(**kw))
 
 
-def test_select_examples_is_deterministic_and_skips_overlapping_documents():
-    a = direct.select_examples(TRAIN, 3, seed=1)
-    assert [d.pmid for d in a] == [d.pmid for d in direct.select_examples(TRAIN, 3, seed=1)]
-    assert "3" not in {d.pmid for d in a}
-    with pytest.raises(ValueError):
-        direct.select_examples(TRAIN, 4, seed=0)  # 重なりのある 1 件を除くと 3 件しかない
-
-
-def test_messages_contain_examples_then_target_only():
-    ex = direct.select_examples(TRAIN, 2, seed=0)
-    msgs = direct.messages(ex, DEV[0])
-    assert [m["role"] for m in msgs] == ["user", "assistant", "user", "assistant", "user"]
-    assert any("<chem>" in m["content"] for m in msgs if m["role"] == "assistant")  # 例には正解のタグが入る
-    assert json.loads(msgs[-1]["content"])["title"] == DEV[0].title
-    assert "<chem>" not in msgs[-1]["content"]  # 対象の文書には正解を入れない
+def test_messages_are_zero_shot():
+    msgs = direct.messages(DEV[0])
+    assert msgs == [{"role": "user", "content": json.dumps({"title": DEV[0].title, "abstract": DEV[0].abstract})}]
 
 
 def test_instructions_include_guidelines_without_attribution_comment():
@@ -82,7 +72,7 @@ def test_instructions_include_guidelines_without_attribution_comment():
 
 
 def test_run_on_development_reproduces_gold_and_records_calls(corpus, tmp_path):
-    cfg = direct.Config("development", "gpt-6-luna", "medium", k=2)
+    cfg = direct.Config("development")
     c = client()
     out = asyncio.run(direct.run(cfg, c, out_root=tmp_path))
     summary = json.loads((out / "summary.json").read_text())
@@ -100,7 +90,7 @@ def test_run_on_development_reproduces_gold_and_records_calls(corpus, tmp_path):
 
 
 def test_failures_are_recorded_not_silently_empty(corpus, tmp_path):
-    cfg = direct.Config("development", "gpt-6-luna", "medium", k=2)
+    cfg = direct.Config("development")
     out = asyncio.run(direct.run(cfg, client(fail={"11"}, incomplete={"12"}), out_root=tmp_path))
     summary = json.loads((out / "summary.json").read_text())
     assert summary["failed"] == 2
@@ -115,7 +105,7 @@ def test_failures_are_recorded_not_silently_empty(corpus, tmp_path):
 
 
 def test_max_cost_stops_new_calls(corpus, tmp_path):
-    cfg = direct.Config("development", "gpt-6-luna", "medium", k=2)
+    cfg = direct.Config("development")
     c = client()
     out = asyncio.run(direct.run(cfg, c, concurrency=1, max_cost=0.0, out_root=tmp_path))
     assert len(c.responses.calls) == 1
@@ -124,21 +114,24 @@ def test_max_cost_stops_new_calls(corpus, tmp_path):
 
 def test_evaluation_requires_frozen_config(corpus, tmp_path, monkeypatch):
     monkeypatch.setattr(direct, "FROZEN", tmp_path / "frozen" / "direct.json")
-    cfg = direct.Config("evaluation", "gpt-6-luna", "medium", k=2)
+    cfg = direct.Config("evaluation")
     with pytest.raises(RuntimeError, match="凍結"):
         asyncio.run(direct.run(cfg, client(), out_root=tmp_path))
 
 
 def test_frozen_config_must_match(corpus, tmp_path, monkeypatch):
-    monkeypatch.setattr(direct, "FROZEN", tmp_path / "frozen" / "direct.json")
-    direct.freeze(k=2, seed=0)
-    cfg = direct.Config("evaluation", "gpt-6-luna", "medium", k=2, seed=1)  # 凍結と違う seed
+    frozen = tmp_path / "frozen" / "direct.json"
+    monkeypatch.setattr(direct, "FROZEN", frozen)
+    direct.freeze()
+    data = json.loads(frozen.read_text())
+    data["instructions_sha256"] = "changed"  # 凍結の後に指示を変えた
+    frozen.write_text(json.dumps(data))
     with pytest.raises(RuntimeError, match="凍結した内容と違う"):
-        direct.check_frozen(cfg, direct.select_examples(TRAIN, 2, 1))
+        direct.check_frozen()
 
 
 def test_unsupported_effort_is_rejected(corpus, tmp_path):
-    cfg = direct.Config("development", "gpt-6.1-sol", "none", k=2)
+    cfg = direct.Config("development", "gpt-6.1-sol", "none")
     with pytest.raises(ValueError, match="effort"):
         asyncio.run(direct.run(cfg, client(), out_root=tmp_path))
 
