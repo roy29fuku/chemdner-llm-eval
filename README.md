@@ -7,19 +7,22 @@ BioCreative IV（2013）の CHEMDNER タスク（PubMed のアブストラクト
 
 ## データ
 
-CHEMDNER のコーパスは、NCBI が BioCreative VII の NLM-Chem トラックで配布している BioC 版を使う。BioCreative IV のコーパスを BioC に変換したもので、元の配布元（biocreative.org）からは 2026-10 時点で取得できない。
+**コーパスはこの repo に含めない。** 明示されたライセンスが見つからず、本文は PubMed のアブストラクトのため。読み込める版は 2 つで、どちらも SHA-256 で原本と同一かを確かめる。
 
-**コーパスはこの repo に含めない。** 明示されたライセンスが見つからず、本文は PubMed のアブストラクトのため。取得のスクリプトは配布ファイルの SHA-256 を確かめる。
+| 版 | 内容 | 入手 |
+|---|---|---|
+| official（正本） | 2013 年の BioCreative IV の公式配布物。件数が公式の表と完全に一致する | 元の配布元（biocreative.org）は 2026-10 時点で使えない。手元のコピーから `fetch --official` で読む |
+| ncbi（公開の代替） | NCBI が BioCreative VII の NLM-Chem トラックで公開している BioC 版（BioCreative IV のコーパスを変換したもの） | `fetch --ncbi` で NCBI から取得する |
 
-| 分割 | アブストラクト | 使える言及 | 公式（Krallinger et al. 2015） |
+| 分割 | アブストラクト | 言及のある文書（official / ncbi） | 言及（official / ncbi） |
 |---|---|---|---|
-| training | 3,500 | 29,462 | 29,478 |
-| development | 3,500 | 29,523 | 29,526 |
-| evaluation（公式の test） | 3,000 | 25,342 | 25,351 |
+| training | 3,500 | 2,916 / 2,915 | 29,478 / 29,462 |
+| development | 3,500 | 2,907 / 2,906 | 29,526 / 29,523 |
+| evaluation（公式の test） | 3,000 | 2,478 / 2,477 | 25,351 / 25,346 |
 
-- 本文は公式とバイト単位で一致する
-- 言及は公式より少ない。evaluation では、注釈が 5 件無く、位置が失われた長さ 0 の注釈が 4 件ある（読み込みで除く）
-- NCBI が足した MeSH の索引語の注釈は CHEMDNER のものではないので使わない
+- official の件数は公式の表（Krallinger et al. 2015, Table 1）と一致する
+- ncbi は本文が公式とバイト単位で同一だが、各分割で 1 文書ずつ、その文書の言及がすべて欠けている（training: PMID 23645249、development: 23646356、evaluation: 23645677）。NCBI が足した MeSH の索引語の注釈は CHEMDNER のものではないので使わない
+- evaluation には長さ 0 の正解が 4 件ある（いずれも MULTIPLE）。公式の時点で長さ 0 なので、そのまま読む（公式の採点ではどのシステムにも取れない FN になる）
 
 ## 採点器（CEM）
 
@@ -27,10 +30,13 @@ BioCreative IV の CEM（chemical entity mention）と同じ定義で採点す�
 
 - 言及は (PMID, 節, 開始, 終了) の組。節は title（T）か abstract（A）で、位置は節ごとに 0 から数える
 - 4 つすべてが正解と一致したものだけを正解とする。予測の重複は 1 つに数える
-- 全文書を合算した micro precision / recall / F1。区間はアブストラクトを単位にした bootstrap で出す
+- micro precision / recall / F1。区間は採点対象の文書を単位にした bootstrap で出す
 - ファイルの形式は公式と同じ `PMID<TAB>節:開始:終了`（3 列目以降は無視する）
+- 採点範囲は 2 つ
+  - **official（主）**: 2013 年の公式の評価（bc-evaluate）と同じく、正解のある文書だけを採点し、それ以外の文書の予測は捨てる（test では 2,478 件）
+  - **all（副）**: 全文書（test では 3,000 件）を採点し、正解の無い文書への予測も FP に数える
 
-採点器は、NCBI が配布している BioCreative VII の公式評価スクリプト（strict の span 評価）と突き合わせ、同じキーで数えると TP / FP / FN が完全に一致することを確かめている（`scripts/crosscheck_bc7_official.py`）。公式スクリプトは節を区別しないため、title と abstract の同じ位置・同じ文字列の言及を 1 件に数える点だけが違う。
+**公式と同じ採点であることの確認**: 2013 年の公式の評価の見本（CHEMDNER_SAMPLE_JUNE25。bc-evaluate の採点結果つき）を、official の範囲で再現する（29 文書・TP 226・FP 302・FN 334・micro P 0.42803 / R 0.40357 / F 0.41544。`tests/test_cem.py`）。補助として、BioCreative VII の公式評価スクリプト（strict の span 評価）とも突き合わせ、同じキーで数えると TP / FP / FN が完全に一致することを確かめている（`scripts/crosscheck_bc7_official.py`。このスクリプトは節を区別せず、長さ 0 の注釈を捨てる点が BC IV と違う）。
 
 ## 使い方
 
@@ -38,12 +44,14 @@ BioCreative IV の CEM（chemical entity mention）と同じ定義で採点す�
 
 ```sh
 uv sync
-uv run python -m chemdner_bench.corpus fetch          # コーパスを NCBI から data/ に取得（SHA-256 を確認）
-uv run python -m chemdner_bench.corpus stats          # 分割ごとの件数
-uv run python -m chemdner_bench.corpus gold --split evaluation --out gold.tsv
-uv run python -m chemdner_bench.cem --gold gold.tsv --pred pred.tsv
-uv run pytest                                         # コーパスが data/ にあれば、件数と満点の確認も走る
-uv run python scripts/crosscheck_bc7_official.py      # 公式評価スクリプトとの突き合わせ
+uv run python -m chemdner_bench.corpus fetch --official <official-2013 のディレクトリ>   # 公式配布物（手元のコピー）
+uv run python -m chemdner_bench.corpus fetch --ncbi                                      # NCBI 版を取得
+uv run python -m chemdner_bench.corpus stats [--source ncbi]
+uv run python -m chemdner_bench.corpus gold --split evaluation --out gold.tsv --pmids pmids.txt
+uv run python -m chemdner_bench.cem --gold gold.tsv --pred pred.tsv                           # 主（official）
+uv run python -m chemdner_bench.cem --gold gold.tsv --pred pred.tsv --scope all --pmids pmids.txt  # 副（all）
+uv run pytest                                         # 手元にコーパスがあれば、件数・公式の見本の再現も走る
+uv run python scripts/crosscheck_bc7_official.py      # BC7 の公式評価スクリプトとの突き合わせ（ncbi が要る）
 ```
 
 ## 構成

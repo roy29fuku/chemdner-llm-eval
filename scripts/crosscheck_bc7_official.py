@@ -1,4 +1,6 @@
-"""採点器（cem.py）を、BioCreative VII NLM-Chem トラックの公式評価スクリプトと突き合わせる。
+"""採点器（cem.py）を、BioCreative VII NLM-Chem トラックの公式評価スクリプトと突き合わせる（補助の確認）。
+
+主の確認は、2013 年の BioCreative IV の公式の評価の見本の再現（tests/test_cem.py の test_reproduces_official_bc_evaluate_on_sample）。
 
 公式の strict の span 評価は、CEM と同じく位置の完全一致で採点する。evaluation 分割の正解に、決まった乱数で
 誤り（欠落・境界のずれ・余分）を混ぜた予測を作り、両方の採点器で TP / FP / FN が一致するかを確かめる。
@@ -24,7 +26,7 @@ import zipfile
 from pathlib import Path
 
 from chemdner_bench.cem import score
-from chemdner_bench.corpus import SECTIONS, corpus_path, data_dir, gold_spans, load
+from chemdner_bench.corpus import SECTIONS, data_dir, gold_spans, load, ncbi_path
 
 EVAL_URL = "https://ftp.ncbi.nlm.nih.gov/pub/lu/BC7-NLM-Chem-track/BC7T2-evaluation_v3.zip"
 SPLIT = "evaluation"
@@ -45,6 +47,8 @@ def perturb(gold, docs, seed=0):
     for d in docs:
         spans = set()
         for s, b, e in sorted(gold[d.pmid]):
+            if e == b:
+                continue  # 長さ 0 の正解は予測に写さない
             u = rng.random()
             if u < 0.10:
                 continue
@@ -84,8 +88,8 @@ def score_without_section(gold, pred, docs):
     """公式スクリプトと同じキー（位置と文字列。節を含まない）で数え直す。公式と厳密に一致するはずの値。"""
     by_pmid = {d.pmid: d for d in docs}
 
-    def keyed(spans):
-        return {pmid: {(b, e, by_pmid[pmid].text(s)[b:e]) for s, b, e in ss} for pmid, ss in spans.items()}
+    def keyed(spans):  # 公式スクリプトは長さ 0 の注釈を捨てる
+        return {pmid: {(b, e, by_pmid[pmid].text(s)[b:e]) for s, b, e in ss if e > b} for pmid, ss in spans.items()}
 
     g, p = keyed(gold), keyed(pred)
     tp = sum(len(g[k] & p.get(k, set())) for k in g)
@@ -108,12 +112,12 @@ def collisions(spans, docs) -> int:
 
 
 def main() -> int:
-    docs = load(SPLIT)
+    docs = load(SPLIT, "ncbi")  # BC7 の公式スクリプトは BioC を読むので NCBI 版で突き合わせる
     gold = gold_spans(docs)
     pred = perturb(gold, docs)
     ours = score(gold, pred, [d.pmid for d in docs])
 
-    with tarfile.open(corpus_path()) as tar:
+    with tarfile.open(ncbi_path()) as tar:
         raw = tar.extractfile(f"BC7T2-CHEMDNER-corpus-{SPLIT}.BioC.xml").read()
     raw = raw.replace(b'encoding="utf8"', b'encoding="utf-8"', 1)
     work = data_dir() / "crosscheck"

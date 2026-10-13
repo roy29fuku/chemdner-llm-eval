@@ -2,7 +2,7 @@
 
 import pytest
 
-from chemdner_bench.corpus import Mention, gold_spans, parse_bioc
+from chemdner_bench.corpus import Mention, gold_spans, parse_bioc, parse_official
 
 BIOC = """<?xml version="1.0" encoding="utf8" standalone="yes"?>
 <collection><source/><date>2021-05-29</date><key/>
@@ -59,6 +59,22 @@ def test_span_text_mismatch_is_an_error():
         parse_bioc(raw)
 
 
-def test_zero_length_annotation_is_dropped():
+def test_zero_length_annotation_is_kept_as_gold():
+    # 公式の正解にも長さ 0 の注釈がある（evaluation に 4 件）。公式の採点では取れない FN になるので、そのまま読む
     raw = BIOC.replace(b'<location offset="16" length="4"/><text>NaCl</text>', b'<location offset="16" length="0"/><text/>')
-    assert [m.text for m in parse_bioc(raw)[0].mentions] == ["aspirin", "ATP"]
+    assert parse_bioc(raw)[0].mentions[-1] == Mention("A", 16, 16, "", "FORMULA")
+
+
+ABSTRACTS = "12345\tEffect of aspirin on χ2 levels\tWe gave ATP and NaCl.\n67890\tNo chemicals here\tNothing.\n"
+ANNOTATIONS = "12345\tT\t10\t17\taspirin\tTRIVIAL\n12345\tA\t8\t11\tATP\tABBREVIATION\n12345\tA\t16\t20\tNaCl\tFORMULA\n"
+
+
+def test_parse_official_format_matches_bioc():
+    official = parse_official(ABSTRACTS, ANNOTATIONS)
+    assert gold_spans(official) == gold_spans(parse_bioc(BIOC))
+    assert official[0].mentions[0] == Mention("T", 10, 17, "aspirin", "TRIVIAL")
+
+
+def test_parse_official_rejects_span_text_mismatch():
+    with pytest.raises(ValueError, match="一致しない"):
+        parse_official(ABSTRACTS, ANNOTATIONS.replace("\tATP\t", "\tADP\t"))

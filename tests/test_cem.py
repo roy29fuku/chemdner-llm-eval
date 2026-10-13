@@ -3,7 +3,8 @@
 import numpy as np
 import pytest
 
-from chemdner_bench.cem import Score, bootstrap, paired_bootstrap, per_document, read_tsv, score, write_tsv
+from chemdner_bench.cem import Score, bootstrap, official_pmids, paired_bootstrap, per_document, read_tsv, score, write_tsv
+from chemdner_bench.corpus import official_dir
 
 GOLD = {
     "1": {("T", 0, 7), ("A", 10, 18), ("A", 30, 35)},
@@ -109,3 +110,37 @@ def test_paired_bootstrap_detects_uniformly_better_system():
 def test_paired_bootstrap_requires_same_documents():
     with pytest.raises(ValueError):
         paired_bootstrap(np.zeros((3, 3)), np.zeros((4, 3)))
+
+
+def test_official_scope_scores_only_documents_with_gold_and_drops_other_predictions():
+    pred = {**GOLD, "3": {("A", 0, 3)}, "999": {("A", 0, 1)}}  # 正解の無い文書 3 と、一覧に無い文書 999 への予測
+    pmids = official_pmids(GOLD)
+    assert pmids == ["1", "2"]
+    s = score(GOLD, pred, pmids, drop_unknown=True)
+    assert (s.tp, s.fp, s.fn) == (4, 0, 0)  # 公式の採点では、範囲外の予測は FP に数えない
+
+
+def test_all_scope_counts_predictions_on_documents_without_gold():
+    pred = {**GOLD, "3": {("A", 0, 3)}}
+    s = score(GOLD, pred, PMIDS)
+    assert (s.tp, s.fp, s.fn) == (4, 1, 0)
+
+
+SAMPLE = official_dir() / "CHEMDNER_SAMPLE_JUNE25"
+
+
+@pytest.mark.corpus
+@pytest.mark.skipif(not (SAMPLE / "chemdner_cem_prediction_1_EVAL.txt").exists(), reason="公式の評価の見本が手元に無い")
+def test_reproduces_official_bc_evaluate_on_sample():
+    """2013 年の公式の評価の見本（bc-evaluate の出力つき）を再現する。これで「公式と同じ採点」と言える。
+
+    公式の出力: Evaluated documents 29 / Evaluated results 528 / TP 226 FP 302 FN 334 /
+    Micro precision 0.42803 recall 0.40357 F-score 0.41544。予測は 30 文書にあり、正解の無い文書の予測は捨てられる。
+    """
+    gold = read_tsv(SAMPLE / "chemdner_sample_cem_gold_standard.txt")
+    pred = read_tsv(SAMPLE / "chemdner_cem_prediction_1.txt")
+    pmids = official_pmids(gold)
+    s = score(gold, pred, pmids, drop_unknown=True)
+    assert len(pmids) == 29
+    assert (s.tp, s.fp, s.fn) == (226, 302, 334)
+    assert (round(s.precision, 5), round(s.recall, 5), round(s.f1, 5)) == (0.42803, 0.40357, 0.41544)
