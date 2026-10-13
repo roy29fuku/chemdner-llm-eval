@@ -283,7 +283,8 @@ def main(argv: list[str] | None = None) -> int:
 
         load_dotenv(ROOT / ".env")
         cfg = Config(args.split, args.model, args.effort, args.rep, args.limit, args.max_output_tokens)
-        out = asyncio.run(run(cfg, AsyncOpenAI(max_retries=6), args.concurrency, args.max_cost))
+        # 1 回の呼び出しは 300 秒で打ち切る（詰まった呼び出しを待ち続けない。失敗として記録し、再実行で埋める）
+        out = asyncio.run(run(cfg, AsyncOpenAI(max_retries=4, timeout=300), args.concurrency, args.max_cost))
         print(json.dumps(json.loads((out / "summary.json").read_text()), indent=2, ensure_ascii=False))
         print(f"出力: {out}")
     return 0
