@@ -30,6 +30,7 @@ UNKNOWN_PRICE = (10.0, 1.0, 50.0)  # 表に無いモデルは高い側で数え�
 
 ALLOW_HOSTS = [
     r"api\.openai\.com",                        # Codex 本体
+    r"chatgpt\.com",                             # Codex のモデル情報の取得だけを通す（_blocked で経路を絞る）
     r"(.+\.)?googleapis\.com", r"accounts\.google\.com", r"(.+\.)?gstatic\.com",  # gcloud・Terraform・GCS
     r"cloud\.google\.com", r"dl\.google\.com", r"packages\.cloud\.google\.com",
     r"releases\.hashicorp\.com", r"registry\.terraform\.io", r"checkpoint-api\.hashicorp\.com",
@@ -64,6 +65,8 @@ def _blocked(flow: http.HTTPFlow) -> str | None:
     host = flow.request.pretty_host
     if not any(p.match(host) for p in _allow):
         return "許可リストに無い宛先"
+    if host == "chatgpt.com" and not (flow.request.method == "GET" and flow.request.path.startswith("/backend-api/codex/models")):
+        return "Codex の付随的な通信（モデル情報の取得以外）"
     url = f"{host}{flow.request.path}"
     if PROJECT_ID:
         url = url.replace(PROJECT_ID, "<project>")  # 実験のプロジェクト自体は遮断しない
