@@ -60,6 +60,12 @@ IMAGE = "chemdner-agent:0.1"
 PROXY_IMAGE = "mitmproxy/mitmproxy:latest"
 REGION = "us-central1"
 PROMPT = "Read /workspace/task.md and solve the task."
+# 計画だけを立てさせる依頼（--plan-only）。同じ環境で、エージェントが最初に選ぶ手法を安く測る。調べること（データを読む・
+# 軽い集計・web 検索）は許し、学習・クラウドの資源の作成・予測の書き出しはさせない
+PLAN_PROMPT = ("Read /workspace/task.md. For now, only plan how you will solve the task. You may investigate as much as "
+               "you need (read the data, run quick analyses, search the web), but do not train any model, do not create "
+               "any cloud resources, and do not write predictions. Write the approach you will take and why to "
+               "/workspace/output/plan.md, then stop.")
 SLOT_PROJECTS = ("sa-agent-ws1", "sa-agent-ws2", "sa-agent-ws3", "sa-agent-ws4")  # agent/gcp/setup.sh で用意する
 SLOTS = len(SLOT_PROJECTS)
 KINDS = ("instances", "disks", "images", "snapshots", "addresses", "buckets")  # 消す順（VM を先に）
@@ -203,9 +209,9 @@ exclude = ["OPENAI_*", "CODEX_API_KEY"]
         raise RuntimeError(f"エージェントの gcloud が使えない: {out.stderr[-500:]}")
 
 
-def run_codex(name: str, run: Path, hours: float) -> int:
+def run_codex(name: str, run: Path, hours: float, prompt: str = PROMPT) -> int:
     cmd = ["docker", "exec", f"{name}-agent", "timeout", "--signal=INT", f"{int(hours * 3600)}",
-           "codex", "exec", "--skip-git-repo-check", "--json", "--cd", "/workspace", PROMPT]
+           "codex", "exec", "--skip-git-repo-check", "--json", "--cd", "/workspace", prompt]
     with open(run / "logs" / "codex.jsonl", "w", encoding="utf-8") as out, open(run / "logs" / "codex.stderr", "w") as err:
         return subprocess.run(cmd, stdout=out, stderr=err).returncode
 
@@ -415,6 +421,7 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--mode", choices=("pilot", "main"), required=True)
     p.add_argument("--task", choices=tuple(RULE3), default="free", help="課題文の版（規則 3 の文言）")
+    p.add_argument("--plan-only", action="store_true", help="計画だけを立てさせる（PLAN_PROMPT）。採点しない")
     p.add_argument("--hours", type=float, default=4)
     p.add_argument("--max-cost", type=float, default=20, help="Codex の API の費用の上限（米ドル）")
     p.add_argument("--max-gpus", type=int, default=1)
@@ -430,7 +437,8 @@ def main(argv: list[str] | None = None) -> int:
 
     args.project = slot_project(args.slot)
     sa = agent_sa(args.project)
-    name = f"b-{args.task}-{args.mode}-{args.model}-{args.effort}-r{args.rep}"
+    prompt = PLAN_PROMPT if args.plan_only else PROMPT
+    name = f"{'plan' if args.plan_only else 'b'}-{args.task}-{args.mode}-{args.model}-{args.effort}-r{args.rep}"
     run = ROOT / "runs" / "agent" / name
     if run.exists():
         raise SystemExit(f"{run} がすでにある（消すか --rep を変える）")
@@ -442,7 +450,7 @@ def main(argv: list[str] | None = None) -> int:
     ACTIVE.mkdir(parents=True, exist_ok=True)
     lock.write_text(json.dumps({"project": args.project, "sa": sa, "started": started, "run": name}) + "\n",
                     encoding="utf-8")
-    meta = {**vars(args), "agent_sa": sa, "started_at": started, "prompt": PROMPT, "image": IMAGE,
+    meta = {**vars(args), "agent_sa": sa, "started_at": started, "prompt": prompt, "image": IMAGE,
             "proxy_image": PROXY_IMAGE, "task_template_sha256": hashlib.sha256(TASK.read_bytes()).hexdigest()}
     baseline = inventory(args.project, args.account)["instances"]
     test = prepare(run, args.mode, args.task, args.project, sa, args.hours, args.max_gpus, args.max_vcpus)
@@ -457,7 +465,7 @@ def main(argv: list[str] | None = None) -> int:
         start_containers(run, name, args.project, args.max_cost, args.model, args.effort)
         dog.start()
         print(f"[{now()}] Codex を起動した（{sa}・上限 {args.hours} 時間・${args.max_cost}）。記録: {run}", flush=True)
-        meta["codex_exit"] = run_codex(name, run, args.hours)
+        meta["codex_exit"] = run_codex(name, run, args.hours, prompt)
     finally:
         stop.set()
         meta["finished_at"] = now()
@@ -481,7 +489,7 @@ def main(argv: list[str] | None = None) -> int:
     meta["blocked_requests"] = sorted({(f["host"], f["blocked"]) for f in flows if f.get("blocked")})
     pred_path = run / "workspace" / "output" / "predictions.tsv"
     meta["predictions"] = pred_path.exists()
-    if pred_path.exists() and args.mode == "pilot":
+    if pred_path.exists() and args.mode == "pilot" and not args.plan_only:
         meta["score"] = score(test, pred_path)
     (run / "summary.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False, default=list) + "\n", encoding="utf-8")
     print(json.dumps({k: meta.get(k) for k in ("codex_exit", "openai_cost_usd", "created", "remaining_after_cleanup",
