@@ -1,8 +1,8 @@
 """条件 b を並列に走らせる（1 つの波）。
 
-回ごとに別のエージェント用サービスアカウント（slot）を割り当てて run_b.py を同時に起動する。すべて終わったら、
-波の前に無かった資源がプロジェクトに残っていないかを確かめて消し（監査ログで作成者を追えなかったもの・遅れて
-記録されたものの受け皿）、どの slot にも鍵が残っていないことを確かめる。
+回ごとに別の GCP プロジェクト（slot。run_b.SLOT_PROJECTS）を割り当てて run_b.py を同時に起動する。すべて終わったら、
+各プロジェクトに波の前に無かった資源が残っていないかを確かめて消し（監査ログで作成者を追えなかったもの・遅れて
+記録されたものの受け皿）、どのプロジェクトのエージェントにも鍵が残っていないことを確かめる。
 
     uv run python agent/run_wave.py --mode main --task free --job gpt-5.2:none:0 --job gpt-5.2:medium:0
 
@@ -29,7 +29,6 @@ def main() -> int:
     p.add_argument("--first-slot", type=int, default=0)
     p.add_argument("--hours", type=float, default=4)
     p.add_argument("--max-cost", type=float, default=20)
-    p.add_argument("--project", default="chemdner-biobert-training")
     p.add_argument("--account", default="ryota.yamada@science-aid.com")
     args = p.parse_args()
     slots = list(range(args.first_slot, args.first_slot + len(args.job)))
@@ -43,7 +42,7 @@ def main() -> int:
     waves = run_b.ROOT / "runs" / "agent" / "waves"
     waves.mkdir(parents=True, exist_ok=True)
     stamp = started.replace(":", "").replace("+0000", "Z")
-    before = run_b.inventory(args.project, args.account)
+    before = {s: run_b.inventory(run_b.slot_project(s), args.account) for s in slots}
     procs = []
     for slot, job in zip(slots, args.job):
         model, effort, rep = job.split(":")
@@ -51,7 +50,7 @@ def main() -> int:
         cmd = [sys.executable, str(Path(__file__).resolve().parent / "run_b.py"), "--mode", args.mode, "--task", args.task,
                "--model", model,
                "--effort", effort, "--rep", rep, "--slot", str(slot), "--hours", str(args.hours),
-               "--max-cost", str(args.max_cost), "--project", args.project, "--account", args.account]
+               "--max-cost", str(args.max_cost), "--account", args.account]
         procs.append((job, slot, subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT), log))
         print(f"[{run_b.now()}] slot {slot}: {job} を起動した", flush=True)
         time.sleep(20)  # 鍵の作成・コンテナの起動が重ならないように少しずらす
@@ -62,9 +61,11 @@ def main() -> int:
         results.append({"job": job, "slot": slot, "exit": code})
         print(f"[{run_b.now()}] slot {slot}: {job} が終わった（exit {code}）", flush=True)
 
-    leftover = run_b.sweep(args.project, args.account, before)
-    keys = {run_b.agent_sa(args.project, s): run_b.delete_user_keys(args.project, args.account, run_b.agent_sa(args.project, s))
-            for s in slots}  # 他の波が使っている slot の鍵には触れない
+    leftover, keys = {}, {}
+    for s in slots:  # 他の波が使っている slot には触れない
+        project = run_b.slot_project(s)
+        leftover[project] = run_b.sweep(project, args.account, before[s])
+        keys[project] = run_b.delete_user_keys(project, args.account, run_b.agent_sa(project))
     summary = {"started_at": started, "finished_at": run_b.now(), "mode": args.mode, "task": args.task, "jobs": results,
                "remaining_after_sweep": leftover, "keys_deleted_after_runs": keys}
     (waves / f"{stamp}.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

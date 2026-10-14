@@ -3,16 +3,20 @@
 エージェント（Codex CLI）に、課題・データ・GCP のプロジェクトを渡して「手段を問わず、最も良い結果を」と頼む。
 web 調査・環境の構築（VM・GPU・Terraform など）も含めて手段はエージェントに任せ、こちらは安全策と記録だけを受け持つ。
 
-1. 準備: 課題文・課題の定義・データ・形式チェッカーを作業場所に置く。この回のサービスアカウント（slot）の鍵を作る
+1. 準備: 課題文・課題の定義・データ・形式チェッカーを作業場所に置く。この回の GCP プロジェクト（slot）のエージェント用
+   サービスアカウントの鍵を作る
 2. proxy（mitmproxy）とエージェントのコンテナを起動する。エージェントは proxy を通してしか外に出られない
-3. 番人: 1 分ごとに VM を見て、上限（この回は GPU 1 枚・L4 だけ・vCPU 24、プロジェクト全体は GPU 4 枚）を超えた VM を消す
+3. 番人: 1 分ごとに VM を見て、上限（GPU 1 枚・L4 だけ・vCPU 24）を超えた VM を消す
 4. 時間の上限で Codex を止める。記録（Codex のログ・proxy の全通信・API の使用量・作られた資源・DNS の問い合わせ）を回収する
-5. 後片付け: コンテナを止めて鍵を消し、この回のサービスアカウントが作った資源（監査ログで作成者を追う）をすべて消す
+5. 後片付け: コンテナを止めて鍵を消し、エージェントのサービスアカウントが作った資源（監査ログで作成者を追う）をすべて消す
 6. pilot なら予測を採点する。main は採点しない（test の正解は、すべての条件の予測がそろってから一度だけ使う）
 
     uv run python agent/run_b.py --mode pilot --model gpt-6-luna --effort medium --rep 0 --slot 0
 
-並列に走らせるときは run_wave.py を使う（回ごとに別の slot を割り当て、波の最後にプロジェクト全体を掃除する）。
+並列に走らせるときは run_wave.py を使う（回ごとに別の slot を割り当て、波の最後に各プロジェクトを掃除する）。
+slot ごとに別の GCP プロジェクト（SLOT_PROJECTS）を使う。同じプロジェクトでは、エージェントが他の回の VM を見つけて
+SSH で入れてしまう（2026-10-14 の試行で起きた）。プロジェクトの名前は課題文でエージェントに見えるので、データ名・
+手法名を含まない中立なものにする（以前の chemdner-biobert-training は「biobert」が手がかりになりうる）。
 
 mode が pilot のときは、development の先頭 100 件（PMID の順。条件 a の試行と同じ文書）を正解を隠して test として渡し、
 残りの development と training をラベル付きで渡す。main のときは test（evaluation）の本文だけを渡す。
@@ -56,7 +60,8 @@ IMAGE = "chemdner-agent:0.1"
 PROXY_IMAGE = "mitmproxy/mitmproxy:latest"
 REGION = "us-central1"
 PROMPT = "Read /workspace/task.md and solve the task."
-SLOTS = 4  # エージェント用のサービスアカウントの数（agent/gcp/setup.sh で作る）
+SLOT_PROJECTS = ("sa-agent-ws1", "sa-agent-ws2", "sa-agent-ws3", "sa-agent-ws4")  # agent/gcp/setup.sh で用意する
+SLOTS = len(SLOT_PROJECTS)
 KINDS = ("instances", "disks", "images", "snapshots", "addresses", "buckets")  # 消す順（VM を先に）
 
 
@@ -72,10 +77,14 @@ def gcloud(args: list[str], project: str, account: str, check: bool = True) -> s
     return sh(["gcloud", *args, f"--project={project}", f"--account={account}", "--quiet"], check=check, capture=True)
 
 
-def agent_sa(project: str, slot: int) -> str:
+def slot_project(slot: int) -> str:
     if not 0 <= slot < SLOTS:
         raise ValueError(f"slot は 0〜{SLOTS - 1}")
-    return f"agent-b{slot or ''}@{project}.iam.gserviceaccount.com"
+    return SLOT_PROJECTS[slot]
+
+
+def agent_sa(project: str) -> str:
+    return f"coding-agent@{project}.iam.gserviceaccount.com"
 
 
 # ---------------------------------------------------------------- 準備
@@ -342,8 +351,10 @@ def cleanup_owned(project: str, account: str, sa: str, since: str) -> dict[str, 
     return remaining
 
 
-def active_slots() -> list[dict]:
-    return [json.loads(p.read_text()) for p in sorted(ACTIVE.glob("slot*.json"))] if ACTIVE.exists() else []
+def active_slots(project: str) -> list[dict]:
+    """project で動いている回の印（旧い印には project が無く、chemdner-biobert-training の回）。"""
+    marks = [json.loads(p.read_text()) for p in sorted(ACTIVE.glob("slot*.json"))] if ACTIVE.exists() else []
+    return [m for m in marks if m.get("project", "chemdner-biobert-training") == project]
 
 
 def sweep(project: str, account: str, before: dict[str, list[str]]) -> dict[str, list[str]]:
@@ -353,7 +364,7 @@ def sweep(project: str, account: str, before: dict[str, list[str]]) -> dict[str,
     監査ログで作成者を追えない資源は、動いている回のものでも消えうるので、波は重ねずに走らせるのが基本。
     """
     keep = {k: set() for k in KINDS}
-    for a in active_slots():
+    for a in active_slots(project):
         for kind, names in owned(project, account, a["sa"], a["started"]).items():
             keep[kind] |= set(names)
     current = locations(project, account)
@@ -408,17 +419,17 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--max-cost", type=float, default=20, help="Codex の API の費用の上限（米ドル）")
     p.add_argument("--max-gpus", type=int, default=1)
     p.add_argument("--max-vcpus", type=int, default=24)
-    p.add_argument("--max-project-gpus", type=int, default=SLOTS, help="並列の回を合わせたプロジェクト全体の GPU の上限")
+    p.add_argument("--max-project-gpus", type=int, default=1, help="プロジェクト全体の GPU の上限（実行の前からの VM は除く）")
     p.add_argument("--model", default="gpt-6-luna")
     p.add_argument("--effort", default="medium")
     p.add_argument("--rep", type=int, default=0)
-    p.add_argument("--slot", type=int, default=0, help=f"エージェント用のサービスアカウントの番号（0〜{SLOTS - 1}）")
-    p.add_argument("--project", default="chemdner-biobert-training")
+    p.add_argument("--slot", type=int, default=0, help=f"使う GCP プロジェクトの番号（0〜{SLOTS - 1}。SLOT_PROJECTS）")
     p.add_argument("--account", default="ryota.yamada@science-aid.com")
     args = p.parse_args(argv)
     load_dotenv(ROOT / ".env")
 
-    sa = agent_sa(args.project, args.slot)
+    args.project = slot_project(args.slot)
+    sa = agent_sa(args.project)
     name = f"b-{args.task}-{args.mode}-{args.model}-{args.effort}-r{args.rep}"
     run = ROOT / "runs" / "agent" / name
     if run.exists():
@@ -429,7 +440,8 @@ def main(argv: list[str] | None = None) -> int:
     run.mkdir(parents=True)
     started = now()
     ACTIVE.mkdir(parents=True, exist_ok=True)
-    lock.write_text(json.dumps({"sa": sa, "started": started, "run": name}) + "\n", encoding="utf-8")
+    lock.write_text(json.dumps({"project": args.project, "sa": sa, "started": started, "run": name}) + "\n",
+                    encoding="utf-8")
     meta = {**vars(args), "agent_sa": sa, "started_at": started, "prompt": PROMPT, "image": IMAGE,
             "proxy_image": PROXY_IMAGE, "task_template_sha256": hashlib.sha256(TASK.read_bytes()).hexdigest()}
     baseline = inventory(args.project, args.account)["instances"]

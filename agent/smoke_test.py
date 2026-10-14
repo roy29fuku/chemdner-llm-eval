@@ -5,7 +5,8 @@ proxy とエージェントのコンテナを起動し、次を確かめてか�
 - 書き込みを伴う通信は許可リストの宛先にだけ届く。他の LLM の API・Hugging Face のデータセット・CHEMDNER の名前を
   含む URL・BioBERT などが配るデータセットは 403 になる
 - proxy を通らない直接の通信はできない
-- gcloud がこの slot のサービスアカウントで使え、作った資源（バケット・小さな VM）を監査ログで追って消せる
+- gcloud がこの slot のプロジェクトのエージェント用サービスアカウントで使え、他の slot のプロジェクトは見えない
+- 作った資源（バケット・小さな VM）を監査ログで追って消せる
 - Codex が web 検索を使え、Codex が実行するコマンドからは OpenAI の API キーが見えない
 
     uv run python agent/smoke_test.py --slot 3
@@ -45,8 +46,10 @@ def main() -> int:
     ap.add_argument("--slot", type=int, default=run_b.SLOTS - 1)
     args = ap.parse_args()
     load_dotenv(run_b.ROOT / ".env")
-    project, account = "chemdner-biobert-training", "ryota.yamada@science-aid.com"
-    sa = run_b.agent_sa(project, args.slot)
+    account = "ryota.yamada@science-aid.com"
+    project = run_b.slot_project(args.slot)
+    other_project = run_b.slot_project((args.slot + 1) % run_b.SLOTS)
+    sa = run_b.agent_sa(project)
     run = run_b.ROOT / "runs" / "agent" / f"smoke-{int(time.time())}"
     (run / "workspace").mkdir(parents=True)
     name = f"b-smoke-{args.slot}"
@@ -85,8 +88,9 @@ def main() -> int:
             time.sleep(15)
         check("監査ログで作成者を追える", bucket in got["buckets"] and vm in got["instances"],
               json.dumps({k: sorted(v) for k, v in got.items() if v}))
-        other = run_b.owned(project, account, run_b.agent_sa(project, (args.slot + 1) % run_b.SLOTS), started)
-        check("他の slot の資源としては見えない", vm not in other["instances"] and bucket not in other["buckets"])
+        out = agent(f"gcloud compute instances list --project={other_project} --format='value(name)' 2>&1")
+        check("他の slot のプロジェクトの VM は見えない", "permission" in out.stdout.lower(),
+              " ".join(out.stdout.split())[:200])
         remaining = run_b.cleanup_owned(project, account, sa, started)
         check("作った資源を消せる", not any(remaining.values()), json.dumps(remaining))
 
