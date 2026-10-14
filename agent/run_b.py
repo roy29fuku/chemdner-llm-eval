@@ -161,6 +161,9 @@ def start_containers(run: Path, name: str, project: str, max_cost: float, model:
         "-v", f"{logs}:/logs", "-v", f"{addon}:/addon:ro", "-v", f"{conf}:/home/mitmproxy/.mitmproxy",
         "-e", f"MAX_COST_USD={max_cost}", "-e", f"PROJECT_ID={project}", PROXY_IMAGE,
         "mitmdump", "-s", "/addon/addon.py", "--listen-port", "8080", "--set", r"ignore_hosts=^.*:22$",
+        # 大きな本体は受け取りながら流す。既定（全部受け取ってから中継）では、PyTorch のような数百 MB の配布物で
+        # pip に何も届かないまま時間切れになる（2026-10-14 の本番の 1 回目で起きた）
+        "--set", "stream_large_bodies=1m",
         "--set", "block_global=false"], capture=True)
     sh(["docker", "network", "connect", "bridge", f"{name}-proxy"], capture=True)
     ca = conf / "mitmproxy-ca-cert.pem"

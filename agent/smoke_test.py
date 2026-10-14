@@ -37,6 +37,9 @@ CHECKS = [
     ("自分の VM の名前に chem-ner があっても GCP の API は遮断しない",
      "curl -s https://compute.googleapis.com/compute/v1/projects/x/zones/us-central1-a/instances/chem-ner-gpu "
      "| grep -c 'blocked by experiment proxy' || true", "0"),
+    ("大きな配布物（PyTorch）を pip で取得できる",
+     "timeout 900 python3 -m pip download torch --no-deps -q -d /tmp/torch-dl >/dev/null 2>&1 && ls /tmp/torch-dl | grep -c '^torch-'",
+     "1"),
     ("直接の通信はできない", f"{CODE} --noproxy '*' --max-time 10 https://pypi.org/ || true", "000"),
     ("gcloud が使える", "gcloud compute zones list --filter=region:us-central1 --format='value(name)' | head -1", "us-central1-"),
 ]

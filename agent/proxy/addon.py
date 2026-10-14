@@ -175,7 +175,9 @@ def response(flow: http.HTTPFlow) -> None:
         "host": flow.request.pretty_host,
         "path": flow.request.path[:300],
         "status": flow.response.status_code if flow.response else None,
-        "bytes": len(flow.response.content or b"") if flow.response else 0,
+        # 大きな本体は流しながら中継する（stream_large_bodies）ので手元に残らない。そのときは Content-Length で数える
+        "bytes": (len(flow.response.content) if flow.response.content else int(flow.response.headers.get("content-length") or 0))
+        if flow.response else 0,
         "user_agent": flow.request.headers.get("user-agent", "")[:120],
         "blocked": flow.metadata.get("blocked"),
     })
