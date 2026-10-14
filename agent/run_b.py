@@ -1,25 +1,30 @@
 """条件 b（答えを得る手段から探索させる）を 1 回走らせる。
 
-エージェント（Codex CLI）に、課題・データ・GCP のプロジェクトを渡して「コーディングとクラウドを自由に使って解いて」と
-頼む。環境の構築（VM・GPU・Terraform など）も含めて手段はエージェントに任せ、こちらは安全策だけを受け持つ。
+エージェント（Codex CLI）に、課題・データ・GCP のプロジェクトを渡して「手段を問わず、最も良い結果を」と頼む。
+web 調査・環境の構築（VM・GPU・Terraform など）も含めて手段はエージェントに任せ、こちらは安全策と記録だけを受け持つ。
 
-1. 準備: 課題文・課題の定義・データ・形式チェッカーを作業場所に置く。エージェント用のサービスアカウントの鍵を作る
+1. 準備: 課題文・課題の定義・データ・形式チェッカーを作業場所に置く。この回のサービスアカウント（slot）の鍵を作る
 2. proxy（mitmproxy）とエージェントのコンテナを起動する。エージェントは proxy を通してしか外に出られない
-3. 番人: 1 分ごとにプロジェクトの VM を見て、上限（GPU 全体 1 枚・L4 だけ・vCPU 24）を超えた VM を消す
+3. 番人: 1 分ごとに VM を見て、上限（この回は GPU 1 枚・L4 だけ・vCPU 24、プロジェクト全体は GPU 4 枚）を超えた VM を消す
 4. 時間の上限で Codex を止める。記録（Codex のログ・proxy の全通信・API の使用量・作られた資源・DNS の問い合わせ）を回収する
-5. 後片付け: エージェントが作った資源をすべて消し、残っていないことを確かめる。鍵を消す
-6. 予測を採点する
+5. 後片付け: コンテナを止めて鍵を消し、この回のサービスアカウントが作った資源（監査ログで作成者を追う）をすべて消す
+6. pilot なら予測を採点する。main は採点しない（test の正解は、すべての条件の予測がそろってから一度だけ使う）
 
-    uv run python agent/run_b.py --mode pilot --hours 4 --max-cost 10
+    uv run python agent/run_b.py --mode pilot --model gpt-6-luna --effort medium --rep 0 --slot 0
+
+並列に走らせるときは run_wave.py を使う（回ごとに別の slot を割り当て、波の最後にプロジェクト全体を掃除する）。
 
 mode が pilot のときは、development の先頭 100 件（PMID の順。条件 a の試行と同じ文書）を正解を隠して test として渡し、
-残りの development と training をラベル付きで渡す。main のときは test（evaluation）を渡す。
+残りの development と training をラベル付きで渡す。main のときは test（evaluation）の本文だけを渡す。
+
+課題文（agent/task/task.md）の版は TASK_NAME で run の名前に入れる。2026-10-14 の試行の naive・scored の課題文は
+commit 9fecad8 までの版にある。
 """
 
 import argparse
+import hashlib
 import json
 import os
-import re
 import shutil
 import subprocess
 import sys
@@ -35,10 +40,14 @@ from chemdner_bench import cem  # noqa: E402
 from chemdner_bench.corpus import Document, gold_spans, load  # noqa: E402
 
 AGENT = ROOT / "agent"
+TASK = AGENT / "task" / "task.md"
+TASK_NAME = "free"
 IMAGE = "chemdner-agent:0.1"
 PROXY_IMAGE = "mitmproxy/mitmproxy:latest"
 REGION = "us-central1"
 PROMPT = "Read /workspace/task.md and solve the task."
+SLOTS = 4  # エージェント用のサービスアカウントの数（agent/gcp/setup.sh で作る）
+KINDS = ("instances", "disks", "images", "snapshots", "addresses", "buckets")  # 消す順（VM を先に）
 
 
 def now() -> str:
@@ -53,6 +62,12 @@ def gcloud(args: list[str], project: str, account: str, check: bool = True) -> s
     return sh(["gcloud", *args, f"--project={project}", f"--account={account}", "--quiet"], check=check, capture=True)
 
 
+def agent_sa(project: str, slot: int) -> str:
+    if not 0 <= slot < SLOTS:
+        raise ValueError(f"slot は 0〜{SLOTS - 1}")
+    return f"agent-b{slot or ''}@{project}.iam.gserviceaccount.com"
+
+
 # ---------------------------------------------------------------- 準備
 def write_abstracts(docs: list[Document], path: Path) -> None:
     path.write_text("".join(f"{d.pmid}\t{d.title}\t{d.abstract}\n" for d in docs), encoding="utf-8")
@@ -63,9 +78,16 @@ def write_annotations(docs: list[Document], path: Path) -> None:
     path.write_text("".join(lines), encoding="utf-8")
 
 
-def prepare(run: Path, mode: str, variant: str, project: str, hours: float, max_gpus: int,
-            max_vcpus: int) -> list[Document]:
-    """作業場所を作り、test として渡す文書（正解つき・採点用）を返す。正解は作業場所に置かない。"""
+def render_task(project: str, sa: str, hours: float, max_gpus: int, max_vcpus: int) -> str:
+    task = TASK.read_text(encoding="utf-8")
+    for key, value in {"project": project, "agent_sa": sa, "hours": f"{hours:g}", "max_gpus": max_gpus,
+                       "max_vcpus": max_vcpus}.items():
+        task = task.replace("{" + key + "}", str(value))
+    return task
+
+
+def prepare(run: Path, mode: str, project: str, sa: str, hours: float, max_gpus: int, max_vcpus: int) -> list[Document]:
+    """作業場所を作り、test として渡す文書を返す（pilot は正解つき・main は本文だけ）。正解は作業場所に置かない。"""
     ws = run / "workspace"
     (ws / "data").mkdir(parents=True)
     (ws / "output").mkdir()
@@ -75,7 +97,7 @@ def prepare(run: Path, mode: str, variant: str, project: str, hours: float, max_
         test, development = dev[:100], dev[100:]
     else:
         development = load("development")
-        test = load("evaluation")  # 正解は採点にだけ使う（test の正解が data/ に無ければここで止まる）
+        test = load("evaluation", gold=False)  # main は test の正解を読まない
     write_abstracts(training, ws / "data" / "training.abstracts.txt")
     write_annotations(training, ws / "data" / "training.annotations.txt")
     write_abstracts(development, ws / "data" / "development.abstracts.txt")
@@ -85,22 +107,15 @@ def prepare(run: Path, mode: str, variant: str, project: str, hours: float, max_
     if guidelines.startswith("<!--"):
         guidelines = guidelines[guidelines.index("-->") + 3:].lstrip()  # 条件 a と同じく出典の注記は渡さない
     (ws / "guidelines.md").write_text(guidelines, encoding="utf-8")
-    task = (AGENT / "task" / "task.md").read_text(encoding="utf-8")
-    # naive は採点の方法を伝えない。scored は採点の方法と「高い点を目指して」を足す（手法は示唆しない）
-    evaluation = (AGENT / "task" / "evaluation.md").read_text(encoding="utf-8") if variant == "scored" else ""
-    task = task.replace("{evaluation}", evaluation)
-    for key, value in {"project": project, "hours": f"{hours:g}", "max_gpus": max_gpus, "max_vcpus": max_vcpus}.items():
-        task = task.replace("{" + key + "}", str(value))
-    (ws / "task.md").write_text(task, encoding="utf-8")
+    (ws / "task.md").write_text(render_task(project, sa, hours, max_gpus, max_vcpus), encoding="utf-8")
     shutil.copy(AGENT / "task" / "check_format.py", ws / "check_format.py")
     return test
 
 
-def create_key(run: Path, project: str, account: str) -> str:
+def create_key(run: Path, project: str, account: str, sa: str) -> str:
     creds = run / "creds"
     creds.mkdir()
-    gcloud(["iam", "service-accounts", "keys", "create", str(creds / "key.json"),
-            f"--iam-account=agent-b@{project}.iam.gserviceaccount.com"], project, account)
+    gcloud(["iam", "service-accounts", "keys", "create", str(creds / "key.json"), f"--iam-account={sa}"], project, account)
     return json.loads((creds / "key.json").read_text())["private_key_id"]  # 後で鍵を消すための ID
 
 
@@ -127,11 +142,13 @@ def start_containers(run: Path, name: str, project: str, max_cost: float, model:
     system = sh(["docker", "run", "--rm", IMAGE, "cat", "/etc/ssl/certs/ca-certificates.crt"], capture=True).stdout
     (certs / "ca-bundle.crt").write_text(system + "\n" + ca.read_text(), encoding="utf-8")
     shutil.copy(ca, certs / "mitmproxy-ca.pem")
-    # Codex の設定。KEY・TOKEN・SECRET を含む環境変数はコマンドに渡さない（OpenAI の API キーをコードから使えなくする）
+    # Codex の設定。KEY・TOKEN・SECRET を含む環境変数はコマンドに渡さない（OpenAI の API キーをコードから使えなくする）。
+    # web 検索は OpenAI の側で動く（proxy を通らない）ので、検索の語と開いたページは Codex のログ（codex.jsonl）で監査する
     (codex / "config.toml").write_text(f'''model = "{model}"
 model_reasoning_effort = "{effort}"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
+web_search = "live"
 
 [shell_environment_policy]
 inherit = "all"
@@ -173,6 +190,37 @@ def run_codex(name: str, run: Path, hours: float) -> int:
         return subprocess.run(cmd, stdout=out, stderr=err).returncode
 
 
+# ---------------------------------------------------------------- 作成者の追跡（監査ログ）
+# 作成の操作（methodName の末尾）と資源の種類
+CREATE_METHODS = {
+    "compute.instances.insert": "instances", "compute.disks.insert": "disks", "compute.images.insert": "images",
+    "compute.snapshots.insert": "snapshots", "compute.addresses.insert": "addresses", "storage.buckets.create": "buckets",
+}
+
+
+def owned(project: str, account: str, sa: str, since: str) -> dict[str, dict[str, str]]:
+    """sa が since 以降に作った資源を、監査ログ（管理アクティビティ）から {種類: {名前: 場所}} で返す。
+
+    監査ログで作成者を追えない作り方（インスタンスグループ・ディスクからのスナップショットなど）は、
+    run_wave.py の波の最後の掃除（プロジェクト全体の差分）で受け止める。
+    """
+    filt = (f'logName="projects/{project}/logs/cloudaudit.googleapis.com%2Factivity" '
+            f'AND protoPayload.authenticationInfo.principalEmail="{sa}" AND timestamp>="{since}"')
+    out = gcloud(["logging", "read", filt, "--format=json", "--limit=5000"], project, account, check=False)
+    found: dict[str, dict[str, str]] = {k: {} for k in KINDS}
+    for e in json.loads(out.stdout or "[]"):
+        pp = e.get("protoPayload", {})
+        method, res = pp.get("methodName", ""), pp.get("resourceName", "")
+        kind = next((k for m, k in CREATE_METHODS.items() if method.endswith(m)), None)
+        if not kind or not res:
+            continue
+        parts = res.split("/")
+        location = parts[parts.index("zones") + 1] if "zones" in parts else \
+            parts[parts.index("regions") + 1] if "regions" in parts else "global"
+        found[kind][parts[-1]] = location
+    return found
+
+
 # ---------------------------------------------------------------- 番人と後片付け
 def list_instances(project: str, account: str) -> list[dict]:
     out = gcloud(["compute", "instances", "list", "--format=json"], project, account, check=False)
@@ -188,134 +236,201 @@ def machine_vcpus(project: str, account: str, zone: str, machine_type: str, cach
     return cache[key]
 
 
-def watchdog(project: str, account: str, stop: threading.Event, log: Path, max_gpus: int, max_vcpus: int) -> None:
-    """1 分ごとに VM を見て、上限を超えた VM を消す。見えた VM はすべて記録する。"""
+def watchdog(project: str, account: str, sa: str, since: str, baseline: list[str], stop: threading.Event, log: Path,
+             max_gpus: int, max_vcpus: int, max_project_gpus: int) -> None:
+    """1 分ごとに VM を見て、上限を超えた VM を消す。実行の前に無かった VM をすべて記録する。
+
+    - 実行の前に無かった VM（並列の他の回のものも含む）: L4 以外の GPU は消す。GPU の合計が max_project_gpus を
+      超えたら新しい方を消す
+    - この回の VM（監査ログで作成者が sa のもの）: GPU max_gpus 枚・vCPU max_vcpus を超えたら新しい方を消す
+    """
     cache: dict = {}
     while not stop.wait(60):
-        gpus = vcpus = 0
+        mine = owned(project, account, sa, since)["instances"]
+        gpus = vcpus = project_gpus = 0
         for inst in sorted(list_instances(project, account), key=lambda i: i.get("creationTimestamp", "")):
+            if inst["name"] in baseline:
+                continue
             zone = inst["zone"].split("/")[-1]
             mtype = inst["machineType"].split("/")[-1]
             accels = [(a["acceleratorType"].split("/")[-1], a["acceleratorCount"]) for a in inst.get("guestAccelerators", [])]
+            running = inst.get("status") == "RUNNING"
             n_gpu = sum(c for _, c in accels)
-            n_cpu = machine_vcpus(project, account, zone, mtype, cache) if inst.get("status") == "RUNNING" else 0
+            is_mine = inst["name"] in mine
+            n_cpu = machine_vcpus(project, account, zone, mtype, cache) if running and is_mine else 0
             reason = None
             if any(t != "nvidia-l4" for t, _ in accels) or (mtype.startswith(("a2-", "a3-", "a4-")) and not accels):
                 reason = "L4 以外の GPU"
-            elif inst.get("status") == "RUNNING" and gpus + n_gpu > max_gpus:
+            elif running and project_gpus + n_gpu > max_project_gpus:
+                reason = f"プロジェクト全体の GPU の上限 {max_project_gpus} 枚を超える"
+            elif running and is_mine and gpus + n_gpu > max_gpus:
                 reason = f"GPU の上限 {max_gpus} 枚を超える"
-            elif inst.get("status") == "RUNNING" and vcpus + n_cpu > max_vcpus:
+            elif running and is_mine and vcpus + n_cpu > max_vcpus:
                 reason = f"vCPU の上限 {max_vcpus} を超える"
             with open(log, "a", encoding="utf-8") as f:
-                f.write(json.dumps({"t": now(), "name": inst["name"], "zone": zone, "machine_type": mtype,
+                f.write(json.dumps({"t": now(), "name": inst["name"], "mine": is_mine, "zone": zone, "machine_type": mtype,
                                     "accelerators": accels, "status": inst.get("status"), "deleted_for": reason}) + "\n")
             if reason:
                 gcloud(["compute", "instances", "delete", inst["name"], f"--zone={zone}"], project, account, check=False)
-            elif inst.get("status") == "RUNNING":
-                gpus += n_gpu
-                vcpus += n_cpu
+            elif running:
+                project_gpus += n_gpu
+                if is_mine:
+                    gpus += n_gpu
+                    vcpus += n_cpu
 
 
-def inventory(project: str, account: str) -> dict:
+def locations(project: str, account: str) -> dict[str, dict[str, str]]:
+    """いまある資源を {種類: {名前: 場所}} で返す。"""
     def j(args):
-        out = gcloud(args + ["--format=json"], project, account, check=False)
-        return json.loads(out.stdout or "[]")
+        return json.loads(gcloud(args + ["--format=json"], project, account, check=False).stdout or "[]")
+
+    def loc(x: dict, key: str) -> str:
+        return x[key].split("/")[-1] if key in x else "global"
     return {
-        "instances": [i["name"] for i in j(["compute", "instances", "list"])],
-        "disks": [d["name"] for d in j(["compute", "disks", "list"])],
-        "images": [i["name"] for i in j(["compute", "images", "list", "--no-standard-images"])],
-        "snapshots": [s["name"] for s in j(["compute", "snapshots", "list"])],
-        "addresses": [a["name"] for a in j(["compute", "addresses", "list"])],
-        "buckets": [b["name"] for b in j(["storage", "buckets", "list"])],
+        "instances": {i["name"]: loc(i, "zone") for i in j(["compute", "instances", "list"])},
+        "disks": {d["name"]: loc(d, "zone") for d in j(["compute", "disks", "list"])},
+        "images": {i["name"]: "global" for i in j(["compute", "images", "list", "--no-standard-images"])},
+        "snapshots": {s["name"]: "global" for s in j(["compute", "snapshots", "list"])},
+        "addresses": {a["name"]: loc(a, "region") for a in j(["compute", "addresses", "list"])},
+        "buckets": {b["name"]: "global" for b in j(["storage", "buckets", "list"])},
     }
 
 
-def cleanup(project: str, account: str, before: dict) -> dict:
-    """エージェントが作った資源（実行の前に無かったもの）をすべて消し、残りを返す。"""
-    now_ = inventory(project, account)
-    new = {k: [x for x in v if x not in before.get(k, [])] for k, v in now_.items()}
-    for inst in list_instances(project, account):
-        if inst["name"] in new["instances"]:
-            gcloud(["compute", "instances", "delete", inst["name"], f"--zone={inst['zone'].split('/')[-1]}",
-                    "--delete-disks=all"], project, account, check=False)
-    disks = json.loads(gcloud(["compute", "disks", "list", "--format=json"], project, account, check=False).stdout or "[]")
-    for d in disks:
-        if d["name"] in new["disks"]:
-            gcloud(["compute", "disks", "delete", d["name"], f"--zone={d['zone'].split('/')[-1]}"], project, account, check=False)
-    for name in new["images"]:
-        gcloud(["compute", "images", "delete", name], project, account, check=False)
-    for name in new["snapshots"]:
-        gcloud(["compute", "snapshots", "delete", name], project, account, check=False)
-    addrs = json.loads(gcloud(["compute", "addresses", "list", "--format=json"], project, account, check=False).stdout or "[]")
-    for a in addrs:
-        if a["name"] in new["addresses"]:
-            loc = f"--region={a['region'].split('/')[-1]}" if "region" in a else "--global"
-            gcloud(["compute", "addresses", "delete", a["name"], loc], project, account, check=False)
-    for name in new["buckets"]:
-        gcloud(["storage", "rm", "--recursive", f"gs://{name}"], project, account, check=False)
+def inventory(project: str, account: str) -> dict[str, list[str]]:
+    return {k: sorted(v) for k, v in locations(project, account).items()}
+
+
+def delete(project: str, account: str, kind: str, name: str, location: str) -> None:
+    args = {
+        "instances": ["compute", "instances", "delete", name, f"--zone={location}", "--delete-disks=all"],
+        "disks": ["compute", "disks", "delete", name, f"--zone={location}"],
+        "images": ["compute", "images", "delete", name],
+        "snapshots": ["compute", "snapshots", "delete", name],
+        "addresses": ["compute", "addresses", "delete", name,
+                      f"--region={location}" if location != "global" else "--global"],
+        "buckets": ["storage", "rm", "--recursive", f"gs://{name}"],
+    }[kind]
+    gcloud(args, project, account, check=False)
+
+
+def cleanup_owned(project: str, account: str, sa: str, since: str) -> dict[str, list[str]]:
+    """sa が作った資源をすべて消し、残りを返す。監査ログの遅れを考えて、1 分おきに確かめ直す（最大 3 回）。"""
+    remaining: dict[str, list[str]] = {}
+    for attempt in range(3):
+        mine = owned(project, account, sa, since)
+        current = inventory(project, account)
+        for kind in KINDS:
+            for name in mine[kind]:
+                if name in current[kind]:
+                    delete(project, account, kind, name, mine[kind][name])
+        current = inventory(project, account)
+        remaining = {k: [n for n in mine[k] if n in current[k]] for k in KINDS}
+        if attempt > 0 and not any(remaining.values()):
+            break
+        time.sleep(60)
+    return remaining
+
+
+def sweep(project: str, account: str, before: dict[str, list[str]]) -> dict[str, list[str]]:
+    """before（並列の回をすべて始める前）に無かった資源をプロジェクトからすべて消し、残りを返す。
+
+    並列の回がすべて終わってから使う（走っている回の資源も消してしまうため）。
+    """
+    current = locations(project, account)
+    for kind in KINDS:
+        for name, location in current[kind].items():
+            if name not in before.get(kind, []):
+                delete(project, account, kind, name, location)
     after = inventory(project, account)
     return {k: [x for x in v if x not in before.get(k, [])] for k, v in after.items()}
 
 
-def dns_log(project: str, account: str, since: str, path: Path) -> None:
+def delete_user_keys(project: str, account: str, sa: str) -> list[str]:
+    """sa の利用者管理の鍵をすべて消し、消した鍵の ID を返す（どの回の後も 0 本のはず）。"""
+    out = gcloud(["iam", "service-accounts", "keys", "list", f"--iam-account={sa}", "--managed-by=user",
+                  "--format=value(name)"], project, account, check=False)
+    ids = [line.split("/")[-1] for line in out.stdout.split()]
+    for key_id in ids:
+        gcloud(["iam", "service-accounts", "keys", "delete", key_id, f"--iam-account={sa}"], project, account, check=False)
+    return ids
+
+
+def dns_log(project: str, account: str, since: str, path: Path, vms: set[str]) -> None:
+    """この回の VM（vms）が引いた名前を記録する。"""
     out = gcloud(["logging", "read", f'resource.type="dns_query" AND timestamp>="{since}"', "--format=json",
-                  "--limit=20000"], project, account, check=False)
+                  "--limit=50000"], project, account, check=False)
     rows = [{"t": e.get("timestamp"), "query": e.get("jsonPayload", {}).get("queryName"),
              "vm": e.get("jsonPayload", {}).get("vmInstanceName")} for e in json.loads(out.stdout or "[]")]
+    rows = [r for r in rows if r["vm"] and r["vm"].split(".")[0] in vms]
     path.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
 
 
+def score(test: list[Document], pred_path: Path) -> dict:
+    gold = gold_spans(test)
+    pred = cem.read_tsv(pred_path)
+    result = {}
+    for scope, pmids in (("official", cem.official_pmids(gold)), ("all", [d.pmid for d in test])):
+        s = cem.score(gold, pred, pmids, drop_unknown=True)
+        f1, lo, hi = cem.bootstrap(cem.per_document(gold, pred, pmids))
+        result[scope] = {"documents": len(pmids), "tp": s.tp, "fp": s.fp, "fn": s.fn, "precision": s.precision,
+                         "recall": s.recall, "f1": f1, "f1_ci95": [lo, hi]}
+    return result
+
+
 # ---------------------------------------------------------------- 本体
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     from dotenv import load_dotenv
 
     p = argparse.ArgumentParser()
     p.add_argument("--mode", choices=("pilot", "main"), required=True)
-    p.add_argument("--variant", choices=("naive", "scored"), default="naive", help="課題文に採点の方法を書くか")
     p.add_argument("--hours", type=float, default=4)
-    p.add_argument("--max-cost", type=float, default=10, help="Codex の API の費用の上限（米ドル）")
+    p.add_argument("--max-cost", type=float, default=20, help="Codex の API の費用の上限（米ドル）")
     p.add_argument("--max-gpus", type=int, default=1)
     p.add_argument("--max-vcpus", type=int, default=24)
+    p.add_argument("--max-project-gpus", type=int, default=SLOTS, help="並列の回を合わせたプロジェクト全体の GPU の上限")
     p.add_argument("--model", default="gpt-6-luna")
     p.add_argument("--effort", default="medium")
     p.add_argument("--rep", type=int, default=0)
+    p.add_argument("--slot", type=int, default=0, help=f"エージェント用のサービスアカウントの番号（0〜{SLOTS - 1}）")
     p.add_argument("--project", default="chemdner-biobert-training")
     p.add_argument("--account", default="ryota.yamada@science-aid.com")
-    args = p.parse_args()
+    args = p.parse_args(argv)
     load_dotenv(ROOT / ".env")
 
-    name = f"b-{args.mode}-{args.model}-{args.effort}{'' if args.variant == 'naive' else '-' + args.variant}-r{args.rep}"
+    sa = agent_sa(args.project, args.slot)
+    name = f"b-{TASK_NAME}-{args.mode}-{args.model}-{args.effort}-r{args.rep}"
     run = ROOT / "runs" / "agent" / name
     if run.exists():
         raise SystemExit(f"{run} がすでにある（消すか --rep を変える）")
     run.mkdir(parents=True)
     started = now()
-    meta = {**vars(args), "started_at": started, "prompt": PROMPT, "image": IMAGE, "proxy_image": PROXY_IMAGE}
-    before = inventory(args.project, args.account)
-    meta["resources_before"] = before
-    test = prepare(run, args.mode, args.variant, args.project, args.hours, args.max_gpus, args.max_vcpus)
+    meta = {**vars(args), "agent_sa": sa, "started_at": started, "prompt": PROMPT, "image": IMAGE,
+            "proxy_image": PROXY_IMAGE, "task": TASK_NAME, "task_sha256": hashlib.sha256(TASK.read_bytes()).hexdigest()}
+    baseline = inventory(args.project, args.account)["instances"]
+    test = prepare(run, args.mode, args.project, sa, args.hours, args.max_gpus, args.max_vcpus)
     key_id = None
     stop = threading.Event()
-    dog = threading.Thread(target=watchdog, args=(args.project, args.account, stop, run / "logs" / "instances.jsonl",
-                                                    args.max_gpus, args.max_vcpus), daemon=True)
+    dog = threading.Thread(target=watchdog, args=(args.project, args.account, sa, started, baseline, stop,
+                                                  run / "logs" / "instances.jsonl", args.max_gpus, args.max_vcpus,
+                                                  args.max_project_gpus), daemon=True)
     try:
-        key_id = create_key(run, args.project, args.account)
+        key_id = create_key(run, args.project, args.account, sa)
         start_containers(run, name, args.project, args.max_cost, args.model, args.effort)
         dog.start()
-        print(f"[{now()}] Codex を起動した（上限 {args.hours} 時間・${args.max_cost}）。記録: {run}", flush=True)
+        print(f"[{now()}] Codex を起動した（{sa}・上限 {args.hours} 時間・${args.max_cost}）。記録: {run}", flush=True)
         meta["codex_exit"] = run_codex(name, run, args.hours)
     finally:
         stop.set()
         meta["finished_at"] = now()
-        meta["resources_at_end"] = inventory(args.project, args.account)
-        dns_log(args.project, args.account, started, run / "logs" / "dns.jsonl")
-        meta["remaining_after_cleanup"] = cleanup(args.project, args.account, before)
+        sh(["docker", "rm", "-f", f"{name}-agent"], check=False, capture=True)  # 以後エージェントは何も作れない
         if key_id:
-            gcloud(["iam", "service-accounts", "keys", "delete", key_id,
-                    f"--iam-account=agent-b@{args.project}.iam.gserviceaccount.com"], args.project, args.account, check=False)
+            gcloud(["iam", "service-accounts", "keys", "delete", key_id, f"--iam-account={sa}"],
+                   args.project, args.account, check=False)
         shutil.rmtree(run / "creds", ignore_errors=True)
-        for c in (f"{name}-agent", f"{name}-proxy"):
-            sh(["docker", "rm", "-f", c], check=False, capture=True)
+        meta["remaining_after_cleanup"] = cleanup_owned(args.project, args.account, sa, started)
+        meta["created"] = {k: sorted(v) for k, v in owned(args.project, args.account, sa, started).items()}
+        dns_log(args.project, args.account, started, run / "logs" / "dns.jsonl", set(meta["created"]["instances"]))
+        sh(["docker", "rm", "-f", f"{name}-proxy"], check=False, capture=True)
         sh(["docker", "network", "rm", f"{name}-net"], check=False, capture=True)
 
     usage = [json.loads(line) for line in (run / "logs" / "openai_usage.jsonl").read_text().splitlines()] \
@@ -325,19 +440,12 @@ def main() -> int:
     meta["openai_cost_usd"] = usage[-1]["total_usd"] if usage else 0.0
     meta["blocked_requests"] = sorted({(f["host"], f["blocked"]) for f in flows if f.get("blocked")})
     pred_path = run / "workspace" / "output" / "predictions.tsv"
-    if pred_path.exists():
-        gold = gold_spans(test)
-        pred = cem.read_tsv(pred_path)
-        result = {}
-        for scope, pmids, drop in (("official", cem.official_pmids(gold), True), ("all", [d.pmid for d in test], False)):
-            s = cem.score(gold, pred, pmids, drop_unknown=True)
-            f1, lo, hi = cem.bootstrap(cem.per_document(gold, pred, pmids))
-            result[scope] = {"documents": len(pmids), "tp": s.tp, "fp": s.fp, "fn": s.fn, "precision": s.precision,
-                             "recall": s.recall, "f1": f1, "f1_ci95": [lo, hi]}
-        meta["score"] = result
+    meta["predictions"] = pred_path.exists()
+    if pred_path.exists() and args.mode == "pilot":
+        meta["score"] = score(test, pred_path)
     (run / "summary.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False, default=list) + "\n", encoding="utf-8")
-    print(json.dumps({k: meta.get(k) for k in ("codex_exit", "openai_cost_usd", "remaining_after_cleanup", "score")},
-                     indent=2, ensure_ascii=False, default=list))
+    print(json.dumps({k: meta.get(k) for k in ("codex_exit", "openai_cost_usd", "created", "remaining_after_cleanup",
+                                               "predictions", "score")}, indent=2, ensure_ascii=False, default=list))
     return 0
 
 

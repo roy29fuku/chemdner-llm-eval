@@ -1,9 +1,11 @@
 """条件 b のエージェントの通信を記録し、絞る mitmproxy の追加スクリプト。
 
 - 全通信を /logs/flows.jsonl に記録する（時刻・方法・宛先・経路・状態・大きさ・遮断の理由）。本文は記録しない
-- 許可リストに無い宛先は遮断する
-- 許可した宛先でも、正解の置き場（CHEMDNER の公開ミラーなど）・データセット・既存の化学物質 NER のモデルやツールは
-  経路（パス）で遮断する
+- 読むだけの通信（GET・HEAD・OPTIONS）はどの宛先にも通す（web 調査・パッケージ・事前学習済みモデルの取得のため）。
+  書き込みを伴う通信（POST など）は許可リストの宛先にだけ通す
+- 他の LLM の API の宛先は、方法を問わず遮断する
+- 正解の置き場（CHEMDNER の公開ミラーなど）・データセット・既存の化学物質 NER のモデルやツールは、宛先と経路
+  （クエリを除く）で遮断する。遮断できなかった取得は、記録から事後に監査する
 - OpenAI の API（Codex 本体）の使用量を応答から数え、費用が上限（環境変数 MAX_COST_USD）を超えたら以後の API の
   呼び出しを止める
 
@@ -28,6 +30,8 @@ PRICES = {"gpt-6-luna": (0.1, 0.01, 0.5), "gpt-6.1-sol": (2.0, 0.1, 10.0), "gpt-
           "gpt-5.2": (1.75, 0.175, 14.0)}
 UNKNOWN_PRICE = (10.0, 1.0, 50.0)  # 表に無いモデルは高い側で数える
 
+READ_METHODS = {"GET", "HEAD", "OPTIONS"}
+# 書き込みを伴う通信を通す宛先
 ALLOW_HOSTS = [
     r"api\.openai\.com",                        # Codex 本体
     r"chatgpt\.com",                             # Codex のモデル情報の取得だけを通す（_blocked で経路を絞る）
@@ -40,7 +44,15 @@ ALLOW_HOSTS = [
     r"(deb|security)\.debian\.org", r"(.+\.)?ubuntu\.com", r"developer\.download\.nvidia\.com",
     r"registry\.npmjs\.org",
 ]
-# 許可した宛先の中で遮断するもの（宛先と経路を合わせた URL に当てる）
+# 方法を問わず遮断する宛先（コードから LLM を呼ぶ経路。OpenAI は Codex 本体が使うので、キーを渡さないことで防ぐ）
+DENY_HOSTS = [
+    r"api\.anthropic\.com", r"generativelanguage\.googleapis\.com", r"(.+-)?aiplatform\.googleapis\.com",
+    r"api\.mistral\.ai", r"api\.cohere\.(com|ai)", r"api\.together\.(xyz|ai)", r"openrouter\.ai", r"api\.groq\.com",
+    r"api\.deepseek\.com", r"api\.perplexity\.ai", r"api\.x\.ai", r"api\.fireworks\.ai", r"api\.replicate\.com",
+    r"(api-inference|router)\.huggingface\.co", r"api\.moonshot\.(ai|cn)", r"dashscope\.aliyuncs\.com",
+    r"(.+\.)?openai\.azure\.com", r"bedrock(-runtime)?\..*\.amazonaws\.com",
+]
+# 遮断する URL（宛先と経路を合わせ、クエリを除いたものに当てる）
 DENY_URL = [
     (r"generativelanguage\.googleapis\.com|aiplatform\.googleapis\.com", "他の LLM の API"),
     (r"huggingface\.co/(api/)?datasets", "Hugging Face のデータセット"),
@@ -48,10 +60,12 @@ DENY_URL = [
     (r"chemdner|chem[-_]?dner|bc4chemd|bc5cdr|biocreative|chemprot|nlm[-_]?chem", "CHEMDNER や関連コーパス・それで学習したモデル"),
     (r"chem[^/]*[-_]ner|ner[-_][^/]*chem|chemical[-_]?ner|chem[-_]?ner", "化学物質の NER のモデル"),
     (r"chemdataextractor|chemlistem|chemspot|oscar4|tmchem|chemtagger|en[-_]ner[-_]bc5cdr", "化学物質の NER のツール"),
-    (r"lingluodlut|spyysalo/chemdner|roy29fuku", "正解の置き場・本実験の repo"),
+    (r"lingluodlut|spyysalo/chemdner|roy29fuku|bigbio", "正解の置き場・本実験の repo"),
+    (r"dmis\.korea\.ac\.kr/.*datasets|nerdata|datasets\.tar\.gz", "BioBERT などが配るデータセット（BC4CHEMD を含む）"),
 ]
 
 _allow = [re.compile(rf"^{p}$", re.I) for p in ALLOW_HOSTS]
+_deny_hosts = [re.compile(rf"^{p}$", re.I) for p in DENY_HOSTS]
 _deny = [(re.compile(p, re.I), why) for p, why in DENY_URL]
 _spent = 0.0
 
@@ -63,11 +77,13 @@ def _write(path: str, row: dict) -> None:
 
 def _blocked(flow: http.HTTPFlow) -> str | None:
     host = flow.request.pretty_host
-    if not any(p.match(host) for p in _allow):
-        return "許可リストに無い宛先"
+    if any(p.match(host) for p in _deny_hosts):
+        return "他の LLM の API"
+    if flow.request.method not in READ_METHODS and not any(p.match(host) for p in _allow):
+        return "書き込みを伴う通信で、許可リストに無い宛先"
     if host == "chatgpt.com" and not (flow.request.method == "GET" and flow.request.path.startswith("/backend-api/codex/models")):
         return "Codex の付随的な通信（モデル情報の取得以外）"
-    url = f"{host}{flow.request.path}"
+    url = f"{host}{flow.request.path.split('?')[0]}"
     if PROJECT_ID:
         url = url.replace(PROJECT_ID, "<project>")  # 実験のプロジェクト自体は遮断しない
     for pattern, why in _deny:
