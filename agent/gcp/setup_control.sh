@@ -16,7 +16,7 @@ ACCOUNT="${ACCOUNT:?ACCOUNT を指定する}"
 N="${N:-1}"  # 作る司令塔の数（ctl-1〜ctl-N）
 CONTROL=sa-agent-control
 ZONE=us-central1-a
-SLOTS="sa-agent-ws1 sa-agent-ws2 sa-agent-ws3 sa-agent-ws4"
+SLOTS="sa-agent-ws1 sa-agent-ws2 sa-agent-ws3 sa-agent-ws4 sa-agent-ws5 sa-agent-ws6"
 G="gcloud --account=$ACCOUNT --quiet"
 ORCH="orchestrator@$CONTROL.iam.gserviceaccount.com"
 

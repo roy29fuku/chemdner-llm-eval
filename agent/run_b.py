@@ -66,7 +66,8 @@ PLAN_PROMPT = ("Read /workspace/task.md. For now, only plan how you will solve t
                "you need (read the data, run quick analyses, search the web), but do not train any model, do not create "
                "any cloud resources, and do not write predictions. Write the approach you will take and why to "
                "/workspace/output/plan.md, then stop.")
-SLOT_PROJECTS = ("sa-agent-ws1", "sa-agent-ws2", "sa-agent-ws3", "sa-agent-ws4")  # agent/gcp/setup.sh で用意する
+SLOT_PROJECTS = ("sa-agent-ws1", "sa-agent-ws2", "sa-agent-ws3", "sa-agent-ws4", "sa-agent-ws5",
+                 "sa-agent-ws6")  # agent/gcp/setup.sh で用意する。司令塔 ctl-<slot+1> と対にして使う
 ALLOWED_GPUS = ("nvidia-l4", "nvidia-tesla-t4")  # L4 の在庫切れに備えて T4 も許す（2026-10-14 の本番の 1 回目で起きた）
 # proxy が中身を見ずに素通しにする宛先（host:port の正規表現）。SSH と、大きな配布物の置き場（PyPI のファイル・
 # Hugging Face の CDN・PyTorch）。中継に時間がかかり取得を諦める回が出たため。どのモデルを取ったかは、記録を
