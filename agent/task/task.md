@@ -43,5 +43,5 @@ Your predictions will be compared with hidden gold annotations of the test artic
 
 1. The predictions must be produced by code that you write and run on the test articles. Do not read the test articles and write the mentions yourself.
 2. Do not call any large language model API (OpenAI or any other provider) from your code or from your VMs.
-3. No leakage. Do not use any other copy of this dataset or of its annotations. Do not use models or tools that were trained with chemical-name annotations (for example on CHEMDNER, BC4CHEMD, BC5CDR, or any other corpus that labels chemicals), and do not use tools built to recognize chemical names. Models pretrained only on text without such annotations may be used, and so may any other publicly available resource.
+3. {rule3}
 4. Stay within the limits above.

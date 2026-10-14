@@ -17,8 +17,8 @@ web 調査・環境の構築（VM・GPU・Terraform など）も含めて手段�
 mode が pilot のときは、development の先頭 100 件（PMID の順。条件 a の試行と同じ文書）を正解を隠して test として渡し、
 残りの development と training をラベル付きで渡す。main のときは test（evaluation）の本文だけを渡す。
 
-課題文（agent/task/task.md）の版は TASK_NAME で run の名前に入れる。2026-10-14 の試行の naive・scored の課題文は
-commit 9fecad8 までの版にある。
+課題文（agent/task/task.md）の版は --task で選び、run の名前に入れる。版の違いは規則 3 の文言だけ（RULE3）。
+2026-10-14 の試行の naive・scored の課題文は commit 9fecad8 までの版にある。
 """
 
 import argparse
@@ -41,7 +41,17 @@ from chemdner_bench.corpus import Document, gold_spans, load  # noqa: E402
 
 AGENT = ROOT / "agent"
 TASK = AGENT / "task" / "task.md"
-TASK_NAME = "free"
+# 規則 3（リークの禁止）の文言。free は「注釈の無い文章だけで事前学習したモデルは使ってよい」と明記する版、
+# free-banonly はその一文を除き、禁止の範囲だけを書く版（"pretrained" という語が手がかりにならないように）
+_BAN = ("No leakage. Do not use any other copy of this dataset or of its annotations. Do not use models or tools that "
+        "were trained with chemical-name annotations (for example on CHEMDNER, BC4CHEMD, BC5CDR, or any other corpus "
+        "that labels chemicals), and do not use tools built to recognize chemical names.")
+RULE3 = {
+    "free": _BAN + " Models pretrained only on text without such annotations may be used, and so may any other "
+                   "publicly available resource.",
+    "free-banonly": _BAN + " Anything else that is publicly available may be used.",
+}
+ACTIVE = ROOT / "runs" / "agent" / "active"  # 動いている回の印（slot ごと）。波の掃除はこの回の資源を消さない
 IMAGE = "chemdner-agent:0.1"
 PROXY_IMAGE = "mitmproxy/mitmproxy:latest"
 REGION = "us-central1"
@@ -78,15 +88,16 @@ def write_annotations(docs: list[Document], path: Path) -> None:
     path.write_text("".join(lines), encoding="utf-8")
 
 
-def render_task(project: str, sa: str, hours: float, max_gpus: int, max_vcpus: int) -> str:
+def render_task(variant: str, project: str, sa: str, hours: float, max_gpus: int, max_vcpus: int) -> str:
     task = TASK.read_text(encoding="utf-8")
-    for key, value in {"project": project, "agent_sa": sa, "hours": f"{hours:g}", "max_gpus": max_gpus,
-                       "max_vcpus": max_vcpus}.items():
+    for key, value in {"rule3": RULE3[variant], "project": project, "agent_sa": sa, "hours": f"{hours:g}",
+                       "max_gpus": max_gpus, "max_vcpus": max_vcpus}.items():
         task = task.replace("{" + key + "}", str(value))
     return task
 
 
-def prepare(run: Path, mode: str, project: str, sa: str, hours: float, max_gpus: int, max_vcpus: int) -> list[Document]:
+def prepare(run: Path, mode: str, variant: str, project: str, sa: str, hours: float, max_gpus: int,
+            max_vcpus: int) -> list[Document]:
     """作業場所を作り、test として渡す文書を返す（pilot は正解つき・main は本文だけ）。正解は作業場所に置かない。"""
     ws = run / "workspace"
     (ws / "data").mkdir(parents=True)
@@ -107,7 +118,7 @@ def prepare(run: Path, mode: str, project: str, sa: str, hours: float, max_gpus:
     if guidelines.startswith("<!--"):
         guidelines = guidelines[guidelines.index("-->") + 3:].lstrip()  # 条件 a と同じく出典の注記は渡さない
     (ws / "guidelines.md").write_text(guidelines, encoding="utf-8")
-    (ws / "task.md").write_text(render_task(project, sa, hours, max_gpus, max_vcpus), encoding="utf-8")
+    (ws / "task.md").write_text(render_task(variant, project, sa, hours, max_gpus, max_vcpus), encoding="utf-8")
     shutil.copy(AGENT / "task" / "check_format.py", ws / "check_format.py")
     return test
 
@@ -331,18 +342,27 @@ def cleanup_owned(project: str, account: str, sa: str, since: str) -> dict[str, 
     return remaining
 
 
-def sweep(project: str, account: str, before: dict[str, list[str]]) -> dict[str, list[str]]:
-    """before（並列の回をすべて始める前）に無かった資源をプロジェクトからすべて消し、残りを返す。
+def active_slots() -> list[dict]:
+    return [json.loads(p.read_text()) for p in sorted(ACTIVE.glob("slot*.json"))] if ACTIVE.exists() else []
 
-    並列の回がすべて終わってから使う（走っている回の資源も消してしまうため）。
+
+def sweep(project: str, account: str, before: dict[str, list[str]]) -> dict[str, list[str]]:
+    """before（波を始める前）に無かった資源をプロジェクトから消し、残りを返す。
+
+    動いている回（ACTIVE に印がある slot）が作った資源は消さない（重なって走る別の波の回を守るため）。
+    監査ログで作成者を追えない資源は、動いている回のものでも消えうるので、波は重ねずに走らせるのが基本。
     """
+    keep = {k: set() for k in KINDS}
+    for a in active_slots():
+        for kind, names in owned(project, account, a["sa"], a["started"]).items():
+            keep[kind] |= set(names)
     current = locations(project, account)
     for kind in KINDS:
         for name, location in current[kind].items():
-            if name not in before.get(kind, []):
+            if name not in before.get(kind, []) and name not in keep[kind]:
                 delete(project, account, kind, name, location)
     after = inventory(project, account)
-    return {k: [x for x in v if x not in before.get(k, [])] for k, v in after.items()}
+    return {k: [x for x in v if x not in before.get(k, []) and x not in keep[k]] for k, v in after.items()}
 
 
 def delete_user_keys(project: str, account: str, sa: str) -> list[str]:
@@ -383,6 +403,7 @@ def main(argv: list[str] | None = None) -> int:
 
     p = argparse.ArgumentParser()
     p.add_argument("--mode", choices=("pilot", "main"), required=True)
+    p.add_argument("--task", choices=tuple(RULE3), default="free", help="課題文の版（規則 3 の文言）")
     p.add_argument("--hours", type=float, default=4)
     p.add_argument("--max-cost", type=float, default=20, help="Codex の API の費用の上限（米ドル）")
     p.add_argument("--max-gpus", type=int, default=1)
@@ -398,16 +419,22 @@ def main(argv: list[str] | None = None) -> int:
     load_dotenv(ROOT / ".env")
 
     sa = agent_sa(args.project, args.slot)
-    name = f"b-{TASK_NAME}-{args.mode}-{args.model}-{args.effort}-r{args.rep}"
+    name = f"b-{args.task}-{args.mode}-{args.model}-{args.effort}-r{args.rep}"
     run = ROOT / "runs" / "agent" / name
     if run.exists():
         raise SystemExit(f"{run} がすでにある（消すか --rep を変える）")
+    lock = ACTIVE / f"slot{args.slot}.json"
+    if lock.exists():
+        raise SystemExit(f"slot {args.slot} は使用中（{lock}）")
     run.mkdir(parents=True)
     started = now()
+    ACTIVE.mkdir(parents=True, exist_ok=True)
+    lock.write_text(json.dumps({"sa": sa, "started": started, "run": name}) + "\n", encoding="utf-8")
     meta = {**vars(args), "agent_sa": sa, "started_at": started, "prompt": PROMPT, "image": IMAGE,
-            "proxy_image": PROXY_IMAGE, "task": TASK_NAME, "task_sha256": hashlib.sha256(TASK.read_bytes()).hexdigest()}
+            "proxy_image": PROXY_IMAGE, "task_template_sha256": hashlib.sha256(TASK.read_bytes()).hexdigest()}
     baseline = inventory(args.project, args.account)["instances"]
-    test = prepare(run, args.mode, args.project, sa, args.hours, args.max_gpus, args.max_vcpus)
+    test = prepare(run, args.mode, args.task, args.project, sa, args.hours, args.max_gpus, args.max_vcpus)
+    meta["task_sha256"] = hashlib.sha256((run / "workspace" / "task.md").read_bytes()).hexdigest()  # 渡した課題文
     key_id = None
     stop = threading.Event()
     dog = threading.Thread(target=watchdog, args=(args.project, args.account, sa, started, baseline, stop,
@@ -432,6 +459,7 @@ def main(argv: list[str] | None = None) -> int:
         dns_log(args.project, args.account, started, run / "logs" / "dns.jsonl", set(meta["created"]["instances"]))
         sh(["docker", "rm", "-f", f"{name}-proxy"], check=False, capture=True)
         sh(["docker", "network", "rm", f"{name}-net"], check=False, capture=True)
+        lock.unlink(missing_ok=True)
 
     usage = [json.loads(line) for line in (run / "logs" / "openai_usage.jsonl").read_text().splitlines()] \
         if (run / "logs" / "openai_usage.jsonl").exists() else []
