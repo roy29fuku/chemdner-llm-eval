@@ -362,9 +362,19 @@ def cleanup_owned(project: str, account: str, sa: str, since: str) -> dict[str, 
     return remaining
 
 
+def slot_busy(slot: int) -> bool:
+    """slot に動いている回の印があるか。印の回がもう終わっている（summary.json がある）なら古い印として扱う。"""
+    lock = ACTIVE / f"slot{slot}.json"
+    if not lock.exists():
+        return False
+    run = json.loads(lock.read_text()).get("run")
+    return not (run and (ROOT / "runs" / "agent" / run / "summary.json").exists())
+
+
 def active_slots(project: str) -> list[dict]:
-    """project で動いている回の印（旧い印には project が無く、chemdner-biobert-training の回）。"""
+    """project で動いている回の印（旧い印には project が無く、chemdner-biobert-training の回）。終わった回の印は除く。"""
     marks = [json.loads(p.read_text()) for p in sorted(ACTIVE.glob("slot*.json"))] if ACTIVE.exists() else []
+    marks = [m for m in marks if not (ROOT / "runs" / "agent" / m.get("run", "?") / "summary.json").exists()]
     return [m for m in marks if m.get("project", "chemdner-biobert-training") == project]
 
 
@@ -450,7 +460,7 @@ def main(argv: list[str] | None = None) -> int:
     if run.exists():
         raise SystemExit(f"{run} がすでにある（消すか --rep を変える）")
     lock = ACTIVE / f"slot{args.slot}.json"
-    if lock.exists():
+    if slot_busy(args.slot):
         raise SystemExit(f"slot {args.slot} は使用中（{lock}）")
     run.mkdir(parents=True)
     started = now()

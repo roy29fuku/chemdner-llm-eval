@@ -36,7 +36,7 @@ def main() -> int:
     slots = list(range(args.first_slot, args.first_slot + len(args.job)))
     if slots[-1] >= run_b.SLOTS:
         raise SystemExit(f"slot は 0〜{run_b.SLOTS - 1}")
-    busy = [s for s in slots if (run_b.ACTIVE / f"slot{s}.json").exists()]
+    busy = [s for s in slots if run_b.slot_busy(s)]
     if busy:
         raise SystemExit(f"slot {busy} は使用中")
 
