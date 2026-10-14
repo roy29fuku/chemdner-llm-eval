@@ -115,7 +115,9 @@ def status(vm: str) -> None:
 
 
 def fetch(vm: str) -> None:
-    excludes = " ".join(f"--exclude={e}" for e in ("*/workspace/data", "*/mitmproxy", "*/creds", "*/certs", "agent/active"))
+    # codex-home/tmp は Codex の一時ファイル（時間の上限で止めた回には、絶対パスへのリンクが残り、展開で拒まれる）
+    excludes = " ".join(f"--exclude={e}" for e in ("*/workspace/data", "*/mitmproxy", "*/creds", "*/certs", "agent/active",
+                                                    "*/codex-home/tmp"))
     out = gcloud_ssh(vm, f"tar czf ~/fetch.tgz -C {REMOTE}/runs {excludes} agent && echo ok", check=False)
     if "ok" not in out.stdout:
         raise SystemExit(f"VM で記録をまとめられない: {out.stderr[-300:]}")
