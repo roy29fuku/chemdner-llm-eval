@@ -14,6 +14,7 @@ proxy とエージェントのコンテナを起動し、次を確かめてか�
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -40,6 +41,8 @@ CHECKS = [
     ("大きな配布物（PyTorch）を pip で取得できる",
      "timeout 900 python3 -m pip download torch --no-deps -q -d /tmp/torch-dl >/dev/null 2>&1 && ls /tmp/torch-dl | grep -c '^torch-'",
      "1"),
+    ("メタデータサーバ（司令塔の VM の権限）は遮断",
+     f"{CODE} -H 'Metadata-Flavor: Google' http://169.254.169.254/computeMetadata/v1/", "403"),
     ("直接の通信はできない", f"{CODE} --noproxy '*' --max-time 10 https://pypi.org/ || true", "000"),
     ("gcloud が使える", "gcloud compute zones list --filter=region:us-central1 --format='value(name)' | head -1", "us-central1-"),
 ]
@@ -52,7 +55,7 @@ def main() -> int:
     ap.add_argument("--slot", type=int, default=run_b.SLOTS - 1)
     args = ap.parse_args()
     load_dotenv(run_b.ROOT / ".env")
-    account = "ryota.yamada@science-aid.com"
+    account = os.environ.get("GCLOUD_ACCOUNT", "ryota.yamada@science-aid.com")
     project = run_b.slot_project(args.slot)
     other_project = run_b.slot_project((args.slot + 1) % run_b.SLOTS)
     sa = run_b.agent_sa(project)

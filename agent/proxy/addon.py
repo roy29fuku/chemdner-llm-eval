@@ -54,6 +54,9 @@ DENY_HOSTS = [
     r"api\.deepseek\.com", r"api\.perplexity\.ai", r"api\.x\.ai", r"api\.fireworks\.ai", r"api\.replicate\.com",
     r"(api-inference|router)\.huggingface\.co", r"api\.moonshot\.(ai|cn)", r"dashscope\.aliyuncs\.com",
     r"(.+\.)?openai\.azure\.com", r"bedrock(-runtime)?\..*\.amazonaws\.com",
+    # 司令塔の VM のメタデータサーバ（VM の権限を返す）と、プライベートなアドレス
+    r"169\.254\.\d+\.\d+", r"metadata(\.google\.internal)?", r"metadata\.goog", r"localhost", r"127\.\d+\.\d+\.\d+",
+    r"10\.\d+\.\d+\.\d+", r"172\.(1[6-9]|2\d|3[01])\.\d+\.\d+", r"192\.168\.\d+\.\d+",
 ]
 # 遮断する URL（宛先と経路を合わせ、クエリを除いたものに当てる）
 DENY_URL = [
@@ -94,7 +97,7 @@ def _write(path: str, row: dict) -> None:
 def _blocked(flow: http.HTTPFlow) -> str | None:
     host = flow.request.pretty_host
     if any(p.match(host) for p in _deny_hosts):
-        return "他の LLM の API"
+        return "他の LLM の API・メタデータサーバ・プライベートなアドレス"
     if flow.request.method not in READ_METHODS and not any(p.match(host) for p in _allow):
         return "書き込みを伴う通信で、許可リストに無い宛先"
     if host == "chatgpt.com" and not (flow.request.method == "GET" and flow.request.path.startswith("/backend-api/codex/models")):

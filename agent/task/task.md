@@ -35,7 +35,7 @@ Your predictions will be compared with hidden gold annotations of the test artic
 ## Resources
 
 - **Google Cloud**: project `{project}`, region `us-central1`. `gcloud` and Terraform are already authenticated as the service account `{agent_sa}`. You can create and delete VMs, disks, and buckets. If a VM needs a service account, use `agent-vm@{project}.iam.gserviceaccount.com`.
-- **Limits**: at most {max_gpus} GPU in total across all VMs, NVIDIA L4 only, and at most {max_vcpus} vCPUs in total. VMs that exceed these limits are deleted automatically.
+- **Limits**: at most {max_gpus} GPU in total across all VMs, NVIDIA L4 or T4 only, and at most {max_vcpus} vCPUs in total. VMs that exceed these limits are deleted automatically.
 - **Time**: {hours} hours from the start. When the time is up, this session ends and everything you created in the project is deleted, so keep your results in `/workspace/output/` before then.
 - **Network**: this container reaches the internet only through an HTTP proxy, which is already set in `HTTP_PROXY` and `HTTPS_PROXY` (its CA certificate is installed). All traffic is logged, and some sites are blocked. SSH connections can also go through the proxy, for example with `-o ProxyCommand="nc -X connect -x proxy:8080 %h %p"`.
 

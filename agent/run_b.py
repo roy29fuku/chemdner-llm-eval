@@ -67,6 +67,12 @@ PLAN_PROMPT = ("Read /workspace/task.md. For now, only plan how you will solve t
                "any cloud resources, and do not write predictions. Write the approach you will take and why to "
                "/workspace/output/plan.md, then stop.")
 SLOT_PROJECTS = ("sa-agent-ws1", "sa-agent-ws2", "sa-agent-ws3", "sa-agent-ws4")  # agent/gcp/setup.sh で用意する
+ALLOWED_GPUS = ("nvidia-l4", "nvidia-tesla-t4")  # L4 の在庫切れに備えて T4 も許す（2026-10-14 の本番の 1 回目で起きた）
+# proxy が中身を見ずに素通しにする宛先（host:port の正規表現）。SSH と、大きな配布物の置き場（PyPI のファイル・
+# Hugging Face の CDN・PyTorch）。中継に時間がかかり取得を諦める回が出たため。どのモデルを取ったかは、記録を
+# 続ける huggingface.co の API への問い合わせとコードで追い、素通しにした接続の宛先は proxy のログに残す
+PASSTHROUGH = (r"^(.*:22|files\.pythonhosted\.org:443|(.+\.)?cdn\.hf\.co:443|cdn-lfs.*\.(huggingface\.co|hf\.co):443|"
+               r"(.+\.)?xethub\.hf\.co:443|download\.pytorch\.org:443)$")
 SLOTS = len(SLOT_PROJECTS)
 KINDS = ("instances", "disks", "images", "snapshots", "addresses", "buckets")  # 消す順（VM を先に）
 
@@ -80,7 +86,9 @@ def sh(args: list[str], check: bool = True, capture: bool = False, **kw) -> subp
 
 
 def gcloud(args: list[str], project: str, account: str, check: bool = True) -> subprocess.CompletedProcess:
-    return sh(["gcloud", *args, f"--project={project}", f"--account={account}", "--quiet"], check=check, capture=True)
+    """account が空なら --account を付けない（司令塔の VM では VM のサービスアカウント orchestrator を使う）。"""
+    acct = [f"--account={account}"] if account else []
+    return sh(["gcloud", *args, f"--project={project}", *acct, "--quiet"], check=check, capture=True)
 
 
 def slot_project(slot: int) -> str:
@@ -146,7 +154,8 @@ def create_key(run: Path, project: str, account: str, sa: str) -> str:
 
 
 # ---------------------------------------------------------------- コンテナ
-def start_containers(run: Path, name: str, project: str, max_cost: float, model: str, effort: str) -> None:
+def start_containers(run: Path, name: str, project: str, max_cost: float, model: str, effort: str,
+                     cpus: str = "6", memory: str = "24g") -> None:
     logs, conf, certs, codex = run / "logs", run / "mitmproxy", run / "certs", run / "codex-home"
     for d in (logs, conf, certs, codex):
         d.mkdir(exist_ok=True)
@@ -157,10 +166,14 @@ def start_containers(run: Path, name: str, project: str, max_cost: float, model:
     shutil.copy(AGENT / "proxy" / "addon.py", addon / "addon.py")
     net = f"{name}-net"
     sh(["docker", "network", "create", "--internal", net], capture=True)
+    # proxy は置き場の持ち主と同じ番号で動かす。イメージの起動スクリプトは持ち主に合わせて利用者を作り直すが、
+    # Linux の司令塔ではグループがイメージに無く失敗する（2026-10-14）。設定の置き場も明示する
     sh(["docker", "run", "-d", "--name", f"{name}-proxy", "--network", net, "--network-alias", "proxy",
+        "--user", f"{os.getuid()}:{os.getgid()}", "--entrypoint", "mitmdump",
         "-v", f"{logs}:/logs", "-v", f"{addon}:/addon:ro", "-v", f"{conf}:/home/mitmproxy/.mitmproxy",
         "-e", f"MAX_COST_USD={max_cost}", "-e", f"PROJECT_ID={project}", PROXY_IMAGE,
-        "mitmdump", "-s", "/addon/addon.py", "--listen-port", "8080", "--set", r"ignore_hosts=^.*:22$",
+        "--set", "confdir=/home/mitmproxy/.mitmproxy",
+        "-s", "/addon/addon.py", "--listen-port", "8080", "--set", f"ignore_hosts={PASSTHROUGH}",
         # 大きな本体は受け取りながら流す。既定（全部受け取ってから中継）では、PyTorch のような数百 MB の配布物で
         # pip に何も届かないまま時間切れになる（2026-10-14 の本番の 1 回目で起きた）
         "--set", "stream_large_bodies=1m",
@@ -199,7 +212,9 @@ exclude = ["OPENAI_*", "CODEX_API_KEY"]
         "CLOUDSDK_COMPUTE_REGION": REGION, "OPENAI_API_KEY": os.environ["OPENAI_API_KEY"],
         "CODEX_API_KEY": os.environ["OPENAI_API_KEY"],  # codex exec はこちらを読む版がある
     }
-    args = ["docker", "run", "-d", "--name", f"{name}-agent", "--network", net, "-v", f"{run / 'workspace'}:/workspace",
+    # エージェントの手元の計算資源は、回ごとに同じ上限に固定する（同時に走る回と取り合わないように）
+    args = ["docker", "run", "-d", "--name", f"{name}-agent", f"--cpus={cpus}", f"--memory={memory}",
+            "--network", net, "-v", f"{run / 'workspace'}:/workspace",
             "-v", f"{certs}:/certs:ro", "-v", f"{run / 'creds'}:/creds:ro", "-v", f"{codex}:/home/agent/.codex"]
     for k, v in env.items():
         args += ["-e", f"{k}={v}"]
@@ -293,8 +308,8 @@ def watchdog(project: str, account: str, sa: str, since: str, baseline: list[str
             is_mine = inst["name"] in mine
             n_cpu = machine_vcpus(project, account, zone, mtype, cache) if running and is_mine else 0
             reason = None
-            if any(t != "nvidia-l4" for t, _ in accels) or (mtype.startswith(("a2-", "a3-", "a4-")) and not accels):
-                reason = "L4 以外の GPU"
+            if any(t not in ALLOWED_GPUS for t, _ in accels) or (mtype.startswith(("a2-", "a3-", "a4-")) and not accels):
+                reason = "許可していない GPU（L4・T4 以外）"
             elif running and project_gpus + n_gpu > max_project_gpus:
                 reason = f"プロジェクト全体の GPU の上限 {max_project_gpus} 枚を超える"
             elif running and is_mine and gpus + n_gpu > max_gpus:
@@ -440,6 +455,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--mode", choices=("pilot", "main"), required=True)
     p.add_argument("--task", choices=tuple(RULE3), default="free", help="課題文の版（規則 3 の文言）")
     p.add_argument("--plan-only", action="store_true", help="計画だけを立てさせる（PLAN_PROMPT）。採点しない")
+    p.add_argument("--tag", default="", help="run の名前に入れる環境の印（例: gcp。司令塔の VM で走らせた回）")
     p.add_argument("--hours", type=float, default=4, help="課題文に書く時間の上限（時間）")
     p.add_argument("--stop-after", type=float, default=None,
                    help="Codex を止めるまでの時間（時間）。省くと --hours と同じ。計画だけの回は課題文を本番と同じにして短く止める")
@@ -451,14 +467,18 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--effort", default="medium")
     p.add_argument("--rep", type=int, default=0)
     p.add_argument("--slot", type=int, default=0, help=f"使う GCP プロジェクトの番号（0〜{SLOTS - 1}。SLOT_PROJECTS）")
-    p.add_argument("--account", default="ryota.yamada@science-aid.com")
+    p.add_argument("--account", default=os.environ.get("GCLOUD_ACCOUNT", "ryota.yamada@science-aid.com"),
+                   help="gcloud のアカウント。空なら付けない（司令塔の VM ではサービスアカウント）")
+    p.add_argument("--agent-cpus", default="6", help="エージェントのコンテナの CPU の上限")
+    p.add_argument("--agent-memory", default="24g", help="エージェントのコンテナのメモリの上限")
     args = p.parse_args(argv)
     load_dotenv(ROOT / ".env")
 
     args.project = slot_project(args.slot)
     sa = agent_sa(args.project)
     prompt = PLAN_PROMPT if args.plan_only else PROMPT
-    name = f"{'plan' if args.plan_only else 'b'}-{args.task}-{args.mode}-{args.model}-{args.effort}-r{args.rep}"
+    tag = f"-{args.tag}" if args.tag else ""
+    name = f"{'plan' if args.plan_only else 'b'}-{args.task}-{args.mode}{tag}-{args.model}-{args.effort}-r{args.rep}"
     run = ROOT / "runs" / "agent" / name
     if run.exists():
         raise SystemExit(f"{run} がすでにある（消すか --rep を変える）")
@@ -482,7 +502,7 @@ def main(argv: list[str] | None = None) -> int:
                                                   args.max_project_gpus), daemon=True)
     try:
         key_id = create_key(run, args.project, args.account, sa)
-        start_containers(run, name, args.project, args.max_cost, args.model, args.effort)
+        start_containers(run, name, args.project, args.max_cost, args.model, args.effort, args.agent_cpus, args.agent_memory)
         dog.start()
         print(f"[{now()}] Codex を起動した（{sa}・上限 {args.hours} 時間・${args.max_cost}）。記録: {run}", flush=True)
         meta["codex_exit"] = run_codex(name, run, args.stop_after or args.hours, prompt)
@@ -497,6 +517,8 @@ def main(argv: list[str] | None = None) -> int:
         meta["remaining_after_cleanup"] = cleanup_owned(args.project, args.account, sa, started)
         meta["created"] = {k: sorted(v) for k, v in owned(args.project, args.account, sa, started).items()}
         dns_log(args.project, args.account, started, run / "logs" / "dns.jsonl", set(meta["created"]["instances"]))
+        proxy_log = sh(["docker", "logs", f"{name}-proxy"], check=False, capture=True)  # 素通しにした接続の宛先も残る
+        (run / "logs" / "proxy.log").write_text((proxy_log.stdout or "") + (proxy_log.stderr or ""), encoding="utf-8")
         sh(["docker", "rm", "-f", f"{name}-proxy"], check=False, capture=True)
         sh(["docker", "network", "rm", f"{name}-net"], check=False, capture=True)
         lock.unlink(missing_ok=True)
