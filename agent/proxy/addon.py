@@ -5,7 +5,10 @@
   書き込みを伴う通信（POST など）は許可リストの宛先にだけ通す
 - 他の LLM の API の宛先は、方法を問わず遮断する
 - 正解の置き場（CHEMDNER の公開ミラーなど）・データセット・既存の化学物質 NER のモデルやツールは、宛先と経路
-  （クエリを除く）で遮断する。遮断できなかった取得は、記録から事後に監査する
+  （クエリを除く）で遮断する。GCP の API（*.googleapis.com）には当てない（エージェントが自分の VM やバケットに
+  chem-ner などの名前を付けると、その操作まで遮断してしまうため。2026-10-14 の試行 4 で起きた）。遮断できなかった
+  取得は、記録から事後に監査する
+- 費用の累計は使用量の記録から復元する（mitmproxy はこのファイルが変わると読み込み直し、変数が初期化されるため）
 - OpenAI の API（Codex 本体）の使用量を応答から数え、費用が上限（環境変数 MAX_COST_USD）を超えたら以後の API の
   呼び出しを止める
 
@@ -66,8 +69,21 @@ DENY_URL = [
 
 _allow = [re.compile(rf"^{p}$", re.I) for p in ALLOW_HOSTS]
 _deny_hosts = [re.compile(rf"^{p}$", re.I) for p in DENY_HOSTS]
+_gcp_api = re.compile(r"^(.+\.)?googleapis\.com$", re.I)  # DENY_URL を当てない（他の LLM の API は DENY_HOSTS で止める）
 _deny = [(re.compile(p, re.I), why) for p, why in DENY_URL]
-_spent = 0.0
+
+
+
+def _restore_spent() -> float:
+    try:
+        with open(USAGE_LOG, encoding="utf-8") as f:
+            lines = f.read().splitlines()
+        return float(json.loads(lines[-1])["total_usd"]) if lines else 0.0
+    except (FileNotFoundError, ValueError, KeyError, IndexError):
+        return 0.0
+
+
+_spent = _restore_spent()
 
 
 def _write(path: str, row: dict) -> None:
@@ -83,6 +99,8 @@ def _blocked(flow: http.HTTPFlow) -> str | None:
         return "書き込みを伴う通信で、許可リストに無い宛先"
     if host == "chatgpt.com" and not (flow.request.method == "GET" and flow.request.path.startswith("/backend-api/codex/models")):
         return "Codex の付随的な通信（モデル情報の取得以外）"
+    if _gcp_api.match(host):
+        return None
     url = f"{host}{flow.request.path.split('?')[0]}"
     if PROJECT_ID:
         url = url.replace(PROJECT_ID, "<project>")  # 実験のプロジェクト自体は遮断しない

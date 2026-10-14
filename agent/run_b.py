@@ -150,10 +150,15 @@ def start_containers(run: Path, name: str, project: str, max_cost: float, model:
     logs, conf, certs, codex = run / "logs", run / "mitmproxy", run / "certs", run / "codex-home"
     for d in (logs, conf, certs, codex):
         d.mkdir(exist_ok=True)
+    # proxy の追加スクリプトは回ごとに写して使う（mitmproxy はファイルが変わると読み込み直すので、走っている回に
+    # 後からの変更が及ばないようにし、その回の方針を記録に残す）
+    addon = run / "proxy-addon"
+    addon.mkdir(exist_ok=True)
+    shutil.copy(AGENT / "proxy" / "addon.py", addon / "addon.py")
     net = f"{name}-net"
     sh(["docker", "network", "create", "--internal", net], capture=True)
     sh(["docker", "run", "-d", "--name", f"{name}-proxy", "--network", net, "--network-alias", "proxy",
-        "-v", f"{logs}:/logs", "-v", f"{AGENT / 'proxy'}:/addon:ro", "-v", f"{conf}:/home/mitmproxy/.mitmproxy",
+        "-v", f"{logs}:/logs", "-v", f"{addon}:/addon:ro", "-v", f"{conf}:/home/mitmproxy/.mitmproxy",
         "-e", f"MAX_COST_USD={max_cost}", "-e", f"PROJECT_ID={project}", PROXY_IMAGE,
         "mitmdump", "-s", "/addon/addon.py", "--listen-port", "8080", "--set", r"ignore_hosts=^.*:22$",
         "--set", "block_global=false"], capture=True)

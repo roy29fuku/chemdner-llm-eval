@@ -34,6 +34,9 @@ CHECKS = [
     ("CHEMDNER の名前を含む URL は遮断", f"{CODE} https://github.com/lingluodlut/Att-ChemdNER", "403"),
     ("BioBERT の配布データセットは遮断",
      f"{CODE} http://nlp.dmis.korea.ac.kr/projects/biobert-2020-checkpoints/datasets.tar.gz", "403"),
+    ("自分の VM の名前に chem-ner があっても GCP の API は遮断しない",
+     "curl -s https://compute.googleapis.com/compute/v1/projects/x/zones/us-central1-a/instances/chem-ner-gpu "
+     "| grep -c 'blocked by experiment proxy' || true", "0"),
     ("直接の通信はできない", f"{CODE} --noproxy '*' --max-time 10 https://pypi.org/ || true", "000"),
     ("gcloud が使える", "gcloud compute zones list --filter=region:us-central1 --format='value(name)' | head -1", "us-central1-"),
 ]
