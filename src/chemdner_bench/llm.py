@@ -14,6 +14,7 @@ PRICING = {
     "gpt-6-luna": (0.1, 0.01, 0.5),
     "gpt-6.1-sol": (2.0, 0.1, 10.0),
     "gpt-6-astra": (10.0, 1.0, 50.0),
+    "gpt-5.2": (1.75, 0.175, 14.0),  # 2026-01 の実験で使ったモデル（比較用）
 }
 MODELS = tuple(PRICING)
 # effort の選択肢（同じ出典）。Luna だけ none を受け付ける
@@ -21,7 +22,10 @@ EFFORTS = {
     "gpt-6-luna": ("none", "low", "medium", "high", "xhigh", "max"),
     "gpt-6.1-sol": ("low", "medium", "high", "xhigh", "max"),
     "gpt-6-astra": ("low", "medium", "high", "xhigh", "max"),
+    "gpt-5.2": ("none", "low", "medium", "high", "xhigh"),  # 既定は none
 }
+# 各モデルの既定の effort（最もナイーブな使い方では既定を使う）
+DEFAULT_EFFORT = {"gpt-6-luna": "medium", "gpt-6.1-sol": "medium", "gpt-6-astra": "medium", "gpt-5.2": "none"}
 
 
 @dataclass
