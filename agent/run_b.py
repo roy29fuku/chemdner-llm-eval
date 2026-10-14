@@ -422,7 +422,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--mode", choices=("pilot", "main"), required=True)
     p.add_argument("--task", choices=tuple(RULE3), default="free", help="課題文の版（規則 3 の文言）")
     p.add_argument("--plan-only", action="store_true", help="計画だけを立てさせる（PLAN_PROMPT）。採点しない")
-    p.add_argument("--hours", type=float, default=4)
+    p.add_argument("--hours", type=float, default=4, help="課題文に書く時間の上限（時間）")
+    p.add_argument("--stop-after", type=float, default=None,
+                   help="Codex を止めるまでの時間（時間）。省くと --hours と同じ。計画だけの回は課題文を本番と同じにして短く止める")
     p.add_argument("--max-cost", type=float, default=20, help="Codex の API の費用の上限（米ドル）")
     p.add_argument("--max-gpus", type=int, default=1)
     p.add_argument("--max-vcpus", type=int, default=24)
@@ -465,7 +467,7 @@ def main(argv: list[str] | None = None) -> int:
         start_containers(run, name, args.project, args.max_cost, args.model, args.effort)
         dog.start()
         print(f"[{now()}] Codex を起動した（{sa}・上限 {args.hours} 時間・${args.max_cost}）。記録: {run}", flush=True)
-        meta["codex_exit"] = run_codex(name, run, args.hours, prompt)
+        meta["codex_exit"] = run_codex(name, run, args.stop_after or args.hours, prompt)
     finally:
         stop.set()
         meta["finished_at"] = now()

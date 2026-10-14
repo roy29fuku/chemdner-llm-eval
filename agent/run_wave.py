@@ -29,6 +29,7 @@ def main() -> int:
     p.add_argument("--first-slot", type=int, default=0)
     p.add_argument("--plan-only", action="store_true", help="計画だけを立てさせる（run_b.py の --plan-only）")
     p.add_argument("--hours", type=float, default=4)
+    p.add_argument("--stop-after", type=float, default=None, help="Codex を止めるまでの時間（run_b.py と同じ）")
     p.add_argument("--max-cost", type=float, default=20)
     p.add_argument("--account", default="ryota.yamada@science-aid.com")
     args = p.parse_args()
@@ -51,7 +52,8 @@ def main() -> int:
         cmd = [sys.executable, str(Path(__file__).resolve().parent / "run_b.py"), "--mode", args.mode, "--task", args.task,
                "--model", model,
                "--effort", effort, "--rep", rep, "--slot", str(slot), "--hours", str(args.hours),
-               "--max-cost", str(args.max_cost), "--account", args.account] + (["--plan-only"] if args.plan_only else [])
+               "--max-cost", str(args.max_cost), "--account", args.account] + (["--plan-only"] if args.plan_only else []) \
+            + (["--stop-after", str(args.stop_after)] if args.stop_after else [])
         procs.append((job, slot, subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT), log))
         print(f"[{run_b.now()}] slot {slot}: {job} を起動した", flush=True)
         time.sleep(20)  # 鍵の作成・コンテナの起動が重ならないように少しずらす
