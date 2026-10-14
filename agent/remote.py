@@ -95,7 +95,9 @@ def _remote_env() -> str:
 
 def start(vm: str, wave_args: list[str]) -> None:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    cmd = (f"{_remote_env()} && setsid nohup ~/.local/bin/uv run python agent/run_wave.py {shlex.join(wave_args)} "
+    # 「cd … && 起動 &」と書くと、後ろに回した部分の shell が SSH の出力をつかんだまま残り、SSH が戻らない。
+    # 「;」で区切り、起動するコマンドだけを後ろに回す
+    cmd = (f"{_remote_env()}; setsid nohup ~/.local/bin/uv run python agent/run_wave.py {shlex.join(wave_args)} "
            f"> ~/waves/{stamp}.log 2>&1 < /dev/null & echo started ~/waves/{stamp}.log")
     print(gcloud_ssh(vm, cmd, stdin=_key() + "\n").stdout.strip())
 
