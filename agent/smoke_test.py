@@ -117,6 +117,17 @@ def main() -> int:
         cmds = [i for i in items if i.get("type") == "command_execution" and "grep -c OPENAI" in i.get("command", "")]
         check("コマンドから API キーが見えない", bool(cmds) and cmds[0].get("aggregated_output", "").strip().startswith("0"),
               (cmds[0].get("aggregated_output", "") if cmds else "コマンドが実行されなかった").strip()[:80])
+        # 一時的な障害の後に run_codex が使う再開（codex exec resume）で、前の会話の続きから進められること
+        thread = next((e.get("thread_id") for e in events if e.get("type") == "thread.started"), None)
+        out = subprocess.run(["docker", "exec", "-w", "/workspace", f"{name}-agent", "codex", "exec", "resume",
+                              "--skip-git-repo-check", "--json", thread or "",
+                              "Reply with the word RESUMED followed by the package version you found earlier."],
+                             capture_output=True, text=True, timeout=600)
+        said = [(e.get("item") or {}).get("text", "") for e in (json.loads(x) for x in out.stdout.splitlines() if x.startswith("{"))
+                if e.get("type") == "item.completed" and (e.get("item") or {}).get("type") == "agent_message"]
+        version = next((s.get("action", {}).get("query", "") for s in searched), "")
+        check("Codex の会話を再開できる", bool(thread) and any("RESUMED" in s and any(c.isdigit() for c in s) for s in said),
+              (said[-1] if said else (out.stderr or "")[-200:])[:200] + f"（検索: {version[:60]}）")
         usage = run / "logs" / "openai_usage.jsonl"
         print("API の使用量の記録:", usage.read_text().splitlines()[-1] if usage.exists() else "無し")
     finally:

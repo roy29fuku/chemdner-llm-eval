@@ -233,11 +233,53 @@ exclude = ["OPENAI_*", "CODEX_API_KEY"]
         raise RuntimeError(f"エージェントの gcloud が使えない: {out.stderr[-500:]}")
 
 
+# OpenAI の側の一時的な障害（混雑など）。Codex はこれで回を終えるので、同じ会話を再開する（2026-10-14 の追加実験で、
+# gpt-6.1-sol の 1 回が「Selected model is at capacity」で 1 時間 50 分で止まった）。エージェントの誤りとは区別する
+TRANSIENT = ("at capacity", "overloaded", "temporarily unavailable", "server_error", "internal server error")
+RESUME_PROMPT = ("The previous request failed because of a temporary error on the model provider's side. "
+                 "Continue the task from where you left off.")
+MAX_RESUMES = 5
+
+
+def transient_failure(log: Path) -> tuple[str | None, str | None]:
+    """Codex のログの最後が一時的な障害による turn.failed なら、(会話の ID, 障害の文) を返す。"""
+    thread, last = None, None
+    for line in log.read_text(encoding="utf-8").splitlines():
+        try:
+            e = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if e.get("type") == "thread.started":
+            thread = e.get("thread_id")
+        last = e
+    if not last or last.get("type") != "turn.failed":
+        return thread, None
+    message = (last.get("error") or {}).get("message", "")
+    return thread, message if any(t in message.lower() for t in TRANSIENT) else None
+
+
 def run_codex(name: str, run: Path, hours: float, prompt: str = PROMPT) -> int:
-    cmd = ["docker", "exec", f"{name}-agent", "timeout", "--signal=INT", f"{int(hours * 3600)}",
-           "codex", "exec", "--skip-git-repo-check", "--json", "--cd", "/workspace", prompt]
-    with open(run / "logs" / "codex.jsonl", "w", encoding="utf-8") as out, open(run / "logs" / "codex.stderr", "w") as err:
-        return subprocess.run(cmd, stdout=out, stderr=err).returncode
+    deadline = time.monotonic() + hours * 3600
+    log = run / "logs" / "codex.jsonl"
+
+    def codex(args: list[str], mode: str) -> int:
+        left = int(deadline - time.monotonic())
+        cmd = ["docker", "exec", "-w", "/workspace", f"{name}-agent", "timeout", "--signal=INT", str(left), "codex", "exec"] + args
+        with open(log, mode, encoding="utf-8") as out, open(run / "logs" / "codex.stderr", mode) as err:
+            return subprocess.run(cmd, stdout=out, stderr=err).returncode
+
+    code = codex(["--skip-git-repo-check", "--json", "--cd", "/workspace", prompt], "w")
+    resumes = []
+    while len(resumes) < MAX_RESUMES:
+        thread, failure = transient_failure(log)
+        if not (thread and failure) or deadline - time.monotonic() < 300:
+            break
+        time.sleep(60)
+        resumes.append({"t": now(), "error": failure})
+        print(f"[{now()}] OpenAI の一時的な障害で止まったので会話を再開する: {failure}", flush=True)
+        code = codex(["resume", "--skip-git-repo-check", "--json", thread, RESUME_PROMPT], "a")
+    (run / "logs" / "resumes.json").write_text(json.dumps(resumes, ensure_ascii=False, indent=2), encoding="utf-8")
+    return code
 
 
 # ---------------------------------------------------------------- 作成者の追跡（監査ログ）
