@@ -14,6 +14,9 @@
 - Codex の内部の DB やキャッシュ（codex-home の sessions と config.toml 以外）
 - 作業場所のデータの写し（workspace/data/。コーパスと分割の規則から作り直せる）
 - 50 MB を超えるファイル（SHA256SUMS の後ろに「写していない」として一覧を残す）
+- 作業場所の中の 5 MB を超える数値の配列・学習したモデル（.npz・.pkl・.pt・.crfsuite など。同じく一覧を残す）。
+  エージェントが途中で作ったもので、手法と結果はコード・ログ・予測から追える。gpt-6.1-sol の回は 1 回で 1 GB 近く作り、
+  git に入れると保管 repo が数 GB になる
 
 写す前に、秘密鍵や API キーらしい文字列が無いかを確かめ、見つかったら止める。
 
@@ -29,6 +32,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RUNS = ROOT / "runs"
 MAX_BYTES = 50 * 1024 * 1024
+MAX_WORKSPACE_BINARY = 5 * 1024 * 1024
+BINARY_SUFFIXES = {".npz", ".npy", ".pkl", ".pt", ".pth", ".bin", ".safetensors", ".ckpt", ".crfsuite", ".joblib", ".h5"}
 # 「sk-」は前が英数字・_・- でないものだけを数える（暗号化された推論の base64url の文字列や、basilisk- のような
 # モデル名の中にたまたま現れるものを除く）
 SECRET = re.compile(rb"BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|\"private_key\"\s*:|(?<![A-Za-z0-9_-])sk-(proj-)?[A-Za-z0-9_-]{20,}")
@@ -52,6 +57,8 @@ def wanted(rel: Path) -> bool:
             return False
     if rel.name.startswith(".watch"):
         return False
+    if ".cache" in parts:  # Hugging Face などの取得のキャッシュ（中の .gitignore が「*」で、写しても git に入らない）
+        return False
     if "__pycache__" in parts:
         return False
     return True
@@ -67,8 +74,10 @@ def main(dest: Path) -> int:
         rel = p.relative_to(RUNS)
         if not wanted(rel):
             continue
-        if p.stat().st_size > MAX_BYTES:
+        size = p.stat().st_size
+        if size > MAX_BYTES or (size > MAX_WORKSPACE_BINARY and "workspace" in rel.parts and p.suffix in BINARY_SUFFIXES):
             skipped.append(rel)
+            (dest / rel).unlink(missing_ok=True)  # 前の写しに残っていれば消す（写す規則を変えたとき）
             continue
         if SECRET.search(p.read_bytes()):
             secrets.append(rel)
@@ -84,7 +93,7 @@ def main(dest: Path) -> int:
         sums.append(f"{hashlib.sha256(out.read_bytes()).hexdigest()}  {rel.as_posix()}")
     body = "\n".join(sums) + "\n"
     if skipped:
-        body += "".join(f"# 写していない（50 MB 超）: {s.as_posix()}  {hashlib.sha256((RUNS / s).read_bytes()).hexdigest()}\n"
+        body += "".join(f"# 写していない（大きいファイル）: {s.as_posix()}  {hashlib.sha256((RUNS / s).read_bytes()).hexdigest()}\n"
                         for s in skipped)
     (dest / "SHA256SUMS").write_text(body, encoding="utf-8")
     print(f"写した {len(files)} ファイル・写していない {len(skipped)} ファイル → {dest}")
