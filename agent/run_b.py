@@ -403,7 +403,7 @@ def dns_log(project: str, account: str, since: str, path: Path, vms: set[str]) -
                   "--limit=50000"], project, account, check=False)
     rows = [{"t": e.get("timestamp"), "query": e.get("jsonPayload", {}).get("queryName"),
              "vm": e.get("jsonPayload", {}).get("vmInstanceName")} for e in json.loads(out.stdout or "[]")]
-    rows = [r for r in rows if r["vm"] and r["vm"].split(".")[0] in vms]
+    rows = [r for r in rows if r["vm"] and r["vm"].split(".", 1)[-1] in vms]  # vmInstanceName は「プロジェクト番号.VM 名」
     path.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
 
 

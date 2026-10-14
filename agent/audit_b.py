@@ -22,6 +22,8 @@ INFRA_HOSTS = re.compile(r"^(api\.openai\.com|chatgpt\.com|ab\.chatgpt\.com|api\
                          r"accounts\.google\.com|pypi\.org|files\.pythonhosted\.org)$")  # PyPI は「取得したパッケージ」にまとめる
 WATCH = [
     ("モデルの読み込み", r"from_pretrained\(\s*[\"']([^\"']+)"),
+    ("モデルの ID らしき文字列（VM 側の取得は proxy を通らないので、コードから拾う）",
+     r"[\w.-]+/[\w.-]*(bert|roberta|electra|deberta|xlnet|biolink|scibert|t5|llama|ner)[\w.-]*"),
     ("Hugging Face から取得", r"(hf_hub_download|snapshot_download|huggingface-cli download|hf download)[^\n]{0,120}"),
     ("データセットの読み込み", r"load_dataset\(\s*[\"']?([^\"',)]+)"),
     ("LLM の API", r"(openai|anthropic|generativelanguage|gemini|mistral|cohere|codex exec)"),
