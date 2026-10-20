@@ -137,6 +137,20 @@ def test_unsupported_effort_is_rejected(corpus, tmp_path):
 
 
 def test_call_record_cost():
-    r = CallRecord("x", "gpt-6.1-sol", "medium", status="completed", input_tokens=1_000_000, cached_tokens=500_000,
-                   output_tokens=100_000)
-    assert r.cost_usd() == pytest.approx(0.5 * 2.0 + 0.5 * 0.1 + 0.1 * 10.0)
+    r = CallRecord("x", "gpt-6.1-sol", "medium", status="completed", input_tokens=200_000, cached_tokens=100_000,
+                   output_tokens=10_000)
+    assert r.cost_usd() == pytest.approx(0.1 * 2.0 + 0.1 * 0.1 + 0.01 * 10.0)
+
+
+def test_call_record_cost_counts_cache_writes():
+    # GPT-6 世代はキャッシュへの書き込みを通常の入力の 1.25 倍で課金する
+    r = CallRecord("x", "gpt-6.1-sol", "medium", status="completed", input_tokens=200_000, cached_tokens=0,
+                   cache_write_tokens=150_000, output_tokens=0)
+    assert r.cost_usd() == pytest.approx(0.05 * 2.0 + 0.15 * 2.5)
+
+
+def test_call_record_cost_long_context():
+    # 入力が 27.2 万トークンを超えると、要求全体の入力・キャッシュ・書き込みが 2 倍、出力が 1.5 倍
+    r = CallRecord("x", "gpt-6-luna", "medium", status="completed", input_tokens=400_000, cached_tokens=390_000,
+                   output_tokens=1_000)
+    assert r.cost_usd() == pytest.approx(2.0 * (0.01 * 0.1 + 0.39 * 0.01) + 1.5 * 0.001 * 0.5)
