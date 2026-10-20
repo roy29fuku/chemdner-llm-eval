@@ -31,6 +31,34 @@ def setting(model: str, effort: str) -> str:
     return f"{NAME[model]} {effort}"
 
 
+def show(name: str) -> str:
+    """採点の出力の設定名（gpt-6-luna medium）を、表の表記（GPT-6 luna medium）に直す。"""
+    model, effort = name.split(" ")
+    return setting(model, effort)
+
+
+KEY_SETTING = {"6-luna-medium": "GPT-6 luna medium", "6.1-sol-low": "GPT-6.1 sol low", "6.1-sol-medium": "GPT-6.1 sol medium"}
+
+
+def role(key: str) -> str:
+    """score_exp15.py の役割の名前を、表の表記に直す。"""
+    head, tail = key.split("/")
+    if head == "curve":
+        return f"曲線（GPT-6 luna medium）・乱数の例 {int(tail[1:]):,} 件"
+    if head == "b128":
+        return f"128 件だけのエージェント（GPT-6 luna medium）・{tail}"
+    name = KEY_SETTING[head]
+    if tail == "k0":
+        return f"{name}・同じ日の直接答える"
+    if tail == "similar":
+        return f"{name}・似た例"
+    if tail.startswith("r128-s"):
+        return f"{name}・乱数の例 128 件（種 {tail[-1]}）"
+    if tail.startswith("a-r"):
+        return f"{name}・直接答える（10-14、{tail[2:]}）"
+    return f"{name}・エージェント（{tail[2:]}）"
+
+
 def main_tables(m: dict) -> list[str]:
     runs = [r for r in m["runs"] if r["group"] in ("a", "b-gcp", "b-mac")]
     L = ["### 表 S1　二つのやり方の結果（設定ごと。正解のある評価用の要旨 2,478 件）", "",
@@ -45,7 +73,10 @@ def main_tables(m: dict) -> list[str]:
             L.append(f"| {setting(model, effort)} | {label[g]} | {len(rs)} | {pc(st.mean(f))} ± {pc(st.stdev(f))} | "
                      f"{pc(st.mean(r['official']['precision'] for r in rs))} | {pc(st.mean(r['official']['recall'] for r in rs))} | "
                      f"{pc(st.mean(r['all']['f1'] for r in rs))} |")
-    L += ["", "予測を出さずに終わった回は、予測が空として採点した（F1 0）。", "",
+    gm = [r["official"]["f1"] for r in runs if (r["group"], r["model"], r["effort"]) == ("b-gcp", "gpt-5.2", "medium")
+          and r["predictions"]]
+    L += ["", f"予測を出さずに終わった回は、予測が空として採点した（F1 0）。GPT-5.2 medium のエージェントで予測を出した "
+          f"{len(gm)} 回だけの平均は {pc(st.mean(gm))}。", "",
           "### 表 S2　エージェント − 直接答える（3 回の平均の差。文書を復元抽出した 95% 区間）", "",
           "| 設定 | 差（2,478 件） | 95% 区間 | 差（全 3,000 件） | 95% 区間 |", "|---|---|---|---|---|"]
     for c in m["comparisons"]:
@@ -55,7 +86,8 @@ def main_tables(m: dict) -> list[str]:
         note = "（予測を出した回だけ）" if c["with_predictions_only"] else ""
         L.append(f"| {setting(c['model'], c['effort'])}{note} | {pt(o['diff'])} | [{pt(o['ci_low'])}, {pt(o['ci_high'])}] | "
                  f"{pt(a['diff'])} | [{pt(a['ci_low'])}, {pt(a['ci_high'])}] |")
-    L += ["", f"bootstrap {m['bootstrap']} 回・seed {m['seed']}。差はポイント（F1 × 100）。", "",
+    L += ["", f"bootstrap {m['bootstrap']:,} 回・seed {m['seed']}。差はポイント（F1 × 100）。区間は文書だけを復元抽出したもので、回は"
+          "固定した（回のばらつき〔表 S1 の SD〕は区間に含まない）。", "",
           "### 表 S3　エージェントの回ごとの結果（2,478 件）", "",
           "| 設定 | 回 | F1 | P | R |", "|---|---|---|---|---|"]
     for model, effort in SETTINGS:
@@ -75,17 +107,17 @@ def exp15_tables(e: dict) -> list[str]:
     for m in e["main"]:
         f, t, d = m["f1"], m["two_stage"], m["documents_only"]
         sim = pc(f["similar"]) if "similar" in f else "走らせていない"
-        L.append(f"| {m['setting']} | {pc(f['k0'])} | {pc(f['r128'])} | {sim} | {pc(f['b'])} | {choice[t['strong_choice']]} | "
+        L.append(f"| {show(m['setting'])} | {pc(f['k0'])} | {pc(f['r128'])} | {sim} | {pc(f['b'])} | {choice[t['strong_choice']]} | "
                  f"{pt(t['diff'])} | [{pt(t['ci_low'])}, {pt(t['ci_high'])}] | {t['category']} | "
                  f"[{pt(d['ci_low'])}, {pt(d['ci_high'])}] |")
     cb = e["curve_best_for_type_a"]
     L += ["", f"全体の型: {e['overall_type']}。型 A の条件の 1 つ（GPT-6 luna medium、1,000 件で、エージェント − 乱数の例の曲線の"
           f"最高点 K = {cb['best_k']}）は {pt(cb['diff'])} [{pt(cb['ci_low'])}, {pt(cb['ci_high'])}]・{cb['category']}。"
-          f"bootstrap {e['bootstrap']} 回・seed {e['seed']}。", "",
+          f"bootstrap {e['bootstrap']:,} 回・seed {e['seed']}。", "",
           "### 表 S5　差の何割を、例を見せることで埋めたか", "",
           "| 設定 | エージェント − 例なし | 強い方 − 例なし | 割合 | 95% 区間 |", "|---|---|---|---|---|"]
     for fr in e["fraction_closed"]:
-        L.append(f"| {fr['setting']} | {pt(fr['b_minus_k0'])} | {pt(fr['strong_minus_k0'])} | {fr['fraction']:.2f} | "
+        L.append(f"| {show(fr['setting'])} | {pt(fr['b_minus_k0'])} | {pt(fr['strong_minus_k0'])} | {fr['fraction']:.2f} | "
                  f"[{fr['ci'][0]:.2f}, {fr['ci'][1]:.2f}] |")
     b, c = e["b128"], e["curve"]
     L += ["", "### 表 S6　副の比較", "", "| 比較 | 差 | 95% 区間 | 判定 |", "|---|---|---|---|",
@@ -94,14 +126,14 @@ def exp15_tables(e: dict) -> list[str]:
           f"| 例の数の曲線: F1(1,024 件) − F1(128 件)（GPT-6 luna medium、1,000 件） | {pt(c['kmax_minus_k128'])} | "
           f"[{pt(c['ci_low'])}, {pt(c['ci_high'])}] | {c['rule']} |"]
     for d in e["k0_drift"]:
-        L.append(f"| 同じ日の例なし − 1 週間前の直接答える（{d['setting']}） | {pt(d['diff'])} | "
+        L.append(f"| 同じ日の例なし − 10-14 の直接答える（{show(d['setting'])}） | {pt(d['diff'])} | "
                  f"[{pt(d['ci_low'])}, {pt(d['ci_high'])}] | {d['rule']} |")
     for s in e["similar_vs_random"]:
-        L.append(f"| 似た例（{s['similar_k']} 件） − 乱数の例 128 件（{s['setting']}） | {pt(s['diff'])} | "
+        L.append(f"| 似た例（{s['similar_k']} 件） − 乱数の例 128 件（{show(s['setting'])}） | {pt(s['diff'])} | "
                  f"[{pt(s['ci_low'])}, {pt(s['ci_high'])}] | {s['category']} |")
     pts = " | ".join(pc(v) for v in c["points"].values())
     L += ["", "### 表 S7　例の数の曲線（GPT-6 luna medium、2,478 件から乱数で選んだ 1,000 件の F1）", "",
-          "| 例なし | " + " | ".join(f"{k[1:]} 件" for k in c["points"]) + " | エージェント（参考） |",
+          "| 例なし | " + " | ".join(f"{int(k[1:]):,} 件" for k in c["points"]) + " | エージェント（参考） |",
           "|" + "---|" * (len(c["points"]) + 2),
           f"| {pc(c['k0'])} | {pts} | {pc(c['b_mean'])} |", "",
           "### 表 S8　回ごとの結果と誤りの内訳（例を見せた対照）", "",
@@ -110,14 +142,54 @@ def exp15_tables(e: dict) -> list[str]:
     for k, x in runs.items():
         er = x["errors"]
         cost = f"{x['cost_usd']:.2f}" if x.get("cost_usd") is not None else ""
-        L.append(f"| {k} | {'1,000' if x['scope'] == 'curve1000' else '2,478'} | {pc(x['f1'])} | {pc(x['precision'])} | "
+        L.append(f"| {role(k)} | {'1,000' if x['scope'] == 'curve1000' else '2,478'} | {pc(x['f1'])} | {pc(x['precision'])} | "
                  f"{pc(x['recall'])} | {pc(er['overlap_f1'])} | {er['fp_boundary']:,}／{er['fn_boundary']:,} | "
                  f"{er['fp_spurious']:,} | {er['fn_missed']:,} | {cost} |")
-    L += ["", "役割の名前: `<設定>/k0` は同じ日の例なし、`r128-s<種>` は乱数の例 128 件、`similar` は似た例、`a-r<回>` は 1 週間前の"
-          "直接答える、`b-r<回>` はエージェント、`curve/k<件数>` は曲線、`b128/r<回>` は 128 件だけのエージェント。費用は、"
+    L += ["", "費用は、"
           "直接答える・例を見せる回は API の費用の合計（キャッシュの書き込みと長い文脈の割増を含む。1 週間前の回は全 3,000 件の分）、"
           "エージェントの回は API の費用だけ（GPU の費用を含まない）。境界の違い＝正解と重なるが一致しない予測（または予測と重なるが"
           "一致しない正解）、余分な予測＝どの正解とも重ならない予測、取りこぼし＝どの予測とも重ならない正解。"]
+    return L
+
+
+def posthoc_tables(h: dict) -> list[str]:
+    L = ["### 表 S9　事後の探索的な解析: 順位・回のばらつきの感度・同じ相手どうしの割合", "",
+         "| 設定 | エージェントの最も低い回 | 他の回の最も高い値 | 全回が上か | 差（強い方との） | 区間（回の分を t 分布で足す） | "
+         "割合（乱数の例 128 件だけ） | 割合（似た例だけ） | 残りの差（重なりで数える F1） |", "|---|---|---|---|---|---|---|---|---|"]
+    for r in h["settings"]:
+        k, s_ = r["rank"], r["run_variance_sensitivity"]
+        fr = r["fraction_same_opponent"]
+        sim = f"{fr['similar']:.2f}" if fr["similar"] is not None else "走らせていない"
+        L.append(f"| {show(r['setting'])} | {pc(k['agent_min'])} | {pc(k['others_max'])} | "
+                 f"{'はい' if k['all_agent_runs_above_all_others'] else 'いいえ'} | {pt(s_['diff'])} | "
+                 f"[{pt(s_['ci'][0])}, {pt(s_['ci'][1])}] | {fr['r128']:.2f} | {sim} | {pt(r['overlap_f1_residual'])} |")
+    L += ["", "他の回 = 同じ設定の直接答える回（10-14 の 3 回と同じ日の 1 回）と例を見せた回すべて。回の分の分散は、エージェントと"
+          "強い方の回の SD から出し（1 回だけの条件は 10-14 の直接答える 3 回の SD で代えた）、文書の抽出の分散に足して、"
+          "t 分布（自由度 2）で 95% 区間にした。", "",
+          "### 表 S10　事後の探索的な解析: 同等とみなす幅を変えたときの区分", "",
+          "| 幅（ポイント） | GPT-6 luna medium | GPT-6.1 sol low | GPT-6.1 sol medium | 曲線の最高点（型 A の条件） | 全体の型 |",
+          "|---|---|---|---|---|---|"]
+    for m, v in h["margin_sensitivity"].items():
+        L.append(f"| ±{m} | " + " | ".join(v["categories"]) + f" | {v['curve']} | {v['type']} |")
+    L += ["", "±1.0 が実行の前に決めた幅。", "",
+          "### 表 S11　事後の探索的な解析: 3 回の多数決（2 回以上に出た言及を採る）", "",
+          "| 設定 | 直接答える 3 回の平均 → 多数決 | 乱数の例 3 組の平均 → 多数決 | 乱数 3 組と似た例の 4 本で 2 本以上 | 似た例（1 回） |",
+          "|---|---|---|---|---|"]
+    for r in h["settings"]:
+        v = r["vote"]
+        four = pc(v["r128_and_similar_4"]) if "r128_and_similar_4" in v else "—"
+        sim = pc(v["similar"]) if "similar" in v else "—"
+        L.append(f"| {show(r['setting'])} | {pc(v['a_mean'])} → {pc(v['a_3runs'])} | {pc(v['r128_mean'])} → {pc(v['r128_3sets'])} | "
+                 f"{four} | {sim} |")
+    classes = ["SYSTEMATIC", "TRIVIAL", "FAMILY", "FORMULA", "ABBREVIATION", "IDENTIFIER", "MULTIPLE"]
+    L += ["", "### 表 S12　事後の探索的な解析: 正解の分類ごとの再現率（R。直接答える 10-14 の 3 回 ／ 強い方 ／ エージェント 3 回の平均）", "",
+          "| 設定 | " + " | ".join(f"{c}（{h['settings'][0]['recall_by_class']['counts'][c]:,}）" for c in classes) + " |",
+          "|---|" + "---|" * len(classes)]
+    for r in h["settings"]:
+        rc = r["recall_by_class"]
+        L.append(f"| {show(r['setting'])} | " + " | ".join(f"{pc(rc['a'][c], 1)} ／ {pc(rc['best'][c], 1)} ／ {pc(rc['agent'][c], 1)}"
+                                                       for c in classes) + " |")
+    L += ["", "分類は CHEMDNER の正解に付いている 8 分類（括弧は正解のある 2,478 件での言及の数。NO CLASS 41 件は省いた）。採点には使わない。"]
     return L
 
 
@@ -125,12 +197,15 @@ def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--main", type=Path, required=True)
     p.add_argument("--exp15", type=Path, required=True)
+    p.add_argument("--posthoc", type=Path, help="scripts/posthoc_exp15.py の posthoc.json（事後の探索的な解析）")
     p.add_argument("--out", type=Path, required=True)
     args = p.parse_args()
     m = json.loads(args.main.read_text(encoding="utf-8"))
     e = json.loads(args.exp15.read_text(encoding="utf-8"))
     L = ["<!-- chemdner-llm-eval の scripts/supplement_tables.py が採点の出力から書き出した。手で直さない -->", ""]
     L += main_tables(m) + [""] + exp15_tables(e)
+    if args.posthoc:
+        L += [""] + posthoc_tables(json.loads(args.posthoc.read_text(encoding="utf-8")))
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(L) + "\n", encoding="utf-8")
     print("wrote", args.out)
