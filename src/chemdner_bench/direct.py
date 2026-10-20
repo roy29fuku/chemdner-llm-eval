@@ -129,10 +129,37 @@ def check_frozen() -> None:
         raise RuntimeError("frozen/direct.json・prompts/・task/ に commit していない変更がある")
 
 
+APRIME = ROOT / "frozen" / "aprime.json"
+
+
+def check_aprime(cfg: Config) -> None:
+    """実験 15 の回を test で走らせてよいか。凍結（frozen/aprime.json）が commit 済みで、回の一覧にあり、
+    文書の一覧・例・コードが凍結と一致すること（scripts/freeze_aprime.py）。"""
+    if not APRIME.exists():
+        raise RuntimeError("test の前に scripts/freeze_aprime.py で凍結し、commit して tag を打つ")
+    frozen = json.loads(APRIME.read_text(encoding="utf-8"))
+    if cfg.name() not in frozen["runs"]:
+        raise RuntimeError(f"凍結した回の一覧に無い: {cfg.name()}")
+    if cfg.pmids_file:
+        name = Path(cfg.pmids_file).name
+        if sha256_text(Path(cfg.pmids_file).read_text(encoding="utf-8")) != frozen["lists"].get(name):
+            raise RuntimeError(f"文書の一覧が凍結と違う: {name}")
+    for rel, digest in frozen["code_sha256"].items():
+        if hashlib.sha256((ROOT / rel).read_bytes()).hexdigest() != digest:
+            raise RuntimeError(f"コードが凍結と違う: {rel}")
+    rel = APRIME.relative_to(ROOT)
+    tracked = subprocess.run(["git", "ls-files", "--error-unmatch", str(rel)], cwd=ROOT, capture_output=True).returncode == 0
+    clean = subprocess.run(["git", "diff", "--quiet", "HEAD", "--", "frozen", "src", "prompts", "task"], cwd=ROOT).returncode == 0
+    if not (tracked and clean):
+        raise RuntimeError("frozen/・src/・prompts/・task/ に commit していない変更がある")
+
+
 async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None = None, out_root: Path = RUNS) -> Path:
     llm.check_model(cfg.model, cfg.effort)
     if cfg.split == "evaluation":
         check_frozen()
+        if cfg.shots or cfg.pmids_file:
+            check_aprime(cfg)
     elif cfg.split != "development":
         raise ValueError("a を走らせる分割は development か evaluation")
     docs = load(cfg.split, gold=False)  # 入力は本文だけ
@@ -168,6 +195,10 @@ async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None
         record = {"pool": pool_info, "select": cfg.select, "shots": cfg.shots}
         if cfg.select == "random":
             examples = shots.random_examples(pool, cfg.shots, cfg.shot_seed)
+            if cfg.split == "evaluation":
+                frozen = json.loads(APRIME.read_text(encoding="utf-8"))["examples"][str(cfg.shot_seed)]
+                if [e.pmid for e in examples] != frozen[:cfg.shots]:
+                    raise RuntimeError("例が凍結と違う")
             fixed_turns = shots.example_turns(examples, breakpoint=True)
             cache_key = sha256_text(system + json.dumps([e.pmid for e in examples]))[:32]
             record["examples"] = [e.pmid for e in examples]
