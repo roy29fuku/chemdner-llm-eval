@@ -28,3 +28,6 @@ infrastructure/terraform.tfvars
 
 # 実行の出力（本文を含む生の応答があるので公開するものは選んで出す）
 runs/
+
+# エージェントのイメージに取り込むバイナリ（agent/image/fetch_vendor.sh で取得）
+agent/image/vendor/
