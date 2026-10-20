@@ -154,3 +154,17 @@ def test_call_record_cost_long_context():
     r = CallRecord("x", "gpt-6-luna", "medium", status="completed", input_tokens=400_000, cached_tokens=390_000,
                    output_tokens=1_000)
     assert r.cost_usd() == pytest.approx(2.0 * (0.01 * 0.1 + 0.39 * 0.01) + 1.5 * 0.001 * 0.5)
+
+
+def test_summary_cost_counts_every_call(tmp_path):
+    # 送り直した呼び出しの費用も合計に入れる（最後の記録だけを数えると、最初の書き込みの料金が消える）
+    out = tmp_path / "run"
+    out.mkdir()
+    rows = [{"key": "1", "ok": True, "parse_error": None, "spans": [], "model": "m", "input_tokens": 10, "cached_tokens": 0,
+             "output_tokens": 1, "reasoning_tokens": 0, "cost_usd": 0.2},
+            {"key": "1", "ok": True, "parse_error": None, "spans": [], "model": "m", "input_tokens": 10, "cached_tokens": 9,
+             "output_tokens": 1, "reasoning_tokens": 0, "cost_usd": 0.01}]
+    (out / "calls.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+    summary = direct.write_outputs(out, ["1"])
+    assert summary["cost_usd"] == pytest.approx(0.21)
+    assert summary["calls"] == 2

@@ -179,10 +179,11 @@ async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None
     sem = asyncio.Semaphore(concurrency)
     spent = sum(r["cost_usd"] for r in done.values())
     stop = asyncio.Event()
+    finished: set[str] = set()  # この実行で成功した文書（先に送った 1 件を並列のときに送り直さない）
 
     async def one(doc: Document) -> None:
         nonlocal spent
-        if doc.pmid in done or stop.is_set():
+        if doc.pmid in done or doc.pmid in finished or stop.is_set():
             return
         async with sem:
             if stop.is_set():
@@ -211,6 +212,8 @@ async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
         with open(out / "private" / "raw.jsonl", "a", encoding="utf-8") as f:  # 本文を含むので公開しない
             f.write(json.dumps({"key": doc.pmid, "output_text": text}, ensure_ascii=False) + "\n")
+        if row["ok"] and row["parse_error"] is None:
+            finished.add(doc.pmid)
         spent += row["cost_usd"]
         if max_cost is not None and spent > max_cost:
             stop.set()
@@ -225,11 +228,13 @@ async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None
 
 
 def write_outputs(out: Path, pmids: list[str]) -> dict:
-    """calls.jsonl から予測と集計を作る。同じ文書は最後の記録を使う。"""
+    """calls.jsonl から予測と集計を作る。同じ文書は最後の記録を使う。費用は、失敗や送り直しを含むすべての呼び出しの合計。"""
     latest = {}
+    spend = 0.0
     for line in (out / "calls.jsonl").read_text(encoding="utf-8").splitlines():
         r = json.loads(line)
         latest[r["key"]] = r
+        spend += r["cost_usd"]
     pred = {k: {tuple(s) for s in r.get("spans", [])} for k, r in latest.items() if r["ok"] and r["parse_error"] is None}
     cem.write_tsv(out / "predictions.tsv", pred)
     failed = sorted(set(pmids) - set(pred))
@@ -247,7 +252,8 @@ def write_outputs(out: Path, pmids: list[str]) -> dict:
         "cache_write_tokens": sum(r.get("cache_write_tokens", 0) for r in latest.values()),
         "output_tokens": sum(r["output_tokens"] for r in latest.values()),
         "reasoning_tokens": sum(r["reasoning_tokens"] for r in latest.values()),
-        "cost_usd": round(sum(r["cost_usd"] for r in latest.values()), 4),
+        "cost_usd": round(spend, 4),
+        "calls": sum(1 for _ in (out / "calls.jsonl").read_text(encoding="utf-8").splitlines()),
     }
     (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return summary
