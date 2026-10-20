@@ -121,8 +121,12 @@ def render_task(variant: str, project: str, sa: str, hours: float, max_gpus: int
 
 
 def prepare(run: Path, mode: str, variant: str, project: str, sa: str, hours: float, max_gpus: int,
-            max_vcpus: int) -> list[Document]:
-    """作業場所を作り、test として渡す文書を返す（pilot は正解つき・main は本文だけ）。正解は作業場所に置かない。"""
+            max_vcpus: int, labeled: Path | None = None) -> list[Document]:
+    """作業場所を作り、test として渡す文書を返す（pilot は正解つき・main は本文だけ）。正解は作業場所に置かない。
+
+    labeled（PMID の一覧）を渡すと、正解付きのデータをその文書だけにする（実験 15 の b(128)）。元の分割を保ち、
+    training にあった文書は training.*、development にあった文書は development.* に書く。
+    """
     ws = run / "workspace"
     (ws / "data").mkdir(parents=True)
     (ws / "output").mkdir()
@@ -133,6 +137,12 @@ def prepare(run: Path, mode: str, variant: str, project: str, sa: str, hours: fl
     else:
         development = load("development")
         test = load("evaluation", gold=False)  # main は test の正解を読まない
+    if labeled is not None:
+        keep = set(labeled.read_text(encoding="utf-8").split())
+        training = [d for d in training if d.pmid in keep]
+        development = [d for d in development if d.pmid in keep]
+        if len(training) + len(development) != len(keep):
+            raise SystemExit(f"正解付きの一覧 {labeled} の文書が training と development に見つからない")
     write_abstracts(training, ws / "data" / "training.abstracts.txt")
     write_annotations(training, ws / "data" / "training.annotations.txt")
     write_abstracts(development, ws / "data" / "development.abstracts.txt")
@@ -499,6 +509,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--task", choices=tuple(RULE3), default="free", help="課題文の版（規則 3 の文言）")
     p.add_argument("--plan-only", action="store_true", help="計画だけを立てさせる（PLAN_PROMPT）。採点しない")
     p.add_argument("--tag", default="", help="run の名前に入れる環境の印（例: gcp。司令塔の VM で走らせた回）")
+    p.add_argument("--labeled", type=Path, help="正解付きのデータをこの PMID の一覧だけにする（実験 15 の b(128)）")
     p.add_argument("--hours", type=float, default=4, help="課題文に書く時間の上限（時間）")
     p.add_argument("--stop-after", type=float, default=None,
                    help="Codex を止めるまでの時間（時間）。省くと --hours と同じ。計画だけの回は課題文を本番と同じにして短く止める")
@@ -536,7 +547,7 @@ def main(argv: list[str] | None = None) -> int:
     meta = {**vars(args), "agent_sa": sa, "started_at": started, "prompt": prompt, "image": IMAGE,
             "proxy_image": PROXY_IMAGE, "task_template_sha256": hashlib.sha256(TASK.read_bytes()).hexdigest()}
     baseline = inventory(args.project, args.account)["instances"]
-    test = prepare(run, args.mode, args.task, args.project, sa, args.hours, args.max_gpus, args.max_vcpus)
+    test = prepare(run, args.mode, args.task, args.project, sa, args.hours, args.max_gpus, args.max_vcpus, args.labeled)
     meta["task_sha256"] = hashlib.sha256((run / "workspace" / "task.md").read_bytes()).hexdigest()  # 渡した課題文
     key_id = None
     stop = threading.Event()

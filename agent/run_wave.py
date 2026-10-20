@@ -29,6 +29,7 @@ def main() -> int:
     p.add_argument("--first-slot", type=int, default=0)
     p.add_argument("--plan-only", action="store_true", help="計画だけを立てさせる（run_b.py の --plan-only）")
     p.add_argument("--tag", default="", help="run の名前に入れる環境の印（run_b.py と同じ）")
+    p.add_argument("--labeled", help="正解付きのデータをこの PMID の一覧だけにする（run_b.py と同じ）")
     p.add_argument("--hours", type=float, default=4)
     p.add_argument("--stop-after", type=float, default=None, help="Codex を止めるまでの時間（run_b.py と同じ）")
     p.add_argument("--max-cost", type=float, default=20)
@@ -54,7 +55,8 @@ def main() -> int:
                "--model", model,
                "--effort", effort, "--rep", rep, "--slot", str(slot), "--hours", str(args.hours),
                "--max-cost", str(args.max_cost), "--account", args.account] + (["--plan-only"] if args.plan_only else []) \
-            + (["--stop-after", str(args.stop_after)] if args.stop_after else []) + (["--tag", args.tag] if args.tag else [])
+            + (["--stop-after", str(args.stop_after)] if args.stop_after else []) + (["--tag", args.tag] if args.tag else []) \
+            + (["--labeled", args.labeled] if args.labeled else [])
         procs.append((job, slot, subprocess.Popen(cmd, stdout=log, stderr=subprocess.STDOUT), log))
         print(f"[{run_b.now()}] slot {slot}: {job} を起動した", flush=True)
         time.sleep(20)  # 鍵の作成・コンテナの起動が重ならないように少しずらす
