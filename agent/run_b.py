@@ -544,7 +544,7 @@ def main(argv: list[str] | None = None) -> int:
     ACTIVE.mkdir(parents=True, exist_ok=True)
     lock.write_text(json.dumps({"project": args.project, "sa": sa, "started": started, "run": name}) + "\n",
                     encoding="utf-8")
-    meta = {**vars(args), "agent_sa": sa, "started_at": started, "prompt": prompt, "image": IMAGE,
+    meta = {**vars(args), "labeled": str(args.labeled) if args.labeled else None, "agent_sa": sa, "started_at": started, "prompt": prompt, "image": IMAGE,
             "proxy_image": PROXY_IMAGE, "task_template_sha256": hashlib.sha256(TASK.read_bytes()).hexdigest()}
     baseline = inventory(args.project, args.account)["instances"]
     test = prepare(run, args.mode, args.task, args.project, sa, args.hours, args.max_gpus, args.max_vcpus, args.labeled)
