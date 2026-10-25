@@ -26,7 +26,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from chemdner_bench import cem, inline_tags, llm
+from chemdner_bench import cem, inline_tags, llm, shots
 from chemdner_bench.corpus import Document, gold_spans, load
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -84,10 +84,18 @@ class Config:
     rep: int = 0
     limit: int | None = None
     max_output_tokens: int = 16000
+    shots: int = 0  # 条件 a'：見せる例の数（0 なら a と同じ）
+    select: str = "random"  # 例の選び方（random・similar）
+    shot_seed: int = 0  # random の例を選ぶ乱数の種
+    pmids_file: str | None = None  # 走らせる文書を PMID の一覧で絞る（test の部分など）
 
     def name(self) -> str:
         limit = f"-n{self.limit}" if self.limit else ""
-        return f"{self.split}-{self.model}-{self.effort}-r{self.rep}{limit}"
+        sub = f"-sub{Path(self.pmids_file).stem}" if self.pmids_file else ""
+        shot = ""
+        if self.shots:
+            shot = f"-shots{self.shots}-{self.select}" + (f"-s{self.shot_seed}" if self.select == "random" else "")
+        return f"{self.split}-{self.model}-{self.effort}{shot}-r{self.rep}{limit}{sub}"
 
 
 def fingerprint() -> dict:
@@ -121,15 +129,45 @@ def check_frozen() -> None:
         raise RuntimeError("frozen/direct.json・prompts/・task/ に commit していない変更がある")
 
 
+APRIME = ROOT / "frozen" / "aprime.json"
+
+
+def check_aprime(cfg: Config) -> None:
+    """実験 15 の回を test で走らせてよいか。凍結（frozen/aprime.json）が commit 済みで、回の一覧にあり、
+    文書の一覧・例・コードが凍結と一致すること（scripts/freeze_aprime.py）。"""
+    if not APRIME.exists():
+        raise RuntimeError("test の前に scripts/freeze_aprime.py で凍結し、commit して tag を打つ")
+    frozen = json.loads(APRIME.read_text(encoding="utf-8"))
+    if cfg.name() not in frozen["runs"]:
+        raise RuntimeError(f"凍結した回の一覧に無い: {cfg.name()}")
+    if cfg.pmids_file:
+        name = Path(cfg.pmids_file).name
+        if sha256_text(Path(cfg.pmids_file).read_text(encoding="utf-8")) != frozen["lists"].get(name):
+            raise RuntimeError(f"文書の一覧が凍結と違う: {name}")
+    for rel, digest in frozen["code_sha256"].items():
+        if hashlib.sha256((ROOT / rel).read_bytes()).hexdigest() != digest:
+            raise RuntimeError(f"コードが凍結と違う: {rel}")
+    rel = APRIME.relative_to(ROOT)
+    tracked = subprocess.run(["git", "ls-files", "--error-unmatch", str(rel)], cwd=ROOT, capture_output=True).returncode == 0
+    clean = subprocess.run(["git", "diff", "--quiet", "HEAD", "--", "frozen", "src", "prompts", "task"], cwd=ROOT).returncode == 0
+    if not (tracked and clean):
+        raise RuntimeError("frozen/・src/・prompts/・task/ に commit していない変更がある")
+
+
 async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None = None, out_root: Path = RUNS) -> Path:
     llm.check_model(cfg.model, cfg.effort)
     if cfg.split == "evaluation":
         check_frozen()
+        if cfg.shots or cfg.pmids_file:
+            check_aprime(cfg)
     elif cfg.split != "development":
         raise ValueError("a を走らせる分割は development か evaluation")
     docs = load(cfg.split, gold=False)  # 入力は本文だけ
     if cfg.limit:
         docs = sorted(docs, key=lambda d: d.pmid)[:cfg.limit]
+    if cfg.pmids_file:
+        wanted = set(Path(cfg.pmids_file).read_text(encoding="utf-8").split())
+        docs = [d for d in docs if d.pmid in wanted]
     out = out_root / cfg.name()
     (out / "private").mkdir(parents=True, exist_ok=True)
     calls_path = out / "calls.jsonl"
@@ -146,22 +184,54 @@ async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None
 
     system = instructions()
     cache_key = sha256_text(system)[:32]
+    cache_mode = None
+    fixed_turns: list[dict] = []
+    index = None
+    if cfg.shots:
+        pool, pool_info = shots.standard_pool(load("training"), load("development"))
+        if cfg.split == "development" and {d.pmid for d in docs} & {d.pmid for d in pool}:
+            raise RuntimeError("development で走らせる文書が例の候補に入っている（確認の対象は候補から除いた先頭 100 件だけ）")
+        cache_mode = "explicit"
+        record = {"pool": pool_info, "select": cfg.select, "shots": cfg.shots}
+        if cfg.select == "random":
+            examples = shots.random_examples(pool, cfg.shots, cfg.shot_seed)
+            if cfg.split == "evaluation":
+                frozen = json.loads(APRIME.read_text(encoding="utf-8"))["examples"][str(cfg.shot_seed)]
+                if [e.pmid for e in examples] != frozen[:cfg.shots]:
+                    raise RuntimeError("例が凍結と違う")
+            fixed_turns = shots.example_turns(examples, breakpoint=True)
+            cache_key = sha256_text(system + json.dumps([e.pmid for e in examples]))[:32]
+            record["examples"] = [e.pmid for e in examples]
+        elif cfg.select == "similar":
+            index = shots.TfidfIndex(pool)  # 文書ごとに例が変わるので、区切りは置かない（明示のモードで書き込みもしない）
+        else:
+            raise ValueError(f"例の選び方は random か similar: {cfg.select}")
+        (out / "examples.json").write_text(json.dumps(record, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     sem = asyncio.Semaphore(concurrency)
     spent = sum(r["cost_usd"] for r in done.values())
     stop = asyncio.Event()
+    finished: set[str] = set()  # この実行で成功した文書（先に送った 1 件を並列のときに送り直さない）
 
     async def one(doc: Document) -> None:
         nonlocal spent
-        if doc.pmid in done or stop.is_set():
+        if doc.pmid in done or doc.pmid in finished or stop.is_set():
             return
         async with sem:
             if stop.is_set():
                 return
+            turns = fixed_turns
+            chosen = None
+            if index is not None:
+                picked = shots.similar_examples(index, doc, cfg.shots)
+                turns, chosen = shots.example_turns(picked), [e.pmid for e in picked]
             text, rec = await llm.respond(client, key=doc.pmid, model=cfg.model, effort=cfg.effort,
-                                          instructions=system, input=messages(doc), json_schema=SCHEMA,
-                                          max_output_tokens=cfg.max_output_tokens, prompt_cache_key=cache_key)
+                                          instructions=system, input=turns + messages(doc), json_schema=SCHEMA,
+                                          max_output_tokens=cfg.max_output_tokens, prompt_cache_key=cache_key,
+                                          cache_mode=cache_mode)
         row = rec.to_dict()
         row["parse_error"] = None
+        if chosen is not None:
+            row["examples"] = chosen
         if text is not None:
             try:
                 spans, stats = predict(doc, text)
@@ -173,21 +243,29 @@ async def run(cfg: Config, client, concurrency: int = 16, max_cost: float | None
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
         with open(out / "private" / "raw.jsonl", "a", encoding="utf-8") as f:  # 本文を含むので公開しない
             f.write(json.dumps({"key": doc.pmid, "output_text": text}, ensure_ascii=False) + "\n")
+        if row["ok"] and row["parse_error"] is None:
+            finished.add(doc.pmid)
         spent += row["cost_usd"]
         if max_cost is not None and spent > max_cost:
             stop.set()
 
+    if fixed_turns and docs:
+        # 例がすべての文書で同じとき、最初の 1 件だけを先に送り、例の部分をキャッシュに書いてから並列にする
+        # （並列の最初の波がそろってキャッシュを外し、それぞれ書き込みの料金を払うのを避ける）
+        await one(docs[0])
     await asyncio.gather(*(one(d) for d in docs))
     write_outputs(out, [d.pmid for d in docs])
     return out
 
 
 def write_outputs(out: Path, pmids: list[str]) -> dict:
-    """calls.jsonl から予測と集計を作る。同じ文書は最後の記録を使う。"""
+    """calls.jsonl から予測と集計を作る。同じ文書は最後の記録を使う。費用は、失敗や送り直しを含むすべての呼び出しの合計。"""
     latest = {}
+    spend = 0.0
     for line in (out / "calls.jsonl").read_text(encoding="utf-8").splitlines():
         r = json.loads(line)
         latest[r["key"]] = r
+        spend += r["cost_usd"]
     pred = {k: {tuple(s) for s in r.get("spans", [])} for k, r in latest.items() if r["ok"] and r["parse_error"] is None}
     cem.write_tsv(out / "predictions.tsv", pred)
     failed = sorted(set(pmids) - set(pred))
@@ -202,9 +280,11 @@ def write_outputs(out: Path, pmids: list[str]) -> dict:
         "models_in_responses": sorted({r["model"] for r in latest.values() if r.get("model")}),
         "input_tokens": sum(r["input_tokens"] for r in latest.values()),
         "cached_tokens": sum(r["cached_tokens"] for r in latest.values()),
+        "cache_write_tokens": sum(r.get("cache_write_tokens", 0) for r in latest.values()),
         "output_tokens": sum(r["output_tokens"] for r in latest.values()),
         "reasoning_tokens": sum(r["reasoning_tokens"] for r in latest.values()),
-        "cost_usd": round(sum(r["cost_usd"] for r in latest.values()), 4),
+        "cost_usd": round(spend, 4),
+        "calls": sum(1 for _ in (out / "calls.jsonl").read_text(encoding="utf-8").splitlines()),
     }
     (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return summary
@@ -269,6 +349,11 @@ def main(argv: list[str] | None = None) -> int:
     p_run.add_argument("--concurrency", type=int, default=16)
     p_run.add_argument("--max-cost", type=float, help="この額（米ドル）を超えたら新しい呼び出しを止める")
     p_run.add_argument("--max-output-tokens", type=int, default=16000)
+    p_run.add_argument("--shots", type=int, default=0, help="条件 a'：見せる正解付きの例の数")
+    p_run.add_argument("--select", choices=("random", "similar"), default="random")
+    p_run.add_argument("--shot-seed", type=int, default=0)
+    p_run.add_argument("--pmids", help="走らせる文書を、この一覧（1 行 1 PMID）に絞る")
+    p_run.add_argument("--timeout", type=float, default=300, help="1 回の呼び出しの打ち切り（秒）")
     sub.add_parser("freeze", help="test の前に指示を凍結する")
     p_score = sub.add_parser("score", help="走らせた結果を採点する")
     p_score.add_argument("run_dir", type=Path)
@@ -282,8 +367,10 @@ def main(argv: list[str] | None = None) -> int:
         from openai import AsyncOpenAI
 
         load_dotenv(ROOT / ".env")
-        cfg = Config(args.split, args.model, args.effort, args.rep, args.limit, args.max_output_tokens)
-        out = asyncio.run(run(cfg, AsyncOpenAI(max_retries=6), args.concurrency, args.max_cost))
+        cfg = Config(args.split, args.model, args.effort, args.rep, args.limit, args.max_output_tokens,
+                     args.shots, args.select, args.shot_seed, args.pmids)
+        # 1 回の呼び出しは既定 300 秒で打ち切る（詰まった呼び出しを待ち続けない。失敗として記録し、再実行で埋める）
+        out = asyncio.run(run(cfg, AsyncOpenAI(max_retries=4, timeout=args.timeout), args.concurrency, args.max_cost))
         print(json.dumps(json.loads((out / "summary.json").read_text()), indent=2, ensure_ascii=False))
         print(f"出力: {out}")
     return 0
