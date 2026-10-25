@@ -1,0 +1,110 @@
+import os,json,time,random,argparse
+os.environ['TOKENIZERS_PARALLELISM']='false'
+import numpy as np
+from viterbi import tags
+import torch
+from torch.utils.data import DataLoader
+from transformers import AutoTokenizer,AutoModelForTokenClassification,get_linear_schedule_with_warmup
+P=argparse.ArgumentParser(); P.add_argument('--all',action='store_true'); P.add_argument('--seed',type=int,default=42); P.add_argument('--epochs',type=int,default=7); P.add_argument('--out',default='run1'); P.add_argument('--predict',action='store_true'); P.add_argument('--model',default='microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext'); P.add_argument('--length',type=int,default=256); P.add_argument('--batch',type=int,default=24); P.add_argument('--lr',type=float,default=3e-5); args=P.parse_args()
+amp_dtype=torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+torch.backends.cuda.matmul.allow_tf32=True
+torch.set_num_threads(6); random.seed(args.seed); np.random.seed(args.seed); torch.manual_seed(args.seed)
+MODEL=args.model
+tok=AutoTokenizer.from_pretrained(MODEL,**({'do_lower_case':False} if 'biobert-base-cased' in MODEL else {}))
+CLASSES=['TRIVIAL','SYSTEMATIC','ABBREVIATION','FORMULA','FAMILY','IDENTIFIER','MULTIPLE','NO CLASS']
+def read(split):
+ ann={}
+ if split!='test':
+  for line in open('data/'+split+'.annotations.txt'):
+   pm,sec,a,b,*_=line.rstrip('\n').split('\t'); ann.setdefault((pm,sec),[]).append((int(a),int(b),CLASSES.index(_[-1])))
+ docs=[]
+ for line in open('data/'+split+'.abstracts.txt'):
+  pm,t,a=line.rstrip('\n').split('\t')
+  for sec,text in [('T',t),('A',a)]:
+   enc=tok(text,add_special_tokens=False,return_offsets_mapping=True); offsets=enc['offset_mapping']; ids=enc['input_ids']; labs=[0]*len(ids)
+   spans=sorted(ann.get((pm,sec),[])); k=0
+   for i,(s,e) in enumerate(offsets):
+    while k<len(spans) and spans[k][1]<=s:k+=1
+    if k<len(spans) and s<spans[k][1] and e>spans[k][0]: labs[i]=(1 if i==0 or offsets[i-1][1]<=spans[k][0] else 2)+2*spans[k][2]
+   docs.append(dict(pm=pm,sec=sec,text=text,ids=ids,offsets=offsets,labs=labs,gold=[(s,e) for s,e,c in spans]))
+ return docs
+def chunks(docs,train=False):
+ items=[]
+ for d in range(0,len(docs),2):
+  title=docs[d]; abstract=docs[d+1]; tids=title['ids']; tlabs=title['labs']; prefix=tids[:128]; cap=args.length-len(prefix)-3
+  n=len(abstract['ids']); start=0
+  while start<n or (start==0 and n==0):
+   end=min(start+cap,n)
+   ids=[tok.cls_token_id]+prefix+[tok.sep_token_id]+abstract['ids'][start:end]+[tok.sep_token_id]
+   labs=[-100]+(tlabs[:128] if start==0 else [-100]*len(prefix))+[-100]+abstract['labs'][start:end]+[-100]
+   maps=[None]+([(d,i) for i in range(len(prefix))] if start==0 else [None]*len(prefix))+[None]+[(d+1,i) for i in range(start,end)]+[None]
+   items.append(dict(input_ids=ids,labels=labs,maps=maps))
+   if end==n:break
+   start+=max(cap-48,1)
+  if len(tids)>128:
+   for st in range(128,len(tids),args.length-2):
+    en=min(st+args.length-2,len(tids));items.append(dict(input_ids=[tok.cls_token_id]+tids[st:en]+[tok.sep_token_id],labels=[-100]+tlabs[st:en]+[-100],maps=[None]+[(d,i) for i in range(st,en)]+[None]))
+ return items
+def collate(items):
+ n=max(len(x['input_ids']) for x in items)
+ return {'input_ids':torch.tensor([x['input_ids']+[0]*(n-len(x['input_ids'])) for x in items]),'attention_mask':torch.tensor([[1]*len(x['input_ids'])+[0]*(n-len(x['input_ids'])) for x in items]),'labels':torch.tensor([x['labels']+[-100]*(n-len(x['labels'])) for x in items])}
+def infer(model,docs):
+ global LAST_RAW
+ items=chunks(docs); sums=[np.zeros((len(d['ids']),17),np.float32) for d in docs]; weights=[np.zeros(len(d['ids']),np.float32) for d in docs]
+ model.eval()
+ with torch.no_grad():
+  for b in range(0,len(items),args.batch):
+   part=items[b:b+args.batch]; batch=collate(part); batch.pop('labels')
+   with torch.autocast('cuda',dtype=amp_dtype): logits=model(**{k:v.cuda() for k,v in batch.items()}).logits.float().cpu().numpy()
+   for x,l in zip(part,logits):
+    n=len(x['maps'])
+    for j,m in enumerate(x['maps']):
+     if m is None:continue
+     d,i=m;w=min(j+1,n-j,32)/32
+     sums[d][i]+=l[j]*w;weights[d][i]+=w
+
+ LAST_RAW=[s/np.maximum(w[:,None],1e-8) for s,w in zip(sums,weights)]
+ return [np.stack([a[:,0],np.logaddexp.reduce(a[:,1::2],axis=1),np.logaddexp.reduce(a[:,2::2],axis=1)],axis=1) for a in LAST_RAW]
+def decode(docs,scores):
+ result=set()
+ for doc,logit in zip(docs,scores):
+  if not len(logit):continue
+  # Viterbi: I cannot start a span or follow O
+  labels=tags(logit); begin=None; end=None
+  for tag,(s,e) in zip(labels,doc['offsets']):
+   if tag!=2 and begin is not None:result.add((doc['pm'],doc['sec'],begin,end)); begin=None
+   if tag==1 or (tag==2 and begin is None):begin=s
+   if tag: end=e
+  if begin is not None:result.add((doc['pm'],doc['sec'],begin,end))
+ return result
+def evaluate(docs,scores):
+ pred=decode(docs,scores); gold={(d['pm'],d['sec'],s,e) for d in docs for s,e in d['gold']}; tp=len(pred&gold); f=2*tp/(len(pred)+len(gold));print('EVAL',dict(f1=f,precision=tp/len(pred),recall=tp/len(gold),pred=len(pred)),flush=True);return f
+os.makedirs(args.out,exist_ok=True)
+json.dump(dict(vars(args),tokenizer_do_lower_case=tok.do_lower_case),open(args.out+'/config.json','w'),indent=2)
+print('GPU',torch.cuda.get_device_name(0),'AMP',str(amp_dtype),flush=True)
+if not args.predict:
+ train=read('training'); dev=read('development'); train+=dev if args.all else []
+ items=chunks(train,True); print('train docs/chunks',len(train),len(items),flush=True)
+ model=AutoModelForTokenClassification.from_pretrained(MODEL,num_labels=17).cuda()
+ loader=DataLoader(items,batch_size=args.batch,shuffle=True,collate_fn=collate,num_workers=2)
+ opt=torch.optim.AdamW(model.parameters(),lr=args.lr,weight_decay=.01); sched=get_linear_schedule_with_warmup(opt,int(len(loader)*args.epochs*.08),len(loader)*args.epochs); scaler=torch.amp.GradScaler('cuda',enabled=amp_dtype==torch.float16); best=0
+ for epoch in range(args.epochs):
+  model.train(); loss_sum=0; t=time.time()
+  for step,batch in enumerate(loader):
+   opt.zero_grad(set_to_none=True)
+   with torch.autocast('cuda',dtype=amp_dtype):loss=model(**{k:v.cuda() for k,v in batch.items()}).loss
+   scaler.scale(loss).backward(); scaler.unscale_(opt); torch.nn.utils.clip_grad_norm_(model.parameters(),1); scaler.step(opt); scaler.update(); sched.step(); loss_sum+=loss.item()
+   if step%100==0:print('epoch',epoch+1,'step',step,'loss',loss_sum/(step+1),'sec',int(time.time()-t),flush=True)
+  print('epoch finished',epoch+1,time.time()-t,flush=True)
+  if not args.all:
+   scores=infer(model,dev); f=evaluate(dev,scores);np.savez_compressed(args.out+'/dev_epoch'+str(epoch+1)+'.npz',*scores);np.savez_compressed(args.out+'/devraw_epoch'+str(epoch+1)+'.npz',*LAST_RAW)
+   if f>best:best=f;model.save_pretrained(args.out+'/best');json.dump({'epoch':epoch+1,'f1':f},open(args.out+'/best.json','w'))
+  else:
+   if epoch==args.epochs-1:model.save_pretrained(args.out+'/best')
+   if epoch>=args.epochs-3:
+    snapshot=infer(model,read('test'));np.savez_compressed(args.out+'/test_epoch'+str(epoch+1)+'.npz',*snapshot);np.savez_compressed(args.out+'/testraw_epoch'+str(epoch+1)+'.npz',*LAST_RAW)
+else:model=AutoModelForTokenClassification.from_pretrained(args.out+'/best').cuda()
+model=AutoModelForTokenClassification.from_pretrained(args.out+'/best').cuda(); test=read('test'); scores=infer(model,test);np.savez_compressed(args.out+'/test.npz',*scores);np.savez_compressed(args.out+'/testraw.npz',*LAST_RAW); pred=decode(test,scores)
+with open(args.out+'/predictions.tsv','w') as f:
+ for pm,sec,s,e in sorted(pred):f.write(f'{pm}\t{sec}:{s}:{e}\n')
+print('DONE',len(pred),flush=True)

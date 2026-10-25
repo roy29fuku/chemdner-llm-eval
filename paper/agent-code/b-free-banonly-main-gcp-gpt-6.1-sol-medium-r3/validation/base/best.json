@@ -1,0 +1,1 @@
+{"epoch": 8, "score": 0.9139344262295083, "args": {"data": "/home/agent/data", "out": "/home/agent/val1", "model": "/home/agent/pretrained", "epochs": 8, "batch": 16, "length": 384, "seed": 42, "lr": 3e-05, "all": false, "predict": false, "bias": 0}}

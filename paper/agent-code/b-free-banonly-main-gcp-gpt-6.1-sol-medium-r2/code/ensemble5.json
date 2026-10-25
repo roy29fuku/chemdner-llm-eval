@@ -1,0 +1,22 @@
+[
+  {
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+    "run": "runs/holdout-a-pred"
+  },
+  {
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+    "run": "runs/holdout-b-pred"
+  },
+  {
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+    "run": "runs/holdout-c-pred"
+  },
+  {
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+    "run": "runs/typed-a-pred"
+  },
+  {
+    "model": "microsoft/BiomedNLP-BiomedBERT-large-uncased-abstract",
+    "run": "runs/large-a-pred"
+  }
+]

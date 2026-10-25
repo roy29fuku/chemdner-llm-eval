@@ -1,0 +1,7 @@
+s=open('/workspace/train_joint.py').read()
+s=s.replace("tok=AutoTokenizer.from_pretrained(MODEL)","tok=AutoTokenizer.from_pretrained(MODEL)\nCLASSES=['TRIVIAL','SYSTEMATIC','ABBREVIATION','FORMULA','FAMILY','IDENTIFIER','MULTIPLE','NO CLASS']")
+s=s.replace("ann.setdefault((pm,sec),[]).append((int(a),int(b)))","ann.setdefault((pm,sec),[]).append((int(a),int(b),CLASSES.index(_[-1])))")
+s=s.replace("labs[i]=1 if i==0 or offsets[i-1][1]<=spans[k][0] else 2","labs[i]=(1 if i==0 or offsets[i-1][1]<=spans[k][0] else 2)+2*spans[k][2]")
+s=s.replace('gold=spans','gold=[(s,e) for s,e,c in spans]').replace('num_labels=3','num_labels=17')
+s=s.replace("   for x,l in zip(part,logits):", "   logits=np.stack([logits[:,:,0],np.logaddexp.reduce(logits[:,:,1::2],axis=2),np.logaddexp.reduce(logits[:,:,2::2],axis=2)],axis=2)\n   for x,l in zip(part,logits):")
+open('/workspace/train_typed.py','w').write(s)

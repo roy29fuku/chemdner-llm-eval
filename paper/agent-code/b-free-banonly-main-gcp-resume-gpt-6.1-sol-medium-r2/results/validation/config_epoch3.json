@@ -1,0 +1,21 @@
+{
+  "config": {
+    "bias": -0.3,
+    "weights": [
+      1
+    ],
+    "expand": true,
+    "abbreviation": true,
+    "propagate": 1,
+    "exclude": true,
+    "dictionary": false,
+    "method": "probability"
+  },
+  "development_metrics": [
+    0.9136835117417642,
+    0.8957987568746135,
+    0.9322969586127481,
+    30729,
+    27527
+  ]
+}

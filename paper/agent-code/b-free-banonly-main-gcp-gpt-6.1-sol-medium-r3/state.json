@@ -1,0 +1,14 @@
+{
+  "current_submission": "all-data four-model ensemble: 25016 mentions; 0 format errors",
+  "validation_f1": 0.9277423683327743,
+  "vm": "chem-train",
+  "zone": "us-central1-c",
+  "ip": "34.61.53.149",
+  "active_phase": "valaux training; all first four checkpoints saved locally",
+  "full_chain_pid": 27950,
+  "prior_chain_pid": 23584,
+  "deadline_utc": "2026-10-14 15:38:00",
+  "auxiliary_pid": 30469,
+  "four_validation_f1": 0.9290637081862497,
+  "four_submission_manifest": "/workspace/output/manifest.json"
+}
