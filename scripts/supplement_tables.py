@@ -4,7 +4,11 @@
 
     uv run python scripts/supplement_tables.py --main runs/scores/main-2026-10-15/scores.json \\
         --exp15 runs/scores/exp15-2026-10-20/scores.json \\
+        --exp15-addendum runs/scores/exp15-addendum-2026-10-26/scores.json \\
         --out ../paper-bppb-2026-hands-and-yardstick/manuscript/supplement/tables-ja.md
+
+--exp15-addendum を渡すと、追加の 2 回（2026-10-26）を足した版の GPT-6.1 sol low の行を、10-20 の版の行の下に並べる
+（主の結果は 10-20 の版のまま。分析計画「追加（2026-10-26）」の判定と報告の 1）
 """
 
 import argparse
@@ -51,7 +55,9 @@ def role(key: str) -> str:
     if tail == "k0":
         return f"{name}・同じ日の直接答える"
     if tail == "similar":
-        return f"{name}・似た例"
+        return f"{name}・似た例" + ("（10-26 に追加）" if head == "6.1-sol-low" else "")
+    if tail == "k0-r20":
+        return f"{name}・同じ日の直接答える（10-26、似た例と同じ日）"
     if tail.startswith("r128-s"):
         return f"{name}・乱数の例 128 件（種 {tail[-1]}）"
     if tail.startswith("a-r"):
@@ -98,27 +104,48 @@ def main_tables(m: dict) -> list[str]:
     return L
 
 
-def exp15_tables(e: dict) -> list[str]:
+ADDED = "GPT-6.1 sol low（似た例を足した版・10-26）"
+
+
+def exp15_tables(e: dict, add: dict | None = None) -> list[str]:
     runs = {r["key"]: r for r in e["runs"]}
+    if add:  # 追加の 2 回の行を、回ごとの表に足す
+        runs.update({r["key"]: r for r in add["runs"] if r["key"] not in runs})
+    add_main = next(m for m in add["main"] if m["setting"] == "gpt-6.1-sol low") if add else None
     L = ["### 表 S4　例を見せた対照の主の比較（エージェント − 例を見せた版のうち強い方。2,478 件）", "",
          "| 設定 | 直接答える（同じ日） | 乱数の例 128 件（3 回の平均） | 似た例 | エージェント | 強い方 | 差 | 95% 区間（2 段） | 区分 | 95% 区間（文書だけ） |",
          "|---|---|---|---|---|---|---|---|---|---|"]
     choice = {"k0": "例なし", "r128": "乱数の例", "similar": "似た例"}
-    for m in e["main"]:
+    def s4_row(label: str, m: dict) -> str:
         f, t, d = m["f1"], m["two_stage"], m["documents_only"]
         sim = pc(f["similar"]) if "similar" in f else "走らせていない"
-        L.append(f"| {show(m['setting'])} | {pc(f['k0'])} | {pc(f['r128'])} | {sim} | {pc(f['b'])} | {choice[t['strong_choice']]} | "
-                 f"{pt(t['diff'])} | [{pt(t['ci_low'])}, {pt(t['ci_high'])}] | {t['category']} | "
-                 f"[{pt(d['ci_low'])}, {pt(d['ci_high'])}] |")
+        return (f"| {label} | {pc(f['k0'])} | {pc(f['r128'])} | {sim} | {pc(f['b'])} | {choice[t['strong_choice']]} | "
+                f"{pt(t['diff'])} | [{pt(t['ci_low'])}, {pt(t['ci_high'])}] | {t['category']} | "
+                f"[{pt(d['ci_low'])}, {pt(d['ci_high'])}] |")
+
+    for m in e["main"]:
+        L.append(s4_row(show(m["setting"]), m))
+    if add_main:
+        L.append(s4_row(ADDED, add_main))
     cb = e["curve_best_for_type_a"]
     L += ["", f"全体の型: {e['overall_type']}。型 A の条件の 1 つ（GPT-6 luna medium、1,000 件で、エージェント − 乱数の例の曲線の"
           f"最高点 K = {cb['best_k']}）は {pt(cb['diff'])} [{pt(cb['ci_low'])}, {pt(cb['ci_high'])}]・{cb['category']}。"
-          f"bootstrap {e['bootstrap']:,} 回・seed {e['seed']}。", "",
+          f"bootstrap {e['bootstrap']:,} 回・seed {e['seed']}。"]
+    if add:
+        L += ["", f"最後の行は、結果を見た後に査読への対応として足した版（GPT-6.1 sol low の似た例 32 件を 2026-10-26 に走らせ、"
+              f"強い方の候補に足した。比べる相手を強くする向きの追加）。主の結果は、その上の 10-20 の版である。"
+              f"足した版の全体の型: {add['overall_type']}。"]
+    L += ["",
           "### 表 S5　差の何割を、例を見せることで埋めたか", "",
           "| 設定 | エージェント − 例なし | 強い方 − 例なし | 割合 | 95% 区間 |", "|---|---|---|---|---|"]
+    def s5_row(label: str, fr: dict) -> str:
+        return (f"| {label} | {pt(fr['b_minus_k0'])} | {pt(fr['strong_minus_k0'])} | {fr['fraction']:.2f} | "
+                f"[{fr['ci'][0]:.2f}, {fr['ci'][1]:.2f}] |")
+
     for fr in e["fraction_closed"]:
-        L.append(f"| {show(fr['setting'])} | {pt(fr['b_minus_k0'])} | {pt(fr['strong_minus_k0'])} | {fr['fraction']:.2f} | "
-                 f"[{fr['ci'][0]:.2f}, {fr['ci'][1]:.2f}] |")
+        L.append(s5_row(show(fr["setting"]), fr))
+    if add:
+        L.append(s5_row(ADDED, next(fr for fr in add["fraction_closed"] if fr["setting"] == "gpt-6.1-sol low")))
     b, c = e["b128"], e["curve"]
     L += ["", "### 表 S6　副の比較", "", "| 比較 | 差 | 95% 区間 | 判定 |", "|---|---|---|---|",
           f"| 128 件だけのエージェント − 同じ 128 件を例に見せた版（GPT-6 luna medium） | {pt(b['diff'])} | "
@@ -131,6 +158,13 @@ def exp15_tables(e: dict) -> list[str]:
     for s in e["similar_vs_random"]:
         L.append(f"| 似た例（{s['similar_k']} 件） − 乱数の例 128 件（{show(s['setting'])}） | {pt(s['diff'])} | "
                  f"[{pt(s['ci_low'])}, {pt(s['ci_high'])}] | {s['category']} |")
+    if add:
+        s = next(s for s in add["similar_vs_random"] if s["setting"] == "gpt-6.1-sol low")
+        L.append(f"| 似た例（{s['similar_k']} 件） − 乱数の例 128 件（{ADDED}） | {pt(s['diff'])} | "
+                 f"[{pt(s['ci_low'])}, {pt(s['ci_high'])}] | {s['category']} |")
+        d = add["addendum"]["k0_r20_minus_r10"]
+        L.append(f"| 例なし: 10-26 − 10-20（GPT-6.1 sol low。モデルの変化の確かめ） | {pt(d['diff'])} | "
+                 f"[{pt(d['ci_low'])}, {pt(d['ci_high'])}] | {d['rule']} |")
     pts = " | ".join(pc(v) for v in c["points"].values())
     L += ["", "### 表 S7　例の数の曲線（GPT-6 luna medium、2,478 件から乱数で選んだ 1,000 件の F1）", "",
           "| 例なし | " + " | ".join(f"{int(k[1:]):,} 件" for k in c["points"]) + " | エージェント（参考） |",
@@ -197,13 +231,15 @@ def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--main", type=Path, required=True)
     p.add_argument("--exp15", type=Path, required=True)
+    p.add_argument("--exp15-addendum", type=Path, help="score_exp15.py --addendum の scores.json（追加の 2 回を足した版）")
     p.add_argument("--posthoc", type=Path, help="scripts/posthoc_exp15.py の posthoc.json（事後の探索的な解析）")
     p.add_argument("--out", type=Path, required=True)
     args = p.parse_args()
     m = json.loads(args.main.read_text(encoding="utf-8"))
     e = json.loads(args.exp15.read_text(encoding="utf-8"))
     L = ["<!-- chemdner-llm-eval の scripts/supplement_tables.py が採点の出力から書き出した。手で直さない -->", ""]
-    L += main_tables(m) + [""] + exp15_tables(e)
+    add = json.loads(args.exp15_addendum.read_text(encoding="utf-8")) if args.exp15_addendum else None
+    L += main_tables(m) + [""] + exp15_tables(e, add)
     if args.posthoc:
         L += [""] + posthoc_tables(json.loads(args.posthoc.read_text(encoding="utf-8")))
     args.out.parent.mkdir(parents=True, exist_ok=True)
