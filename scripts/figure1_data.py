@@ -1,4 +1,4 @@
-"""論文の Figure 1 に使う数値を、本番の採点（scripts/score_main.py と同じ回・同じ採点）から書き出す。
+"""論文の Figure 2（改訂稿。初稿の Figure 1）に使う数値を、本番の採点（scripts/score_main.py と同じ回・同じ採点）から書き出す。
 
 - 回ごとの F1（official・正解のある 2,478 件）
 - 条件ごとの 3 回の平均と、その 95% 区間（採点対象の文書を復元抽出し、同じ抽出で 3 回を採点し直して平均を取る bootstrap。
@@ -6,7 +6,7 @@
 - b のうち、GPU の VM を立てて事前学習済みモデルを fine-tuning し、予測まで出した回の数（監査で判定した値。
   原稿 repo の dev_logs「再実験 5/6」の表と同じ）
 
-    uv run python scripts/figure1_data.py --out ../paper-bppb-2026-hands-and-yardstick/manuscript/figures/fig1-data.json
+    uv run python scripts/figure1_data.py --out ../paper-bppb-2026-hands-and-yardstick/manuscript/figures/fig2-data.json
 """
 
 import argparse

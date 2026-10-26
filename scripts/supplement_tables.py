@@ -105,6 +105,13 @@ def main_tables(m: dict) -> list[str]:
 
 
 ADDED = "GPT-6.1 sol low（似た例を足した版・10-26）"
+NOT_RUN = "走らせていない"
+NOT_RUN_ADDED = "10-20 には無し（下の行）"
+
+
+def label(setting_name: str, add) -> str:
+    """足した版を並べるときは、10-20 の版の GPT-6.1 sol low の行にそう書く。"""
+    return show(setting_name) + ("（10-20 の版）" if add and setting_name == "gpt-6.1-sol low" else "")
 
 
 def exp15_tables(e: dict, add: dict | None = None) -> list[str]:
@@ -116,15 +123,15 @@ def exp15_tables(e: dict, add: dict | None = None) -> list[str]:
          "| 設定 | 直接答える（同じ日） | 乱数の例 128 件（3 回の平均） | 似た例 | エージェント | 強い方 | 差 | 95% 区間（2 段） | 区分 | 95% 区間（文書だけ） |",
          "|---|---|---|---|---|---|---|---|---|---|"]
     choice = {"k0": "例なし", "r128": "乱数の例", "similar": "似た例"}
-    def s4_row(label: str, m: dict) -> str:
+    def s4_row(name: str, m: dict) -> str:
         f, t, d = m["f1"], m["two_stage"], m["documents_only"]
-        sim = pc(f["similar"]) if "similar" in f else "走らせていない"
-        return (f"| {label} | {pc(f['k0'])} | {pc(f['r128'])} | {sim} | {pc(f['b'])} | {choice[t['strong_choice']]} | "
+        sim = pc(f["similar"]) if "similar" in f else (NOT_RUN_ADDED if add else NOT_RUN)
+        return (f"| {name} | {pc(f['k0'])} | {pc(f['r128'])} | {sim} | {pc(f['b'])} | {choice[t['strong_choice']]} | "
                 f"{pt(t['diff'])} | [{pt(t['ci_low'])}, {pt(t['ci_high'])}] | {t['category']} | "
                 f"[{pt(d['ci_low'])}, {pt(d['ci_high'])}] |")
 
     for m in e["main"]:
-        L.append(s4_row(show(m["setting"]), m))
+        L.append(s4_row(label(m["setting"], add), m))
     if add_main:
         L.append(s4_row(ADDED, add_main))
     cb = e["curve_best_for_type_a"]
@@ -132,18 +139,18 @@ def exp15_tables(e: dict, add: dict | None = None) -> list[str]:
           f"最高点 K = {cb['best_k']}）は {pt(cb['diff'])} [{pt(cb['ci_low'])}, {pt(cb['ci_high'])}]・{cb['category']}。"
           f"bootstrap {e['bootstrap']:,} 回・seed {e['seed']}。"]
     if add:
-        L += ["", f"最後の行は、結果を見た後に査読への対応として足した版（GPT-6.1 sol low の似た例 32 件を 2026-10-26 に走らせ、"
-              f"強い方の候補に足した。比べる相手を強くする向きの追加）。主の結果は、その上の 10-20 の版である。"
-              f"足した版の全体の型: {add['overall_type']}。"]
+        L += ["", f"末尾の行は、対照の結果を見た後に、著者の読み直しを受けて足した版（GPT-6.1 sol low の似た例 32 件を 2026-10-26 に"
+              f"走らせ、強い方の候補に足した。比べる相手を強くする向きの追加）。事前に記録した判定は、その上の 10-20 の版である。"
+              f"本文は、比べる相手を強めた足した版の値で書いた。足した版の全体の型: {add['overall_type']}。"]
     L += ["",
           "### 表 S5　差の何割を、例を見せることで埋めたか", "",
           "| 設定 | エージェント − 例なし | 強い方 − 例なし | 割合 | 95% 区間 |", "|---|---|---|---|---|"]
-    def s5_row(label: str, fr: dict) -> str:
-        return (f"| {label} | {pt(fr['b_minus_k0'])} | {pt(fr['strong_minus_k0'])} | {fr['fraction']:.2f} | "
+    def s5_row(name: str, fr: dict) -> str:
+        return (f"| {name} | {pt(fr['b_minus_k0'])} | {pt(fr['strong_minus_k0'])} | {fr['fraction']:.2f} | "
                 f"[{fr['ci'][0]:.2f}, {fr['ci'][1]:.2f}] |")
 
     for fr in e["fraction_closed"]:
-        L.append(s5_row(show(fr["setting"]), fr))
+        L.append(s5_row(label(fr["setting"], add), fr))
     if add:
         L.append(s5_row(ADDED, next(fr for fr in add["fraction_closed"] if fr["setting"] == "gpt-6.1-sol low")))
     b, c = e["b128"], e["curve"]
@@ -180,7 +187,7 @@ def exp15_tables(e: dict, add: dict | None = None) -> list[str]:
                  f"{pc(x['recall'])} | {pc(er['overlap_f1'])} | {er['fp_boundary']:,}／{er['fn_boundary']:,} | "
                  f"{er['fp_spurious']:,} | {er['fn_missed']:,} | {cost} |")
     L += ["", "費用は、"
-          "直接答える・例を見せる回は API の費用の合計（キャッシュの書き込みと長い文脈の割増を含む。1 週間前の回は全 3,000 件の分）、"
+          "直接答える・例を見せる回は API の費用の合計（キャッシュの書き込みと長い文脈の割増を含む。10-14 の回は全 3,000 件の分）、"
           "エージェントの回は API の費用だけ（GPU の費用を含まない）。境界の違い＝正解と重なるが一致しない予測（または予測と重なるが"
           "一致しない正解）、余分な予測＝どの正解とも重ならない予測、取りこぼし＝どの予測とも重ならない正解。"]
     return L
@@ -191,16 +198,16 @@ def posthoc_tables(h: dict, hadd: dict | None = None) -> list[str]:
     L = ["### 表 S9　事後の探索的な解析: 順位・回のばらつきの感度・同じ相手どうしの割合", "",
          "| 設定 | エージェントの最も低い回 | 他の回の最も高い値 | 全回が上か | 差（強い方との） | 区間（回の分を t 分布で足す） | "
          "割合（乱数の例 128 件だけ） | 割合（似た例だけ） | 残りの差（重なりで数える F1） |", "|---|---|---|---|---|---|---|---|---|"]
-    def s9_row(label: str, r: dict) -> str:
+    def s9_row(name: str, r: dict) -> str:
         k, s_ = r["rank"], r["run_variance_sensitivity"]
         fr = r["fraction_same_opponent"]
-        sim = f"{fr['similar']:.2f}" if fr["similar"] is not None else "走らせていない"
-        return (f"| {label} | {pc(k['agent_min'])} | {pc(k['others_max'])} | "
+        sim = f"{fr['similar']:.2f}" if fr["similar"] is not None else (NOT_RUN_ADDED if hadd else NOT_RUN)
+        return (f"| {name} | {pc(k['agent_min'])} | {pc(k['others_max'])} | "
                 f"{'はい' if k['all_agent_runs_above_all_others'] else 'いいえ'} | {pt(s_['diff'])} | "
                 f"[{pt(s_['ci'][0])}, {pt(s_['ci'][1])}] | {fr['r128']:.2f} | {sim} | {pt(r['overlap_f1_residual'])} |")
 
     for r in h["settings"]:
-        L.append(s9_row(show(r["setting"]), r))
+        L.append(s9_row(label(r["setting"], hadd), r))
     if hadd:
         L.append(s9_row(ADDED, sol_low(hadd)))
     L += ["", "他の回 = 同じ設定の直接答える回（10-14 の 3 回と同じ日の 1 回）と例を見せた回すべて。回の分の分散は、エージェントと"
@@ -219,28 +226,29 @@ def posthoc_tables(h: dict, hadd: dict | None = None) -> list[str]:
           "### 表 S11　事後の探索的な解析: 3 回の多数決（2 回以上に出た言及を採る）", "",
           "| 設定 | 直接答える 3 回の平均 → 多数決 | 乱数の例 3 組の平均 → 多数決 | 乱数 3 組と似た例の 4 本で 2 本以上 | 似た例（1 回） |",
           "|---|---|---|---|---|"]
-    def s11_row(label: str, r: dict) -> str:
+    def s11_row(name: str, r: dict) -> str:
         v = r["vote"]
-        four = pc(v["r128_and_similar_4"]) if "r128_and_similar_4" in v else "—"
-        sim = pc(v["similar"]) if "similar" in v else "—"
-        return (f"| {label} | {pc(v['a_mean'])} → {pc(v['a_3runs'])} | {pc(v['r128_mean'])} → {pc(v['r128_3sets'])} | "
+        none = NOT_RUN_ADDED if hadd and r["setting"] == "gpt-6.1-sol low" else "—"
+        four = pc(v["r128_and_similar_4"]) if "r128_and_similar_4" in v else none
+        sim = pc(v["similar"]) if "similar" in v else none
+        return (f"| {name} | {pc(v['a_mean'])} → {pc(v['a_3runs'])} | {pc(v['r128_mean'])} → {pc(v['r128_3sets'])} | "
                 f"{four} | {sim} |")
 
     for r in h["settings"]:
-        L.append(s11_row(show(r["setting"]), r))
+        L.append(s11_row(label(r["setting"], hadd), r))
     if hadd:
         L.append(s11_row(ADDED, sol_low(hadd)))
     classes = ["SYSTEMATIC", "TRIVIAL", "FAMILY", "FORMULA", "ABBREVIATION", "IDENTIFIER", "MULTIPLE"]
     L += ["", "### 表 S12　事後の探索的な解析: 正解の分類ごとの再現率（R。直接答える 10-14 の 3 回 ／ 強い方 ／ エージェント 3 回の平均）", "",
           "| 設定 | " + " | ".join(f"{c}（{h['settings'][0]['recall_by_class']['counts'][c]:,}）" for c in classes) + " |",
           "|---|" + "---|" * len(classes)]
-    def s12_row(label: str, r: dict) -> str:
+    def s12_row(name: str, r: dict) -> str:
         rc = r["recall_by_class"]
-        return f"| {label} | " + " | ".join(f"{pc(rc['a'][c], 1)} ／ {pc(rc['best'][c], 1)} ／ {pc(rc['agent'][c], 1)}"
+        return f"| {name} | " + " | ".join(f"{pc(rc['a'][c], 1)} ／ {pc(rc['best'][c], 1)} ／ {pc(rc['agent'][c], 1)}"
                                            for c in classes) + " |"
 
     for r in h["settings"]:
-        L.append(s12_row(show(r["setting"]), r))
+        L.append(s12_row(label(r["setting"], hadd), r))
     if hadd:
         L.append(s12_row(ADDED, sol_low(hadd)))
     L += ["", "分類は CHEMDNER の正解に付いている 8 分類（括弧は正解のある 2,478 件での言及の数。NO CLASS 41 件は省いた）。採点には使わない。"]

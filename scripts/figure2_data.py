@@ -1,4 +1,4 @@
-"""論文の Figure 2 に使う数値を、実験 15 の採点（scripts/score_exp15.py の scores.json）から書き出す。
+"""論文の Figure 3（改訂稿。初稿の Figure 2）に使う数値を、実験 15 の採点（scripts/score_exp15.py の scores.json）から書き出す。
 
 力のある 3 設定ごとに、次の 4 つのやり方の回ごとの F1（official・正解のある 2,478 件）:
 - 直接答える: 例なしの再実行（a' と同じ日に走らせた回。1 回）
@@ -10,7 +10,7 @@
 あわせて、走らせる前に決めた主の比較（b − a'(強い方)）の値と区間・区分も写す（図には描かず、キャプションと本文で使う）。
 
     uv run python scripts/figure2_data.py --scores runs/scores/exp15-addendum-2026-10-26/scores.json \\
-        --out ../paper-bppb-2026-hands-and-yardstick/manuscript/figures/fig2-data.json
+        --out ../paper-bppb-2026-hands-and-yardstick/manuscript/figures/fig3-data.json
 """
 
 import argparse
