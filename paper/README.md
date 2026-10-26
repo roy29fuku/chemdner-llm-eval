@@ -1,6 +1,6 @@
 # Materials for the paper
 
-Materials for the revised Note "When does a reasoning brain need hands? Let a yardstick decide — chemical named-entity recognition with an AI scientist" (Biophysics and Physicobiology, BSJ-2026038), referred to in its Data and code availability statement and Supplementary Note 7.
+Materials for the revised Note "When does a reasoning brain need hands? Let a yardstick decide — a lesson for AI peer review from chemical named-entity recognition" (Biophysics and Physicobiology, BSJ-2026038), referred to in its Data and code availability statement and Supplementary Note 7.
 
 | Path | Contents |
 |---|---|

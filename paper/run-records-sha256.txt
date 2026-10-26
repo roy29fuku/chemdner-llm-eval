@@ -1,7 +1,10 @@
-# SHA-256 of every tracked file in the run-records repository (private), HEAD f48bfa6e65df579abf188d4d42af237087645d89
+# SHA-256 of every tracked file in the run-records repository (private), HEAD b9ed31277bc69857b2e4187ee7bc2c864ec49c3c
 9264e668a745aadbe5d396a162c7cfb3d46c6a1b4e8f954a70a3a345ac2c38a8  .gitattributes
-e049847ade1e17a0dc2fd7c0744ff432325332d162437555a930b4f0b2250dae  README.md
-293fb4be18e0208c1f3ab5257ed597de9da27cfaa288c5f7f8e47c157182d705  SHA256SUMS
+f78c8aa7015401d3ef1e3e0647009f629c3250254da5ed2398ae4d1b49bfe9c8  README.md
+74218599605f6dee9c27eac4e30d8216906fc355702628f64c92e4340270fef3  SHA256SUMS
+8fb6313fb75ee0ca73c5dc1f973be888d0d1b1f6072bf6b2a4152e604cf11008  addendum-2026-10-26-r20.log
+715fb0882f113bd096455ae978744879e4da60dcd23ae2a53a394c8c6d99322e  addendum-2026-10-26-similar32.log
+291f1d71606c14acfe1f83996396825a99266b30d1bf9fc28b3a83d12529d41e  addendum-2026-10-26.log
 489d805b4546433856ee3d2953fbf46c1301a1d0b2b36b860e2dca79a3bb99f1  agent/active/slot0.json
 e0efcb2751917f1a53ac5b4dd404c4bb03cc83b35e42766c5cfbb672113d9213  agent/active/slot1.json
 d03318c0da195f01b660c6c153d3400f75921829e843af9e7223f52a809aa1a0  agent/active/slot2.json
@@ -2726,6 +2729,11 @@ acc3983a230b55a85a74fcb0a953893e8b6316e1a4184d139b7a13c767ba202f  direct/evaluat
 eb8ba1e5898a9e8988ca808c942c2fbaa429ceaeb34504465d92f861694d74b5  direct/evaluation-gpt-6.1-sol-low-r2/predictions.tsv
 734c8cb3eec8b18280d79a591faa00c5adc671604bd4950ff9df864d636f7032  direct/evaluation-gpt-6.1-sol-low-r2/private/raw.jsonl
 7728a379f180ccc247a7b06688838c182fd9f31ca1944c492a3f51dd603617d1  direct/evaluation-gpt-6.1-sol-low-r2/summary.json
+6775f4547ed5a48ebc4ec1e42637b0aa422821affbeafe2cbe3a6a5eae48b25b  direct/evaluation-gpt-6.1-sol-low-r20-subofficial2478/calls.jsonl
+416e2911294256ca80dced32d4cb2fd936bb284dc7dd0cc340d5133355833770  direct/evaluation-gpt-6.1-sol-low-r20-subofficial2478/config.json
+de4b13049deb34f67862394d243ff55b07365bd1172cc4248cc06954919e254c  direct/evaluation-gpt-6.1-sol-low-r20-subofficial2478/predictions.tsv
+baa7006f3d46250037c3e62f134667e6cb92993517600f470783ad60077c8f54  direct/evaluation-gpt-6.1-sol-low-r20-subofficial2478/private/raw.jsonl
+398183fccf7f68dda9ff5cc450d5737ec9ac4955a7adede21a1050f929c9bebb  direct/evaluation-gpt-6.1-sol-low-r20-subofficial2478/summary.json
 960f4683e873dfc994b5481ffda9fc6606b478ad42c95e5c542f05fbb3bcaaf5  direct/evaluation-gpt-6.1-sol-low-shots128-random-s1-r0-subofficial2478/calls.jsonl
 567c5aa3040653a570d377e7d13c761410949f6fb4a5d5a94c09a39f3693ecc1  direct/evaluation-gpt-6.1-sol-low-shots128-random-s1-r0-subofficial2478/config.json
 e6d2d3ec0b1fe71d9414b474404aef4c731831c831ed325bee22b71494ab28b6  direct/evaluation-gpt-6.1-sol-low-shots128-random-s1-r0-subofficial2478/examples.json
@@ -2744,6 +2752,12 @@ bd4b46d69e401ba30bd9fe6e5138519489db47461aa6ada0a38120643368b10f  direct/evaluat
 9aed04579a4dfb74a552f837cfcfc9edf941f7487f7e9876a0ec99e961bf19c4  direct/evaluation-gpt-6.1-sol-low-shots128-random-s3-r0-subofficial2478/predictions.tsv
 1554e2e5a09c6a1df99bcabdcafcf799211fdcca16b0480fc9321a70b6846a03  direct/evaluation-gpt-6.1-sol-low-shots128-random-s3-r0-subofficial2478/private/raw.jsonl
 58c269a793a06d13fefc8f67e1698373e5b5a33826f8834460a9fa99f35b9bf6  direct/evaluation-gpt-6.1-sol-low-shots128-random-s3-r0-subofficial2478/summary.json
+d4a3b7523d4f2ba16d15286790949d6238ac735944a9d92471640962a8959200  direct/evaluation-gpt-6.1-sol-low-shots32-similar-r0-subofficial2478/calls.jsonl
+8fc41c0e0ea3c09b5fd076c419959e330e4e8dc93a22376380d7c804566af957  direct/evaluation-gpt-6.1-sol-low-shots32-similar-r0-subofficial2478/config.json
+e4fad0d5d98ac3cea3860f1859784ae09540437d5c9e8d22507339188a2300e9  direct/evaluation-gpt-6.1-sol-low-shots32-similar-r0-subofficial2478/examples.json
+d6f810ebf7f7092cf5a4ec91e7615a92c4a8e892f08cdc355aea6716cf2e6f50  direct/evaluation-gpt-6.1-sol-low-shots32-similar-r0-subofficial2478/predictions.tsv
+6dab84cd7735e2f9bf33732644c4ff213012a28417b6d8a43ac6f9902e18d547  direct/evaluation-gpt-6.1-sol-low-shots32-similar-r0-subofficial2478/private/raw.jsonl
+7827c179d2047da7a76b7b3f9c603c5a961090496236cc9223414e7f41ce1a23  direct/evaluation-gpt-6.1-sol-low-shots32-similar-r0-subofficial2478/summary.json
 26db2be8f35af563ed65a049b0aedfda97b6795d6e69360567160e8c8cf4b466  direct/evaluation-gpt-6.1-sol-medium-r0/calls.jsonl
 9d4e65d33c38dd0786abb74b8c5212c2eae47a8cb08a6ff679f095723bf41f0e  direct/evaluation-gpt-6.1-sol-medium-r0/config.json
 3e3d8c47eba48f3a7ab76a794b20b8ef9fd0749a35bacba766fe3999f31f61ca  direct/evaluation-gpt-6.1-sol-medium-r0/predictions.tsv
@@ -2788,7 +2802,11 @@ e4fad0d5d98ac3cea3860f1859784ae09540437d5c9e8d22507339188a2300e9  direct/evaluat
 d616b8962b031b9ae4e064abf72802fe3bbdc08cabb6ca22a4290842c205b6ac  direct/evaluation-gpt-6.1-sol-medium-shots32-similar-r0-subofficial2478/predictions.tsv
 cf156b2f5b2d31c041bf42721876ede18ca106916e9212918f6647d20325bef9  direct/evaluation-gpt-6.1-sol-medium-shots32-similar-r0-subofficial2478/private/raw.jsonl
 ad3ea25b977b2777bba0ae7be9875abc52ac4fd8d146f228fb609302ce19aec2  direct/evaluation-gpt-6.1-sol-medium-shots32-similar-r0-subofficial2478/summary.json
+301bd6d9f93d4f1d7cb48981c4c5e3fc513560dfdf5cac6e5c39965546439111  scores/exp15-2026-10-20/posthoc/posthoc.json
 52203f17cc17c3ef4ab40ebdeac1dcdc33f90a7276130fb9ea930993d3cb1a40  scores/exp15-2026-10-20/scores.json
 91f2584d7e34a3525f5d573651fdb2738f5db7112c69e2a3f2cc6d508c43e178  scores/exp15-2026-10-20/scores.md
+ab2f25eac3db2d7d519b07d21d78e77a612ccbc91034b6edd364ff67cf4559a5  scores/exp15-addendum-2026-10-26/posthoc/posthoc.json
+745b41037094d695f973e1d33c006e33c36eec0868885ade51114af3b3c86e9f  scores/exp15-addendum-2026-10-26/scores.json
+0b9b69f5636cffb01347247c8c520d7f6879d33bc09171a8a267a40dcf379809  scores/exp15-addendum-2026-10-26/scores.md
 f500ab24abb2340f902b68f1a0ad28f63c2dc3af7499b1e03e3e5153d23f1043  scores/main-2026-10-15/scores.json
 d2bb002a933700104c04d079acc2d2b6df82fac2563bba1379620e3f1e12f899  scores/main-2026-10-15/scores.md
