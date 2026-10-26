@@ -1321,7 +1321,9 @@
     "evaluation-gpt-6-luna-medium-shots32-random-s1-r0-subcurve1000",
     "evaluation-gpt-6-luna-medium-shots256-random-s1-r0-subcurve1000",
     "evaluation-gpt-6-luna-medium-shots512-random-s1-r0-subcurve1000",
-    "evaluation-gpt-6-luna-medium-shots1024-random-s1-r0-subcurve1000"
+    "evaluation-gpt-6-luna-medium-shots1024-random-s1-r0-subcurve1000",
+    "evaluation-gpt-6.1-sol-low-shots32-similar-r0-subofficial2478",
+    "evaluation-gpt-6.1-sol-low-r20-subofficial2478"
   ],
   "code_sha256": {
     "src/chemdner_bench/shots.py": "f084b48d72fc1ffaaa19d688fdda496dc73e1a3026cefb436c834ca7a83bcf58",
@@ -1330,5 +1332,13 @@
     "src/chemdner_bench/inline_tags.py": "60ba1989112115e5b40eab2bc2b0758b0353ff819059bf0007b0843414628e99",
     "prompts/direct/instructions.md": "9e862ea7087e90bbeb95d9593715a2ebe866e5347403c49bd31672555215bfe2",
     "task/guidelines.md": "5f7deab9f97b90bf3699452c83dd8809730c537ce9eecc3dbbefbde570ac9e5b"
+  },
+  "addendum": {
+    "added_at": "2026-10-26T05:32:45+00:00",
+    "runs": [
+      "evaluation-gpt-6.1-sol-low-shots32-similar-r0-subofficial2478",
+      "evaluation-gpt-6.1-sol-low-r20-subofficial2478"
+    ],
+    "reason": "gpt-6.1-sol low similar examples (K=32), omitted in the 2026-10-20 freeze for cost, and a same-day no-example rerun to check model change. Recorded before running in the analysis plan (manuscript repo docs/experiment-protocol.md, section added 2026-10-26). The 2026-10-20 freeze is kept at tag aprime-2026-10-20."
   }
 }
