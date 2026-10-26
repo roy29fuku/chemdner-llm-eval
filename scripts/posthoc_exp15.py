@@ -13,6 +13,10 @@
 7. 正解の分類（CHEMDNER の 8 分類）ごとの再現率
 
     uv run python scripts/posthoc_exp15.py --scores runs/scores/exp15-2026-10-20/scores.json --out runs/scores/exp15-2026-10-20/posthoc
+
+追加の 2 回（2026-10-26）を足した版は `--addendum` を付け、足した版の scores.json を渡す（gpt-6.1-sol low の似た例が候補に入る）
+    uv run python scripts/posthoc_exp15.py --addendum --scores runs/scores/exp15-addendum-2026-10-26/scores.json \\
+        --out runs/scores/exp15-addendum-2026-10-26/posthoc
 """
 
 import argparse
@@ -31,7 +35,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from chemdner_bench import cem  # noqa: E402
 from chemdner_bench.compare import MARGIN, boot_f1, classify, error_breakdown, overall_type  # noqa: E402
 from chemdner_bench.corpus import gold_spans, load  # noqa: E402
-from score_exp15 import SETTINGS, exp15_runs  # noqa: E402
+from score_exp15 import SETTINGS, addendum_runs, exp15_runs  # noqa: E402
 from score_main import runs_of  # noqa: E402
 
 T975_DF2 = 4.302652729911275  # t 分布（自由度 2）の 97.5% 点
@@ -54,6 +58,7 @@ def main() -> int:
     p.add_argument("--scores", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--bootstrap", type=int, default=10_000)
+    p.add_argument("--addendum", action="store_true", help="追加の 2 回（2026-10-26）を足した版で出す")
     args = p.parse_args()
     scores = json.loads(args.scores.read_text(encoding="utf-8"))
     docs = load("evaluation")
@@ -62,6 +67,8 @@ def main() -> int:
     cls = {(d.pmid, m.section, m.start, m.end): m.cls for d in docs for m in d.mentions}
 
     runs = exp15_runs()
+    if args.addendum:
+        runs.update(addendum_runs())
     for model, effort in SETTINGS:
         k = key_of(model, effort)
         for r, run in enumerate(runs_of("a", model, effort)):
