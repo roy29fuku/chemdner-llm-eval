@@ -8,6 +8,12 @@
        uv run python scripts/score_exp15.py score --out runs/scores/exp15-2026-10-20
    hash の一覧が commit 済みで、予測が一覧と一致するときだけ採点する
 
+追加の 2 回（2026-10-26。分析計画「追加（2026-10-26）」）は `--addendum` を付ける。hash は別の一覧
+（frozen/exp15-addendum-predictions.sha256）に書き、10-20 の一覧は変えない。採点では gpt-6.1-sol low の
+a'(強い方) の候補に似た例（K = 32）を足し、同じ日の例なし（r20）− 10-20 の例なし（r10）を出す
+       uv run python scripts/score_exp15.py hash --addendum
+       uv run python scripts/score_exp15.py score --addendum --out runs/scores/exp15-addendum-2026-10-26
+
 比べる相手の a（答えを直接聞く・10-14）と b（エージェント・GCP）は、scripts/score_main.py と同じ回を使う。
 """
 
@@ -32,9 +38,10 @@ from score_main import runs_of  # noqa: E402
 
 FROZEN = ROOT / "frozen"
 HASHES = FROZEN / "exp15-predictions.sha256"
+ADD_HASHES = FROZEN / "exp15-addendum-predictions.sha256"
 OFF, CUR = str(FROZEN / "official2478.txt"), str(FROZEN / "curve1000.txt")
 SETTINGS = [("gpt-6-luna", "medium"), ("gpt-6.1-sol", "low"), ("gpt-6.1-sol", "medium")]
-SIMILAR_K = {("gpt-6-luna", "medium"): 128, ("gpt-6.1-sol", "medium"): 32}  # sol low は似た例を走らせない
+SIMILAR_K = {("gpt-6-luna", "medium"): 128, ("gpt-6.1-sol", "medium"): 32}  # sol low は似た例を走らせない（追加の 2 回で足す）
 SEEDS = (1, 2, 3)
 CURVE_K = (8, 32, 128, 256, 512, 1024)  # 128 は a'(乱数, 128) の種 1 を 1,000 件で採点し直す
 B128 = [f"b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r{r}" for r in (1, 2, 3)]
@@ -64,10 +71,21 @@ def exp15_runs() -> dict[str, tuple[str, Path]]:
             runs[f"curve/k{k}"] = direct_run("gpt-6-luna", "medium", CUR, shots=k, select="random", shot_seed=1)
     for r, name in enumerate(B128, 1):
         runs[f"b128/r{r}"] = agent_run(name)
-    frozen = set(json.loads((FROZEN / "aprime.json").read_text())["runs"])
+    aprime = json.loads((FROZEN / "aprime.json").read_text())
+    frozen = set(aprime["runs"]) - set(aprime.get("addendum", {}).get("runs", []))
     stray = {n for n, _ in runs.values() if not n.startswith("b-")} - frozen
     if stray or len(frozen) != len([n for n, _ in runs.values() if not n.startswith("b-")]):
         raise SystemExit(f"凍結した回の一覧と合わない: {sorted(stray)}")
+    return runs
+
+
+def addendum_runs() -> dict[str, tuple[str, Path]]:
+    """追加の 2 回（2026-10-26）: gpt-6.1-sol low の似た例（K = 32）と、同じ日の例なし。"""
+    runs = {"6.1-sol-low/similar": direct_run("gpt-6.1-sol", "low", OFF, shots=32, select="similar"),
+            "6.1-sol-low/k0-r20": direct_run("gpt-6.1-sol", "low", OFF, rep=20)}
+    frozen = json.loads((FROZEN / "aprime.json").read_text()).get("addendum", {}).get("runs", [])
+    if sorted(n for n, _ in runs.values()) != sorted(frozen):
+        raise SystemExit(f"凍結した追加の回の一覧と合わない: {sorted(frozen)}")
     return runs
 
 
@@ -79,41 +97,47 @@ def hash_lines(runs: dict[str, tuple[str, Path]]) -> list[str]:
     return [f"{sha256(p) if p.exists() else 'MISSING'}  {p.relative_to(ROOT)}" for _, p in sorted(runs.values())]
 
 
-def cmd_hash() -> int:
-    lines = hash_lines(exp15_runs())
-    HASHES.write_text("\n".join(lines) + "\n", encoding="utf-8")
+def cmd_hash(addendum: bool) -> int:
+    path = ADD_HASHES if addendum else HASHES
+    lines = hash_lines(addendum_runs() if addendum else exp15_runs())
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     missing = [ln for ln in lines if ln.startswith("MISSING")]
-    print(f"{HASHES.relative_to(ROOT)} に {len(lines)} 回を書いた（予測なし {len(missing)} 回）。commit して push してから採点する")
+    print(f"{path.relative_to(ROOT)} に {len(lines)} 回を書いた（予測なし {len(missing)} 回）。commit して push してから採点する")
     return 0
 
 
-def check_gate(runs: dict[str, tuple[str, Path]]) -> None:
-    rel = str(HASHES.relative_to(ROOT))
+def check_gate(runs: dict[str, tuple[str, Path]], path: Path = HASHES) -> None:
+    rel = str(path.relative_to(ROOT))
     tracked = subprocess.run(["git", "ls-files", "--error-unmatch", rel], cwd=ROOT, capture_output=True).returncode == 0
     clean = subprocess.run(["git", "diff", "--quiet", "HEAD", "--", rel], cwd=ROOT).returncode == 0
     if not (tracked and clean):
         raise SystemExit(f"採点の門: {rel} が commit されていない")
-    if HASHES.read_text(encoding="utf-8").splitlines() != hash_lines(runs):
+    if path.read_text(encoding="utf-8").splitlines() != hash_lines(runs):
         raise SystemExit("採点の門: 予測が commit した hash と一致しない")
 
 
 def main() -> int:
     p = argparse.ArgumentParser()
     sub = p.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("hash")
+    h = sub.add_parser("hash")
+    h.add_argument("--addendum", action="store_true", help="追加の 2 回（2026-10-26）の hash を別の一覧に書く")
     s = sub.add_parser("score")
+    s.add_argument("--addendum", action="store_true", help="追加の 2 回（2026-10-26）を足した版で採点する")
     s.add_argument("--out", type=Path, required=True)
     s.add_argument("--bootstrap", type=int, default=10_000)
     s.add_argument("--seed", type=int, default=0)
     s.add_argument("--pseudo-gold", metavar="KEY",
                    help="コードの確認用: test の正解の代わりに、この役割の回の予測を正解として採点する（門と範囲の照合を飛ばす）")
     args = p.parse_args()
-    return cmd_hash() if args.cmd == "hash" else score(args)
+    return cmd_hash(args.addendum) if args.cmd == "hash" else score(args)
 
 
 def score(args) -> int:
     runs = exp15_runs()
     gated = dict(runs)  # 採点の門で照らす回（実験 15 で走らせた回）
+    added = addendum_runs() if args.addendum else {}
+    runs.update(added)
+    similar_k = {**SIMILAR_K, ("gpt-6.1-sol", "low"): 32} if args.addendum else SIMILAR_K
     official = (FROZEN / "official2478.txt").read_text().split()
     curve_docs = (FROZEN / "curve1000.txt").read_text().split()
     # 比べる相手（10-14 の a と GCP の b）を足す
@@ -129,6 +153,8 @@ def score(args) -> int:
         gold, stamp = {pmid: preds[args.pseudo_gold].get(pmid, set()) for pmid in official}, f"pseudo（{args.pseudo_gold}）"
     else:
         check_gate(gated)
+        if added:
+            check_gate(added, ADD_HASHES)
         gold = gold_spans(load("evaluation"))  # 正解が無ければここで止まる
         if official != cem.official_pmids(gold):
             raise SystemExit("凍結した 2,478 件が、正解のある文書と一致しない")
@@ -186,9 +212,18 @@ def score(args) -> int:
                 drift.append({"setting": row["setting"], "diff": k0_pt - a_pt, "ci_low": lo, "ci_high": hi,
                               "rule": drift_rule(lo, hi)})
                 if "similar" in cands:
-                    similar.append({"setting": row["setting"], "similar_k": SIMILAR_K[(model, effort)],
+                    similar.append({"setting": row["setting"], "similar_k": similar_k[(model, effort)],
                                     **diff(cands["similar"][0] - r_pt, cands["similar"][1] - r128)})
         main_rows.append(row)
+
+    # 追加の 2 回: 同じ日の例なし（r20）− 10-20 の例なし（r10）。どちらも 1 回なので文書だけを抽出する
+    addendum = None
+    if added:
+        r10_pt, r10 = mean(sc_off, ["6.1-sol-low/k0"], False)
+        r20_pt, r20 = mean(sc_off, ["6.1-sol-low/k0-r20"], False)
+        lo, hi = interval(r20 - r10)
+        addendum = {"runs": [n for n, _ in added.values()], "k0_r10": r10_pt, "k0_r20": r20_pt,
+                    "k0_r20_minus_r10": {"diff": r20_pt - r10_pt, "ci_low": lo, "ci_high": hi, "rule": drift_rule(lo, hi)}}
 
     # 型 A の条件: gpt-6-luna medium の b − a'(乱数, 曲線の最高点)（1,000 件）
     b_pt, b = mean(sc_cur, [f"{luna}/b-r{r}" for r in (1, 2, 3)], True)
@@ -233,7 +268,7 @@ def score(args) -> int:
               "documents": {"official": len(official), "curve": len(curve_docs)},
               "overall_type": overall, "main": main_rows, "curve_best_for_type_a": curve_best,
               "fraction_closed": fractions, "k0_drift": drift, "similar_vs_random": similar, "curve": curve,
-              "b128": b128, "runs": per_run}
+              "b128": b128, "addendum": addendum, "runs": per_run}
     args.out.mkdir(parents=True, exist_ok=True)
     (args.out / "scores.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     md = render(result)
@@ -251,7 +286,8 @@ def ci(lo: float, hi: float) -> str:
 
 
 def render(r: dict) -> str:
-    L = [f"# 実験 15 の採点（test の正解の取得: {r['test_gold_fetched_at']}）", "",
+    title = "実験 15 の採点（追加の 2 回を足した版）" if r.get("addendum") else "実験 15 の採点"
+    L = [f"# {title}（test の正解の取得: {r['test_gold_fetched_at']}）", "",
          f"範囲: 正解のある {r['documents']['official']} 件（曲線は {r['documents']['curve']} 件）。"
          f"bootstrap {r['bootstrap']} 回・seed {r['seed']}。差はポイント（F1 × 100）", "",
          f"## 全体の型: **{r['overall_type']}**", "",
@@ -278,6 +314,10 @@ def render(r: dict) -> str:
              f"{pt(b['diff'])} | {ci(b['ci_low'], b['ci_high'])} | {b['category']} |")
     c = r["curve"]
     L.append(f"| 曲線: F1(1024) − F1(128) | {pt(c['kmax_minus_k128'])} | {ci(c['ci_low'], c['ci_high'])} | {c['rule']} |")
+    if r.get("addendum"):
+        d = r["addendum"]["k0_r20_minus_r10"]
+        L.append(f"| 同じ日の例なし（r20）− 10-20 の例なし（r10）（gpt-6.1-sol low） | {pt(d['diff'])} | "
+                 f"{ci(d['ci_low'], d['ci_high'])} | {d['rule']} |")
     for d in r["k0_drift"]:
         L.append(f"| 例なしの再実行 − 10-14 の a（{d['setting']}） | {pt(d['diff'])} | {ci(d['ci_low'], d['ci_high'])} | {d['rule']} |")
     for s in r["similar_vs_random"]:
