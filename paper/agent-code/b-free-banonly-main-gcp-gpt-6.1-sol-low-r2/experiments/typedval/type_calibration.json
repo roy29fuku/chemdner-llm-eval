@@ -1,0 +1,18 @@
+{
+  "f1": 0.9194785147401802,
+  "type_bias": [
+    -0.5,
+    0,
+    -0.5,
+    0.0,
+    -0.5,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bias": -0.5,
+  "ibias": 1.0,
+  "scores": [
+    "/workspace/experiments/typedval/devmean567_raw.npz"
+  ]
+}

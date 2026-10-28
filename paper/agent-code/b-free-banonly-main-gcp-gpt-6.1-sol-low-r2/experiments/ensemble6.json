@@ -1,0 +1,21 @@
+{
+  "f1": 0.9314949006977993,
+  "weights": [
+    1.0,
+    1,
+    0,
+    1.0,
+    1.0,
+    0.5
+  ],
+  "bias": -0.5,
+  "ibias": 0.5,
+  "scores": [
+    "/workspace/experiments/run1/devmean567_aligned.npz",
+    "/workspace/experiments/largeval/devmean567.npz",
+    "/workspace/experiments/jointval/devmean567.npz",
+    "/workspace/experiments/typedval/devmean567.npz",
+    "/workspace/experiments/largejointval/devmean567.npz",
+    "/workspace/experiments/casedfixedval/devmean456_aligned.npz"
+  ]
+}

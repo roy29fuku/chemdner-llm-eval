@@ -1,0 +1,87 @@
+[
+  {
+    "f1": 0.9283531979184153,
+    "bias": -0.40000000000000013,
+    "begin_bias": 0,
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "average": "log",
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "path": "/workspace/results/best4begin_2.tsv.dev"
+  },
+  {
+    "f1": 0.9281444184362528,
+    "bias": -0.5000000000000001,
+    "begin_bias": -0.25,
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "average": "log",
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "path": "/workspace/results/best4begin_1.tsv.dev"
+  },
+  {
+    "f1": 0.9280427010423485,
+    "bias": 0.09999999999999976,
+    "begin_bias": -0.5,
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "average": "log",
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "path": "/workspace/results/best4begin_0.tsv.dev"
+  },
+  {
+    "f1": 0.9276198785275662,
+    "bias": -0.6000000000000001,
+    "begin_bias": 0.25,
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "average": "log",
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "path": "/workspace/results/best4begin_3.tsv.dev"
+  },
+  {
+    "f1": 0.927342704149933,
+    "bias": -0.5000000000000001,
+    "begin_bias": 0.5,
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "average": "log",
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "path": "/workspace/results/best4begin_4.tsv.dev"
+  }
+]

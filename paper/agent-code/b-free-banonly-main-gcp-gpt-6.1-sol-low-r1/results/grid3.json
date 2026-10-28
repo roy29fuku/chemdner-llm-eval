@@ -1,0 +1,182 @@
+[
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9262707473214435,
+    "bias": 0.19999999999999973,
+    "path": "/workspace/results/grid3_3.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9262707473214435,
+    "bias": 0.19999999999999973,
+    "path": "/workspace/results/grid3_5.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9255722957042288,
+    "bias": -2.220446049250313e-16,
+    "path": "/workspace/results/grid3_9.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9255722957042288,
+    "bias": -2.220446049250313e-16,
+    "path": "/workspace/results/grid3_11.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      2,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.925285525013836,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid3_4.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      2,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9245809589063988,
+    "bias": 0.09999999999999976,
+    "path": "/workspace/results/grid3_10.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9243942980909686,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid3_0.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9242492454938055,
+    "bias": 0.09999999999999976,
+    "path": "/workspace/results/grid3_7.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9242368640533778,
+    "bias": 0.3999999999999997,
+    "path": "/workspace/results/grid3_1.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.923904843333501,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid3_8.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9238999195063053,
+    "bias": -2.220446049250313e-16,
+    "path": "/workspace/results/grid3_6.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9238902408324242,
+    "bias": -0.6000000000000001,
+    "path": "/workspace/results/grid3_2.tsv.dev"
+  }
+]

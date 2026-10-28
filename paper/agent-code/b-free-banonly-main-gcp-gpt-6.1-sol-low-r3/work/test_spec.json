@@ -1,0 +1,37 @@
+[
+  {
+    "path": "/workspace/work/test_probs/full_abs2025.npz",
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract",
+    "weight": 0.5
+  },
+  {
+    "path": "/workspace/work/test_probs/full_abs77.npz",
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract",
+    "weight": 0.5
+  },
+  {
+    "path": "/workspace/work/test_probs/full_bilou123.npz",
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+    "weight": 0.5
+  },
+  {
+    "path": "/workspace/work/test_probs/full_ctx314.npz",
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+    "weight": 1
+  },
+  {
+    "path": "/workspace/work/test_probs/full_ft2024.npz",
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+    "weight": 0.08333333333333333
+  },
+  {
+    "path": "/workspace/work/test_probs/full_ft42.npz",
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+    "weight": 0.08333333333333333
+  },
+  {
+    "path": "/workspace/work/test_probs/full_ft991.npz",
+    "model": "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+    "weight": 0.08333333333333333
+  }
+]

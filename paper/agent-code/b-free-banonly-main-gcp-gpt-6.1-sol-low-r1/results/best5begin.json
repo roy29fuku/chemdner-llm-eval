@@ -1,0 +1,107 @@
+[
+  {
+    "f1": 0.9285822084346441,
+    "bias": -2.220446049250313e-16,
+    "begin_bias": -0.25,
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "average": "prob",
+    "weights": [
+      1.0,
+      1.0,
+      1.0,
+      2.0,
+      1.0
+    ],
+    "path": "/workspace/results/best5begin_1.tsv.dev"
+  },
+  {
+    "f1": 0.9285329744279947,
+    "bias": -2.220446049250313e-16,
+    "begin_bias": -0.5,
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "average": "prob",
+    "weights": [
+      1.0,
+      1.0,
+      1.0,
+      2.0,
+      1.0
+    ],
+    "path": "/workspace/results/best5begin_0.tsv.dev"
+  },
+  {
+    "f1": 0.9284179425194735,
+    "bias": -0.30000000000000016,
+    "begin_bias": 0,
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "average": "prob",
+    "weights": [
+      1.0,
+      1.0,
+      1.0,
+      2.0,
+      1.0
+    ],
+    "path": "/workspace/results/best5begin_2.tsv.dev"
+  },
+  {
+    "f1": 0.92721127137646,
+    "bias": -0.30000000000000016,
+    "begin_bias": 0.25,
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "average": "prob",
+    "weights": [
+      1.0,
+      1.0,
+      1.0,
+      2.0,
+      1.0
+    ],
+    "path": "/workspace/results/best5begin_3.tsv.dev"
+  },
+  {
+    "f1": 0.9258801523147839,
+    "bias": -0.40000000000000013,
+    "begin_bias": 0.5,
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "average": "prob",
+    "weights": [
+      1.0,
+      1.0,
+      1.0,
+      2.0,
+      1.0
+    ],
+    "path": "/workspace/results/best5begin_4.tsv.dev"
+  }
+]

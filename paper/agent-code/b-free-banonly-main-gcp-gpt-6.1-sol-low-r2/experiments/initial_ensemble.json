@@ -1,0 +1,13 @@
+{
+  "f1": 0.9287596287780892,
+  "weights": [
+    1.0,
+    2
+  ],
+  "bias": -0.5,
+  "ibias": 0.5,
+  "scores": [
+    "/workspace/experiments/run1/dev_epoch7_aligned.npz",
+    "/workspace/experiments/largeval/dev_epoch7.npz"
+  ]
+}

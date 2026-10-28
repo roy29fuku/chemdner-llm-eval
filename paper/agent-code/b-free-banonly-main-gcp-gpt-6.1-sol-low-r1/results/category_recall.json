@@ -1,0 +1,42 @@
+{
+  "TRIVIAL": {
+    "gold": 8970,
+    "correct": 8706,
+    "recall": 0.9705685618729097
+  },
+  "SYSTEMATIC": {
+    "gold": 6816,
+    "correct": 6554,
+    "recall": 0.9615610328638498
+  },
+  "FAMILY": {
+    "gold": 4223,
+    "correct": 3776,
+    "recall": 0.8941510774331044
+  },
+  "ABBREVIATION": {
+    "gold": 4521,
+    "correct": 4235,
+    "recall": 0.9367396593673966
+  },
+  "FORMULA": {
+    "gold": 4137,
+    "correct": 3740,
+    "recall": 0.9040367416001934
+  },
+  "IDENTIFIER": {
+    "gold": 639,
+    "correct": 624,
+    "recall": 0.9765258215962441
+  },
+  "NO CLASS": {
+    "gold": 32,
+    "correct": 24,
+    "recall": 0.75
+  },
+  "MULTIPLE": {
+    "gold": 188,
+    "correct": 153,
+    "recall": 0.8138297872340425
+  }
+}

@@ -1,0 +1,902 @@
+[
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      2,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9284179425194735,
+    "bias": -0.30000000000000016,
+    "path": "/workspace/results/grid5_55.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9283531979184153,
+    "bias": -0.40000000000000013,
+    "path": "/workspace/results/grid5_13.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      2,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9282972053177757,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid5_27.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9280918816655226,
+    "bias": -2.220446049250313e-16,
+    "path": "/workspace/results/grid5_20.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9278650670147081,
+    "bias": 0.2999999999999996,
+    "path": "/workspace/results/grid5_11.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9278454261849652,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid5_48.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9277213158598556,
+    "bias": 0.09999999999999976,
+    "path": "/workspace/results/grid5_24.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9277130646107433,
+    "bias": -0.1000000000000002,
+    "path": "/workspace/results/grid5_50.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.927646330444095,
+    "bias": 0.09999999999999976,
+    "path": "/workspace/results/grid5_39.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9275619855492783,
+    "bias": -0.30000000000000016,
+    "path": "/workspace/results/grid5_41.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9274954339047236,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid5_25.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9274132698402052,
+    "bias": -0.30000000000000016,
+    "path": "/workspace/results/grid5_44.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9274116363025775,
+    "bias": -0.6000000000000001,
+    "path": "/workspace/results/grid5_19.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9273872123790066,
+    "bias": -2.220446049250313e-16,
+    "path": "/workspace/results/grid5_18.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9273626834381551,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid5_22.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9272818961169944,
+    "bias": -0.40000000000000013,
+    "path": "/workspace/results/grid5_53.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9271179053940796,
+    "bias": -0.30000000000000016,
+    "path": "/workspace/results/grid5_16.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9270479599859482,
+    "bias": -0.1000000000000002,
+    "path": "/workspace/results/grid5_52.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9270287411957139,
+    "bias": 0.19999999999999973,
+    "path": "/workspace/results/grid5_46.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9269545080798081,
+    "bias": -0.40000000000000013,
+    "path": "/workspace/results/grid5_23.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9268447943713879,
+    "bias": 0.09999999999999976,
+    "path": "/workspace/results/grid5_2.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9267859238519959,
+    "bias": -2.220446049250313e-16,
+    "path": "/workspace/results/grid5_30.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9265898277826174,
+    "bias": -0.1000000000000002,
+    "path": "/workspace/results/grid5_37.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9265538616183615,
+    "bias": -0.30000000000000016,
+    "path": "/workspace/results/grid5_47.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.926552537778001,
+    "bias": -0.1000000000000002,
+    "path": "/workspace/results/grid5_51.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9265027459228471,
+    "bias": 0.2999999999999996,
+    "path": "/workspace/results/grid5_9.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9262999246420497,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid5_35.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9262707473214435,
+    "bias": 0.19999999999999973,
+    "path": "/workspace/results/grid5_10.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9262206208610653,
+    "bias": 0.6999999999999995,
+    "path": "/workspace/results/grid5_5.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      2,
+      1,
+      1,
+      1,
+      2
+    ],
+    "average": "log",
+    "f1": 0.9260128789911457,
+    "bias": -0.30000000000000016,
+    "path": "/workspace/results/grid5_26.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run3",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9260011994402612,
+    "bias": 0.2999999999999996,
+    "path": "/workspace/results/grid5_7.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run4"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9259644066092435,
+    "bias": -2.220446049250313e-16,
+    "path": "/workspace/results/grid5_33.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      2,
+      1,
+      1,
+      1,
+      2
+    ],
+    "average": "prob",
+    "f1": 0.9257584890496283,
+    "bias": -0.1000000000000002,
+    "path": "/workspace/results/grid5_54.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9255722957042288,
+    "bias": -2.220446049250313e-16,
+    "path": "/workspace/results/grid5_38.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9255312040625417,
+    "bias": 0.09999999999999976,
+    "path": "/workspace/results/grid5_17.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.925481691550588,
+    "bias": 0.3999999999999997,
+    "path": "/workspace/results/grid5_21.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9254791582897735,
+    "bias": -0.1000000000000002,
+    "path": "/workspace/results/grid5_15.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.925335822139262,
+    "bias": 0.19999999999999973,
+    "path": "/workspace/results/grid5_45.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run3",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9251461400599635,
+    "bias": -0.1000000000000002,
+    "path": "/workspace/results/grid5_49.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run4",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9245172419568239,
+    "bias": -0.1000000000000002,
+    "path": "/workspace/results/grid5_43.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9243942980909686,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid5_0.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9242492454938055,
+    "bias": 0.09999999999999976,
+    "path": "/workspace/results/grid5_29.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9242368640533778,
+    "bias": 0.3999999999999997,
+    "path": "/workspace/results/grid5_1.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run3",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9242248939416805,
+    "bias": -0.6000000000000001,
+    "path": "/workspace/results/grid5_8.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9241411654355728,
+    "bias": -2.220446049250313e-16,
+    "path": "/workspace/results/grid5_12.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run3",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9240251909419804,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid5_36.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9239975262005449,
+    "bias": 0.09999999999999976,
+    "path": "/workspace/results/grid5_40.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.923904843333501,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid5_32.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run2"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9238999195063053,
+    "bias": -2.220446049250313e-16,
+    "path": "/workspace/results/grid5_28.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run3"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9238902408324242,
+    "bias": -0.6000000000000001,
+    "path": "/workspace/results/grid5_4.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9238357077397318,
+    "bias": 0.4999999999999998,
+    "path": "/workspace/results/grid5_14.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run3",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9236666778265091,
+    "bias": -0.1000000000000002,
+    "path": "/workspace/results/grid5_42.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9233954451345756,
+    "bias": 0.3999999999999997,
+    "path": "/workspace/results/grid5_6.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run2",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9232913986260645,
+    "bias": -0.20000000000000018,
+    "path": "/workspace/results/grid5_34.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "prob",
+    "f1": 0.9201661593313264,
+    "bias": -0.5000000000000001,
+    "path": "/workspace/results/grid5_31.tsv.dev"
+  },
+  {
+    "runs": [
+      "/workspace/run1",
+      "/workspace/run5"
+    ],
+    "weights": [
+      1,
+      1
+    ],
+    "average": "log",
+    "f1": 0.9198044256262916,
+    "bias": -0.5000000000000001,
+    "path": "/workspace/results/grid5_3.tsv.dev"
+  }
+]

@@ -1,0 +1,1499 @@
+run	path (relative to /workspace)	bytes	reason
+b-free-banonly-main-gcp-gpt-5.2-none-r1	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-5.2-none-r1	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-5.2-none-r1	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-5.2-none-r1	output/predictions.tsv	506356	under output/
+b-free-banonly-main-gcp-gpt-5.2-none-r2	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-5.2-none-r2	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-5.2-none-r2	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-5.2-none-r2	output/predictions.tsv	861963	under output/
+b-free-banonly-main-gcp-gpt-5.2-none-r3	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-5.2-none-r3	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-5.2-none-r3	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-5.2-none-r3	output/dev_eval.txt	63	under output/
+b-free-banonly-main-gcp-gpt-5.2-none-r3	output/dev_eval2.txt	63	under output/
+b-free-banonly-main-gcp-gpt-5.2-none-r3	output/predictions.tsv	642300	under output/
+b-free-banonly-main-gcp-gpt-5.2-none-r3	__pycache__/chem_tagger.cpython-312.pyc	13371	bytecode cache
+b-free-banonly-main-gcp-gpt-5.2-medium-r1	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-5.2-medium-r1	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-5.2-medium-r1	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-5.2-medium-r1	output/predictions.tsv	396384	under output/
+b-free-banonly-main-gcp-gpt-5.2-medium-r2	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-5.2-medium-r2	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-5.2-medium-r2	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-5.2-medium-r2	__pycache__/chemner_bert.cpython-312.pyc	24187	bytecode cache
+b-free-banonly-main-gcp-gpt-5.2-medium-r3	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-5.2-medium-r3	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-5.2-medium-r3	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-5.2-medium-r3	output/predictions.tsv	446990	under output/
+b-free-banonly-main-gcp-gpt-6-luna-none-r1	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6-luna-none-r1	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6-luna-none-r1	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6-luna-none-r1	output/predictions.tsv	343403	under output/
+b-free-banonly-main-gcp-gpt-6-luna-none-r1	__pycache__/model.cpython-312.pyc	10429	bytecode cache
+b-free-banonly-main-gcp-gpt-6-luna-none-r1	__pycache__/gazetteer.cpython-312.pyc	4961	bytecode cache
+b-free-banonly-main-gcp-gpt-6-luna-none-r1	__pycache__/fastmodel.cpython-312.pyc	4833	bytecode cache
+b-free-banonly-main-gcp-gpt-6-luna-none-r2	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6-luna-none-r2	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6-luna-none-r2	dictpat.pkl	141066	model binary/weights
+b-free-banonly-main-gcp-gpt-6-luna-none-r2	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6-luna-none-r2	output/predictions.tsv	387021	under output/
+b-free-banonly-main-gcp-gpt-6-luna-none-r2	__pycache__/model.cpython-312.pyc	10774	bytecode cache
+b-free-banonly-main-gcp-gpt-6-luna-none-r2	__pycache__/model_fast.cpython-312.pyc	7647	bytecode cache
+b-free-banonly-main-gcp-gpt-6-luna-none-r3	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6-luna-none-r3	core	942546944	extension not in allowlist (none)
+b-free-banonly-main-gcp-gpt-6-luna-none-r3	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6-luna-none-r3	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6-luna-none-r3	output/predictions.tsv	438998	under output/
+b-free-banonly-main-gcp-gpt-6-luna-medium-r1	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6-luna-medium-r1	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6-luna-medium-r1	model.crfsuite	6399132	model binary/weights
+b-free-banonly-main-gcp-gpt-6-luna-medium-r1	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6-luna-medium-r1	output/predictions.tsv	490675	under output/
+b-free-banonly-main-gcp-gpt-6-luna-medium-r1	__pycache__/ner.cpython-312.pyc	9966	bytecode cache
+b-free-banonly-main-gcp-gpt-6-luna-medium-r2	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6-luna-medium-r2	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6-luna-medium-r2	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6-luna-medium-r2	output/predictions.tsv	478367	under output/
+b-free-banonly-main-gcp-gpt-6-luna-medium-r2	__pycache__/model.cpython-312.pyc	12793	bytecode cache
+b-free-banonly-main-gcp-gpt-6-luna-medium-r2	__pycache__/crfmodel.cpython-312.pyc	9852	bytecode cache
+b-free-banonly-main-gcp-gpt-6-luna-medium-r2	__pycache__/hf_ner.cpython-312.pyc	24180	bytecode cache
+b-free-banonly-main-gcp-gpt-6-luna-medium-r3	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6-luna-medium-r3	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6-luna-medium-r3	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6-luna-medium-r3	output/predictions.tsv	494937	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_ratio/tokenizer_config.json	379	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_ratio/dev_logits.npz	11475266	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_ratio/tokenizer.json	706024	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_ratio/model.joblib	883	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_ratio/dev_anchor_logprobs.npz	10467672	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_ratio/meta.json	147	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full4/tokenizer_config.json	1293	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full4/special_tokens_map.json	695	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full4/.downloaded	9	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full4/config.json	784	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full4/test_logits.npz	6628528	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full4/tokenizer.json	678903	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full4/full4.log	4156	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full4/test.tsv	487144	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full4/vocab.txt	225062	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full4/test_anchor_logprobs.npz	4862865	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full3/tokenizer_config.json	1293	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full3/special_tokens_map.json	695	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full3/.downloaded	9	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full3/config.json	783	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full3/test_logits.npz	5891689	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full3/full3.log	2870	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full3/tokenizer.json	678903	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full3/test.tsv	488174	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full3/vocab.txt	225062	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full3/test_anchor_logprobs.npz	8018538	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_prob/tokenizer_config.json	379	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_prob/dev_logits.npz	7088013	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_prob/tokenizer.json	706024	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_prob/model.joblib	915	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_prob/dev_anchor_logprobs.npz	5886963	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	stack2_prob/meta.json	146	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full2/tokenizer_config.json	1292	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full2/special_tokens_map.json	125	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full2/.downloaded	9	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full2/config.json	748	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full2/test_logits.npz	6509257	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full2/tokenizer.json	678903	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full2/full2.log	2890	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full2/test.tsv	485637	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full2/vocab.txt	225062	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full2/test_anchor_logprobs.npz	4404877	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full5/tokenizer_config.json	1292	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full5/special_tokens_map.json	125	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full5/.downloaded	9	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full5/config.json	748	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full5/test_logits.npz	6355608	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full5/tokenizer.json	706024	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full5/full5.log	2903	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full5/test.tsv	484296	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full5/vocab.txt	226150	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full5/test_anchor_logprobs.npz	6780846	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	output/predictions.tsv	483895	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/download.log	0	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/tokenizer/tokenizer_config.json	379	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/tokenizer/tokenizer.json	706024	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/project.cpython-312.pyc	1572	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/dictionary.cpython-312.pyc	7881	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/download.cpython-312.pyc	3163	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/combine.cpython-312.pyc	9079	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/stack.cpython-312.pyc	8800	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/constrained.path-7.py312.nbi	1150	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/begin_grid.cpython-312.pyc	2989	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/constrained.cpython-312.pyc	2747	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/train.cpython-312.pyc	17043	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/abbreviations.cpython-312.pyc	4951	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/finalize.cpython-312.pyc	2754	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/constrained.path-7.py312.2.nbc	63146	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/constrained.path-7.py312.1.nbc	63530	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/filter.cpython-312.pyc	2831	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/constrained_reference.cpython-312.pyc	1710	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/__pycache__/analyze.cpython-312.pyc	1926	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/provenance/BiomedNLP-BiomedBERT-base-uncased-abstract.README.md	2306	downloaded third-party model card/config (not agent-written)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/provenance/BioLinkBERT-large.README.md	3827	downloaded third-party model card/config (not agent-written)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/provenance/BioLinkBERT-base.config.json	559	downloaded third-party model card/config (not agent-written)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/provenance/BioLinkBERT-base.README.md	3823	downloaded third-party model card/config (not agent-written)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/provenance/BioLinkBERT-large.config.json	560	downloaded third-party model card/config (not agent-written)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/provenance/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext.README.md	2436	downloaded third-party model card/config (not agent-written)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/provenance/BiomedNLP-BiomedBERT-base-uncased-abstract.config.json	385	downloaded third-party model card/config (not agent-written)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	code/provenance/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext.config.json	385	downloaded third-party model card/config (not agent-written)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/run2.log	2782	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/tokenizer_config.json	1292	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/special_tokens_map.json	125	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/.downloaded	9	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/config.json	748	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/test_logits.npz	6613421	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/dev.tsv	573058	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/dev_logits.npz	7670089	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/tokenizer.json	678903	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/test.tsv	481888	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/vocab.txt	225062	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/dev_anchor_logprobs.npz	5696532	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run2/test_anchor_logprobs.npz	4873513	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/run5.log	2789	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/tokenizer_config.json	1292	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/special_tokens_map.json	125	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/.downloaded	9	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/config.json	748	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/test_logits.npz	6115587	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/dev.tsv	578223	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/dev_logits.npz	7107988	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/tokenizer.json	706024	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/test.tsv	486282	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/vocab.txt	226150	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/dev_anchor_logprobs.npz	7567143	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run5/test_anchor_logprobs.npz	6487405	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/run4.log	3272	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/tokenizer_config.json	1293	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/special_tokens_map.json	695	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/.downloaded	9	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/config.json	784	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/test_logits.npz	6625831	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/dev.tsv	576673	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/dev_logits.npz	7686154	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/tokenizer.json	678903	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/test.tsv	484204	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/vocab.txt	225062	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/dev_anchor_logprobs.npz	6125124	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run4/test_anchor_logprobs.npz	5245179	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/tokenizer_config.json	1293	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/special_tokens_map.json	695	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/run3.log	2275	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/.downloaded	9	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/config.json	783	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/test_logits.npz	5921121	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/dev.tsv	581518	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/dev_logits.npz	6875096	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/tokenizer.json	678903	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/test.tsv	489021	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/vocab.txt	225062	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/dev_anchor_logprobs.npz	9852252	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run3/test_anchor_logprobs.npz	8472509	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_2.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_2.tsv.dev	574250	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_1.tsv.dev	571857	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_1.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/dual_test.tsv.abbr.filtered	482253	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/partial_full_test.tsv.abbr.filtered	483410	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_11.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_11.tsv.dev	573764	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_38.tsv.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_28.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_8.tsv.dev	571857	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_28.tsv.dev	573007	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_8.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_38.tsv.dev	576261	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_0.tsv.dev	575042	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_0.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_2.tsv.dev.abbr.filtered	574430	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_17.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_17.tsv.dev	577414	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_18.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_18.tsv.dev	574598	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_21.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_1.tsv.dev	579121	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_31.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_31.tsv.dev	569794	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_21.tsv.dev	578951	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_1.tsv.log	1081	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_53.tsv.dev	570293	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_43.tsv.dev	574527	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_43.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_53.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_8.tsv.dev	577001	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_8.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_3.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_3.tsv.dev	576722	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/stack2_prob.tsv.dev	567241	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/dual_test.tsv.abbr	482253	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_2.tsv.dev.abbr	574485	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_progress.log	2707	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_19.tsv.dev	576261	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_19.tsv.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_20.tsv.dev	574833	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_0.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_30.tsv.dev	573346	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_30.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_20.tsv.log	1094	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_0.tsv.dev	571608	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_9.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_9.tsv.dev	580760	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4_test.tsv.abbr.filtered	483134	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_52.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_42.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_42.tsv.dev	575030	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_52.tsv.dev	575781	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_2.tsv.dev	572008	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_2.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_0.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_0.tsv.dev	578739	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_3.tsv.dev	570862	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_3.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_progress.log	1436	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_10.tsv.dev	574833	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_10.tsv.log	1094	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/triple_test.tsv.abbr.filtered.repeat	486559	extension not in allowlist (.repeat)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_39.tsv.dev	575456	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_29.tsv.dev	579538	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_9.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_29.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_9.tsv.dev	573436	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_39.tsv.log	1082	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/partial_full_test.tsv	482352	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_1.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_1.tsv.dev	571608	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5_test.tsv.abbr.filtered.balanced	483483	extension not in allowlist (.balanced)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_16.tsv.dev	573436	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_16.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/partial_full_test.tsv.abbr.filtered.balanced	483410	extension not in allowlist (.balanced)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_50.tsv.dev	573637	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_8.tsv.log	1091	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_40.tsv.dev	576759	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_40.tsv.log	1082	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_50.tsv.log	1082	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_8.tsv.dev	573087	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_2.tsv.dev	574250	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_22.tsv.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_32.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_32.tsv.dev	573266	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_2.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_22.tsv.dev	572873	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_4.tsv.dev	577638	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_4.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_10.tsv.dev	576997	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_10.tsv.log	1083	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/stack2_ratio_tuning.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_24.tsv.log	1091	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_24.tsv.dev	574325	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_0.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_0.tsv.dev	571608	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_12.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_12.tsv.dev	576757	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_progress.log	6046	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4_test.tsv.abbr	483155	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_2.tsv.dev	574477	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_2.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_progress.log	2826	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_49.tsv.dev	574369	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_1.tsv.log	1081	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_1.tsv.dev	579121	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_49.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5_test.tsv.abbr.filtered	483483	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_2.tsv.dev.abbr.filtered.balanced.atoms	574415	extension not in allowlist (.atoms)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_1.tsv.dev.abbr.filtered	575795	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_14.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_9.tsv.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_14.tsv.dev	580340	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_9.tsv.dev	576261	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_3.tsv.dev	577155	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_3.tsv.log	1083	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/final_test.tsv.abbr.filtered	483895	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/final_test.tsv.abbr	483895	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_13.tsv.dev	573007	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_13.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/final_test.tsv.abbr.filtered.balanced	483895	extension not in allowlist (.balanced)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_48.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_0.tsv.dev	571608	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_0.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_48.tsv.dev	572777	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_3.tsv.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_3.tsv.dev	576099	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/stack2_prob_tuning.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_8.tsv.dev	573266	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/triple_test.tsv	484221	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_15.tsv.dev	574115	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_8.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_15.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_2.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_2.tsv.dev	572204	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_4.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_4.tsv.dev	575920	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_9.tsv.dev	578214	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_51.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_41.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_41.tsv.dev	573404	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_9.tsv.log	1081	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_51.tsv.dev	575418	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_4.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_4.tsv.dev	575444	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_3.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_23.tsv.dev	572288	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_33.tsv.dev	573738	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_33.tsv.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_3.tsv.dev	572008	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_23.tsv.log	1082	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_11.tsv.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_11.tsv.dev	576261	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_25.tsv.dev	579461	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_25.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_1.tsv.dev	579121	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_1.tsv.log	1081	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_1.tsv.dev.abbr.filtered.balanced	575776	extension not in allowlist (.balanced)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_progress.log	13164	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/stack2_ratio.log	610	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_0.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_0.tsv.dev	569354	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_4.tsv.dev	572935	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_19.tsv.dev	571547	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_4.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_19.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_20.tsv.dev	575456	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_20.tsv.log	1082	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_1.tsv.dev.abbr	579383	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/triple_test.tsv.abbr.filtered.balanced	486152	extension not in allowlist (.balanced)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_44.tsv.log	1091	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_54.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_54.tsv.dev	574771	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_44.tsv.dev	573105	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_1.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_1.tsv.dev	576523	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_1.tsv.log	1083	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_1.tsv.dev.abbr.filtered.repeat	579685	extension not in allowlist (.repeat)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_1.tsv.dev	568313	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_36.tsv.dev	574361	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_26.tsv.dev	573016	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_6.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_26.tsv.log	1091	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_6.tsv.dev	576722	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_36.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_10.tsv.dev	576722	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_10.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/partial_full_test.tsv.abbr	483410	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5_test.tsv	482041	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4_test.tsv	481517	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_16.tsv.dev	573266	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_16.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_5.tsv.dev	579052	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_5.tsv.log	1081	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_6.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_6.tsv.dev	573404	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_11.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_11.tsv.dev	575490	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_1.tsv.dev.abbr.filtered	574698	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_2.tsv.dev.abbr.filtered.balanced	574394	extension not in allowlist (.balanced)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/stack2_prob_extended.log	2071	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_17.tsv.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_17.tsv.dev	573738	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_7.tsv.dev	576178	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_7.tsv.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_4.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_4.tsv.dev	572008	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_1.tsv.dev	573062	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_1.tsv.log	1093	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/dual_test.tsv	479396	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_18.tsv.log	1090	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_5.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_18.tsv.dev	574518	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_5.tsv.dev	576722	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_21.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_21.tsv.dev	573404	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_1.tsv.dev.abbr.filtered	579309	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_0.tsv.dev	571994	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_0.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/triple_test.tsv.abbr.filtered	486152	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_45.tsv.dev	580033	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5_test.tsv.abbr	483502	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_55.tsv.dev	571768	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_55.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_45.tsv.log	1085	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_0.tsv.dev	576136	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_0.tsv.log	1091	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_37.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_27.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_7.tsv.dev	575490	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_27.tsv.dev	573301	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_7.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_37.tsv.dev	574120	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_4.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_4.tsv.dev	573007	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_1.tsv.dev.abbr.filtered.repeat	574958	extension not in allowlist (.repeat)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/stack2_ratio.tsv.dev	573888	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_13.tsv.dev	571857	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_13.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_5.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_5.tsv.dev	577526	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_6.tsv.dev	577929	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_6.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_15.tsv.dev	573346	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_15.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_progress.log	1802	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/stack2_prob_extended.tsv.dev	571438	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_23.tsv.dev	572777	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_23.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_7.tsv.dev	579538	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_7.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_3.tsv.log	1082	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_3.tsv.dev	575453	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_1.tsv.dev.abbr	574772	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/stack2_prob.log	720	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_35.tsv.dev	574598	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_5.tsv.log	1081	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_25.tsv.dev	573891	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_5.tsv.dev	580554	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_25.tsv.log	1091	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_35.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_1.tsv.dev.abbr	575831	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_2.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_2.tsv.dev	571857	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_2.tsv.log	1086	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_2.tsv.dev	576722	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_47.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_47.tsv.dev	574099	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_22.tsv.log	1091	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_22.tsv.dev	573105	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_6.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid3_6.tsv.dev	573007	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4_test.tsv.abbr.filtered.balanced	483134	extension not in allowlist (.balanced)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_2.tsv.dev	571768	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best5begin_2.tsv.log	1089	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/triple_test.tsv.abbr	486152	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/final_test.tsv	482875	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_34.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_4.tsv.dev	579052	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_24.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_4.tsv.log	1081	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_24.tsv.dev	576643	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_34.tsv.dev	571171	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_3.tsv.dev	576259	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_3.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_46.tsv.dev	578333	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_46.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_progress.log	1459	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_3.tsv.dev	572463	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/best4begin_3.tsv.log	1084	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_5.tsv.dev	573474	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid2_5.tsv.log	1079	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_12.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_12.tsv.dev	574361	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_7.tsv.log	1081	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid5_7.tsv.dev	580554	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/dual_test.tsv.abbr.filtered.repeat	482955	extension not in allowlist (.repeat)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/begin3_1.tsv.dev.abbr.filtered.balanced	579269	extension not in allowlist (.balanced)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_4.tsv.dev	574414	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/weight_search_4.tsv.log	1088	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_14.tsv.log	1087	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/grid4_14.tsv.dev	579538	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/early_output/predictions.tsv.dev.abbr.filtered	578824	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/early_output/predictions.tsv.dev.abbr	578936	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/early_output/predictions.tsv.abbr.filtered	486891	extension not in allowlist (.filtered)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/early_output/predictions.tsv.dev.abbr.filtered.repeat	579295	extension not in allowlist (.repeat)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/early_output/predictions.tsv.abbr	486912	extension not in allowlist (.abbr)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/early_output/predictions.tsv.abbr.filtered.repeat	487622	extension not in allowlist (.repeat)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	results/early_output/predictions.tsv.dev	575759	extension not in allowlist (.dev)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full1/tokenizer_config.json	1292	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full1/special_tokens_map.json	125	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full1/.downloaded	9	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full1/config.json	748	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full1/test_logits.npz	5929431	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full1/full1.log	2902	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full1/tokenizer.json	706024	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full1/test.tsv	484457	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full1/vocab.txt	226150	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	full1/test_anchor_logprobs.npz	6174247	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/epoch2.tsv.dev.filtered	589807	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/epoch2.tsv.dev	590512	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/dict_epoch2.txt	975	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/final_tuning.txt	1133	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/tokenizer_config.json	1292	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/special_tokens_map.json	125	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/dict_tuned.txt	985	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/tuned.tsv.dev.abbr.filtered.dict	579003	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/errors.txt	40267	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/config.json	748	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/test_logits.npz	6280162	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/dev.tsv	550876	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/dev_logits.npz	7292411	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/tokenizer.json	706024	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/epoch2.tsv.dev.dict	590512	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/epoch2.tsv.dev.abbr	594042	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/dev.tsv.dict	559244	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/test.tsv	485878	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/vocab.txt	226150	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/calibration.txt	1088	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/tuned.tsv.dev.abbr.filtered	579003	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/dev_anchor_logprobs.npz	7956035	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/tuned.tsv.dev.abbr.filtered.repeat	579607	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/tuning.txt	1092	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/train.log	1777	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/constrained.tsv.dev	567749	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/test_anchor_logprobs.npz	6832944	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/tuned.tsv.dev.abbr	579354	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/jit.tsv.dev	575759	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r1	run1/tuned.tsv.dev	576572	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	sshkeys.txt	578	credential-like name (not opened)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble2.log	1785	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble345.log	2042	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble2_title.tsv	570539	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble4.log	432	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble5.log	388	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble6.log	726	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/initial_ensemble.log	422	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/stack3_eval.log	1789	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/stack2_eval.log	1789	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble345_tuned.log	338	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/stack2_oof.tsv.errors	771439	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble2_title.tsv.errors	749644	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble345.tsv.errors	744350	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble345_filtered.tsv	572063	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/stack3_oof.tsv.errors	751247	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/stack2_oof.tsv	574199	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble_aux.log	454	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/stack2.log	290	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/stack3.log	291	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/stack3_oof.npz	11866068	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble2.tsv.errors	749644	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble2.tsv	570539	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/stack2_oof.npz	11910659	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/stack3_oof.tsv	567442	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble2_title.log	2024	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/ensemble345.tsv	572137	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedall/mean.log	29	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedall/test_epoch4.npz	6253031	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedall/test_epoch5.npz	6021866	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedall/test_epoch6.npz	5966250	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedall/testmean456.npz	7431862	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/jointval/grid567.log	2049	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/jointval/dev567.tsv	570775	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/jointval/devmean567.npz	7073437	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/jointval/dev_epoch5.npz	5978027	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/jointval/dev_epoch7.npz	5755257	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/jointval/dev_epoch6.npz	5816348	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/jointval/dev567.tsv.errors	838037	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/grid567.log	2047	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev567.tsv	575995	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev2.tsv	576203	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/grid2.log	1790	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/devmean567.npz	7319602	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev345.tsv.errors	780353	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev_epoch4.npz	6301537	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/test.npz	5124017	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev_epoch5.npz	6282973	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev_epoch7.npz	5958088	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev_epoch6.npz	6009714	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev_epoch2.npz	6761270	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev_epoch3.npz	6512780	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev2.tsv.errors	850296	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/devmean345.npz	7616996	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev345.tsv	570249	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/grid345.log	2043	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeval/dev567.tsv.errors	799761	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largejointval/grid567.log	2047	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largejointval/dev567.tsv	573206	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largejointval/devmean567.npz	7115048	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largejointval/dev_epoch5.npz	6042333	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largejointval/dev_epoch7.npz	5873603	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largejointval/dev_epoch6.npz	5933745	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largejointval/dev567.tsv.errors	818410	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/dev567_typed.tsv	571474	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/dev567_posterior.tsv.errors	875550	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/grid567.log	2044	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/dev567_typed.tsv.errors	865755	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/dev567.tsv	576410	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/devmean567.npz	9789652	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/grid567_posterior.log	2044	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/devraw_epoch5.npz	29047238	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/devraw_epoch7.npz	28799024	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/devraw_epoch6.npz	28883857	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/devmean567_posterior.npz	9125563	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/dev567_posterior.tsv	572659	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/devmean567_raw.npz	34810192	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/type_calibration.log	761	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/grid567_typed.log	2047	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/typedval/dev567.tsv.errors	847514	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeall/mean.log	29	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeall/test_epoch5.npz	5215547	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeall/test_epoch7.npz	4911803	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/largeall/test_epoch6.npz	5063307	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/posterior567.tsv	572160	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev56.tsv	575979	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev56.tsv.errors	834313	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/grid567.log	1781	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/posterior567.tsv.errors	855926	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev567.tsv	575776	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/mean.log	105	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev_epoch2_aligned.npz	8262099	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev2.tsv	579167	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev.tsv	561593	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/devmean567.npz	8919743	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/grid5.log	1785	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev5.tsv	573221	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev_epoch7_aligned.npz	7806567	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/devmean567_aligned.npz	9018241	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/test.npz	6634758	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev_epoch5.npz	7776866	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev_epoch7.npz	7709606	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/test_aligned.npz	6714571	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev_epoch6.npz	7782017	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev_epoch2.npz	8176410	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev2.tsv.errors	930397	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev.tsv.errors	1013612	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev_epoch1.npz	8453550	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev5.tsv.errors	847318	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/grid56.log	1788	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/dev567.tsv.errors	832913	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/run1/posterior567.log	1785	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedfixedval/dev456.tsv.errors	970338	extension not in allowlist (.errors)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedfixedval/dev_epoch4.npz	7405285	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedfixedval/grid456.log	2048	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedfixedval/dev_epoch5.npz	7261910	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedfixedval/dev456.tsv	573189	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedfixedval/dev_epoch6.npz	7214337	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedfixedval/devmean456.npz	8759742	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/casedfixedval/devmean456_aligned.npz	8260332	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/fulltextall/mean.log	29	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/fulltextall/testmean567.npz	6274189	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/fulltextall/testmean567_aligned.npz	6385564	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/fulltextall/test_epoch5.npz	5195919	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/fulltextall/test_epoch7.npz	5101048	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	experiments/fulltextall/test_epoch6.npz	5230866	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/recipe.json	1997	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/README.md	1360	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/predictions.tsv	482208	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/reproduce.sh	399	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/tune_ensemble.py	2161	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/train_joint.py	7170	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/train_typed.py	7689	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/train.py	6085	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/train_v2.py	6619	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/eval.py	4455	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/viterbi.py	1887	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/align_scores.py	1633	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/__pycache__/tune_ensemble.cpython-312.pyc	5303	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/__pycache__/viterbi.cpython-312.pyc	5302	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/__pycache__/train_typed.cpython-312.pyc	19205	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/__pycache__/train.cpython-312.pyc	15244	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/__pycache__/align_scores.cpython-312.pyc	3897	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/__pycache__/train_joint.cpython-312.pyc	17655	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/__pycache__/eval.cpython-312.pyc	10630	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/code/__pycache__/train_v2.cpython-312.pyc	16205	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/scores/auxiliary_context.npz	5194813	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/scores/fulltext.npz	6385564	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/scores/large.npz	6183653	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	output/scores/cased.npz	6954395	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/viterbi.typed_tags-20.py312.1.nbc	63506	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/tune_ensemble.cpython-312.pyc	5291	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/vote.cpython-312.pyc	3923	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/viterbi.cpython-312.pyc	5290	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/tune_types.cpython-312.pyc	5485	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/viterbi.tags-3.py312.1.nbc	61237	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/stack.cpython-312.pyc	10509	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/train_typed.cpython-312.pyc	19358	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/train.cpython-312.pyc	15232	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/viterbi.typed_tags-20.py312.nbi	650	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/align_scores.cpython-312.pyc	4064	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/train_joint.cpython-312.pyc	17808	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/eval.cpython-312.pyc	10719	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/viterbi.bio_posterior-43.py312.1.nbc	152703	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/viterbi.tags-3.py312.nbi	643	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/viterbi.lse-38.py312.nbi	971	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/train_v2.cpython-312.pyc	16358	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/viterbi.lse-38.py312.1.nbc	39710	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/viterbi.bio_posterior-43.py312.nbi	653	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r2	__pycache__/viterbi.lse-38.py312.2.nbc	38886	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/ensemble_spec.json	1205	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/run_summary.json	1881	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/README.md	941	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/predictions.tsv	486923	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/probabilities/full_bilou123.npz	8840335	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/probabilities/full_ft991.npz	9141149	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/probabilities/full_ft42.npz	8694416	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/probabilities/full_ctx314.npz	8949750	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/probabilities/full_abs2025.npz	8814080	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/probabilities/full_abs77.npz	8754816	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/probabilities/full_ft2024.npz	8883442	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/source/post.py	2533	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/source/run.py	7432	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/source/requirements.txt	40	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/source/final_pipeline.sh	1268	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/source/run_bilou.py	7701	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/source/run_context.py	7972	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/source/ensemble_lexword.py	4433	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/models/full_ctx314.json	200	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/models/full_ft991.json	199	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/models/full_bilou123.json	202	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/models/full_abs2025.json	193	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/models/full_ft42.json	197	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/models/full_ft2024.json	201	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	output/models/full_abs77.json	189	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/fallback.log	0	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/analysis.log	2059	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_exceptions.log	981	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_abs6.npz	9945804	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/filter_final.log	2061	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_abs7.npz	9743968	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_ctx8.npz	9455791	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_final.npz	10019073	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_ft_w0.5.log	976	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/filter_analysis.log	2056	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_bilou8.npz	10321058	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/FP.txt	395969	larger than 200 KB
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_replace_ft.log	980	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/monitor.log	0	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_three_w2.log	979	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_lexeval.log	1487	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev3.npz	10616430	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_abs.npz	10876104	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_wordcheck.log	980	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_three_w0.25.log	978	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_two_final.log	976	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_single.log	973	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_probs.npz	11120016	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_normalize.log	979	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/lex_stats.json	196534	corpus check: contains >=60-char abstract substrings and ~2,000 gold mention strings (per-mention lexicon statistics)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_three_snap.log	977	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_single_v2.log	973	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_shortfix.log	978	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_four_w0.5.log	977	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_abs_final.npz	9743968	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_three_w0.5.log	977	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_lexword.log	975	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_ft_w0.25.log	979	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_four_w2.log	978	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_bilou6.npz	10456039	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_bilou7.npz	10371181	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_two_snap.log	979	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_four_w1.log	977	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/filter3.log	2072	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_ctx6.npz	9662846	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_two.log	980	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/ensemble_four_w0.25.log	976	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_abs8.npz	9815420	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/FN.txt	287914	larger than 200 KB
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/dev_ctx7.npz	9470935	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/baseline_test.npz	8615154	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/test_probs/full_bilou123.npz	8840335	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/test_probs/full_ft991.npz	9141149	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/test_probs/full_ft42.npz	8694416	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/test_probs/full_ctx314.npz	8949750	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/test_probs/full_abs2025.npz	8814080	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/test_probs/full_abs77.npz	8754816	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/test_probs/full_ft2024.npz	8883442	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/__pycache__/lexical.cpython-312.pyc	5729	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/__pycache__/post.cpython-312.pyc	5182	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/__pycache__/post_fixed.cpython-312.pyc	5188	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/__pycache__/run.cpython-312.pyc	15293	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-low-r3	work/__pycache__/run_context.cpython-312.pyc	18922	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/linklarge_all_test_scores.pkl	35573631	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/requirements.txt	72	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_initial_predictions.tsv	487935	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_all2_test_scores.pkl	35642630	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_avg_dev_scores.pkl	41509357	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/roberta_dev_metrics.jsonl	1194	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_calibration.json	30130	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/reproduce_predictions.sh	1108	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_final_settings.json	247	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/three_model_calibration.json	140312	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/results.json	711	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/roberta_all_test_scores.pkl	40308201	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/biobert_all_test_scores.pkl	43658645	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/two_model_calibration.json	71224	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/ensemble_development.tsv	579966	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/three_model_predictions.tsv	483942	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/biobert_dev_metrics.jsonl	1199	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/final_calibration.log	6798	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/linklarge_projected_dev_scores.pkl	41509394	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_calibration.log	1076	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/linklarge_dev_scores.pkl	41429260	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_all_test_scores.pkl	35642630	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/two_model_predictions.tsv	486908	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/five_model_predictions.tsv	486379	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/README.md	3732	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_dev_scores.pkl	41509357	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/final_calibration.json	254950	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_dev_metrics.jsonl	1045	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/predictions.tsv	486639	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_all_predictions.tsv	490671	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/linklarge_dev_metrics.jsonl	898	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/biobert_dev_scores.pkl	50914436	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/two_model_refined_calibration.log	3679	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/linklarge_avg_dev_scores.pkl	41429260	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_boundary_map.json	262	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/final_boundary_map.json	247	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/four_model_predictions.tsv	486234	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/status.json	4260	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/training_lexicon.json	667563	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/two_model_refined_calibration.json	99251	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/biobert_projected_dev_scores.pkl	41509357	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/three_model_calibration.log	6484	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/all_lexicon.json	1179295	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/roberta_dev_scores.pkl	46990593	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/pubmed_initial_test_scores.pkl	35642630	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/two_model_calibration.log	2680	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/linklarge_all2_test_scores.pkl	35573631	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/final_development_predictions.tsv	578230	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/training_logs/linklarge_dev.log	3219	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/training_logs/biobert_dev.log	3640	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/training_logs/pubmed_all.log	2206	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/training_logs/final_pipeline.log	4368	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/training_logs/cased_roberta_pipeline.log	5757	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/training_logs/pubmed_dev.log	3275	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/training_logs/extra_pipeline.log	6296	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/grouped_scores/pubmed.pkl	35642630	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/grouped_scores/linklarge.pkl	35573631	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/grouped_scores/roberta.pkl	40308201	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/grouped_scores/biobert.pkl	43658645	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/postprocess.py	4083	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/make_predictions.py	1635	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/lexicon.py	2491	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/average_scores.py	658	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/ner.py	14985	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/ensemble.py	2767	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/average_checkpoints.py	887	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/calibrate.py	5712	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/__pycache__/ensemble.cpython-312.pyc	5969	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/__pycache__/ner.viterbi-67.py312.nbi	643	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/__pycache__/ner.viterbi-67.py312.1.nbc	71920	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/__pycache__/lexicon.cpython-312.pyc	5164	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/__pycache__/postprocess.cpython-312.pyc	6764	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/code/__pycache__/ner.cpython-312.pyc	29513	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed2/model.safetensors	435605316	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed2/tokenizer_config.json	1292	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed2/special_tokens_map.json	125	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed2/config.json	764	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed2/tokenizer.json	706024	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed2/vocab.txt	226150	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed2/training_config.json	477	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge/model.safetensors	1329772268	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge/tokenizer_config.json	1293	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge/special_tokens_map.json	695	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge/config.json	800	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge/tokenizer.json	678903	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge/vocab.txt	225062	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge/training_config.json	429	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/biobert/model.safetensors	430917436	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/biobert/tokenizer_config.json	1301	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/biobert/special_tokens_map.json	125	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/biobert/config.json	786	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/biobert/tokenizer.json	668923	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/biobert/vocab.txt	213450	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/biobert/training_config.json	454	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/roberta/model.safetensors	496259468	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/roberta/tokenizer_config.json	1264	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/roberta/special_tokens_map.json	958	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/roberta/config.json	812	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/roberta/tokenizer.json	3558897	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/roberta/merges.txt	456318	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/roberta/training_config.json	449	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/roberta/vocab.json	798293	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed/model.safetensors	435605316	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed/tokenizer_config.json	1292	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed/special_tokens_map.json	125	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed/config.json	764	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed/tokenizer.json	706024	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed/vocab.txt	226150	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/pubmed/training_config.json	454	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge2/model.safetensors	1329772268	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge2/tokenizer_config.json	1293	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge2/special_tokens_map.json	695	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge2/config.json	800	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge2/tokenizer.json	678903	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge2/vocab.txt	225062	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	output/models/linklarge2/training_config.json	450	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/sshkeys	106	credential-like name (not opened)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/training_tokenized.pkl	22153202	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/training_link_tokenized.pkl	22104371	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/__pycache__/average_checkpoints.cpython-312.pyc	1948	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/__pycache__/ensemble.cpython-312.pyc	5962	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/__pycache__/make_predictions.cpython-312.pyc	2982	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/__pycache__/ner.viterbi-67.py312.nbi	643	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/__pycache__/calibrate.cpython-312.pyc	7850	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/__pycache__/ner.viterbi-67.py312.1.nbc	71913	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/__pycache__/lexicon.cpython-312.pyc	5157	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/__pycache__/postprocess.cpython-312.pyc	6757	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/__pycache__/ner.cpython-312.pyc	29506	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	code/__pycache__/average_scores.cpython-312.pyc	1563	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/roberta_split_tokenizer/tokenizer_config.json	1264	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/roberta_split_tokenizer/special_tokens_map.json	958	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/roberta_split_tokenizer/tokenizer.json	3558897	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/roberta_split_tokenizer/merges.txt	456318	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/roberta_split_tokenizer/vocab.json	798293	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/tokenizer/tokenizer_config.json	1292	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/tokenizer/special_tokens_map.json	125	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/tokenizer/tokenizer.json	706024	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/tokenizer/vocab.txt	226150	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/link_tokenizer/tokenizer_config.json	1293	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/link_tokenizer/special_tokens_map.json	695	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/link_tokenizer/tokenizer.json	678903	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/link_tokenizer/vocab.txt	225062	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/roberta_tokenizer/tokenizer_config.json	1264	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/roberta_tokenizer/special_tokens_map.json	958	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/roberta_tokenizer/tokenizer.json	3558643	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/roberta_tokenizer/merges.txt	456318	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r1	models/roberta_tokenizer/vocab.json	798293	under models/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/tokenizer_config.json	28	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/config.json	385	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/vocab.txt	225062	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/pytorch_model.bin	440474434	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/.cache/huggingface/.gitignore	1	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/.cache/huggingface/download/tokenizer_config.json.metadata	101	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/.cache/huggingface/download/tokenizer_config.json.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/.cache/huggingface/download/vocab.txt.metadata	101	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/.cache/huggingface/download/config.json.metadata	101	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/.cache/huggingface/download/config.json.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/.cache/huggingface/download/vocab.txt.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/.cache/huggingface/download/pytorch_model.bin.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained-abstract/.cache/huggingface/download/pytorch_model.bin.metadata	125	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/pretraining_sources.json	710	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/result.json	208	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/README.md	1351	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/predictions.tsv	481234	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/validation.json	1151	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/manifest.json	739	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/abstract/model.safetensors	435599164	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/abstract/tokenizer_config.json	1262	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/abstract/special_tokens_map.json	695	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/abstract/config.json	839	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/abstract/tokenizer.json	678903	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/abstract/vocab.txt	225062	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/large/model.safetensors	1329764068	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/large/tokenizer_config.json	1263	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/large/special_tokens_map.json	695	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/large/config.json	869	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/large/tokenizer.json	678903	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/large/vocab.txt	225062	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/mixed/model.safetensors	435673132	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/mixed/tokenizer_config.json	1262	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/mixed/special_tokens_map.json	695	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/mixed/config.json	1384	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/mixed/tokenizer.json	706024	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/mixed/vocab.txt	226150	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/aux/model.safetensors	435657928	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/aux/tokenizer_config.json	1262	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/aux/special_tokens_map.json	695	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/aux/config.json	834	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/aux/tokenizer.json	706024	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/aux/vocab.txt	226150	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/base/model.safetensors	435599164	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/base/tokenizer_config.json	1262	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/base/special_tokens_map.json	695	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/base/config.json	813	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/base/tokenizer.json	706024	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/models/base/vocab.txt	226150	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/logs/valaux.log	4072	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/logs/val1.log	14859	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/logs/allmixed.log	980	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/logs/allbase.log	3767	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/logs/allaux.log	983	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/logs/alllarge.log	3271	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/logs/valabstract.log	4497	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/logs/valmixed.log	4622	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/logs/allabstract.log	3779	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	output/logs/vallarge.log	4870	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/tokenizer-large/tokenizer_config.json	1263	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/tokenizer-large/special_tokens_map.json	695	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/tokenizer-large/tokenizer.json	678903	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/tokenizer-large/vocab.txt	225062	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/tokenizer/tokenizer_config.json	1262	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/tokenizer/special_tokens_map.json	125	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/tokenizer/tokenizer.json	706024	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/tokenizer/vocab.txt	226150	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/split_known.cpython-312.pyc	7450	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-16.py312.2.nbc	47567	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-17.py312.nbi	1771	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/evaluate.cpython-312.pyc	4456	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-16.py312.1.nbc	47321	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/select_checkpoint.cpython-312.pyc	3392	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ensemble.cpython-312.pyc	9852	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-16.py312.nbi	1106	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-59.py312.nbi	1106	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-46.py312.nbi	707	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/negative_lexicon.cpython-312.pyc	5101	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/reproduce.cpython-312.pyc	3644	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-50.py312.2.nbc	66540	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-59.py312.1.nbc	66536	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-17.py312.4.nbc	66536	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/positive_lexicon.cpython-312.pyc	8693	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-50.py312.1.nbc	66536	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-59.py312.2.nbc	66540	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-17.py312.1.nbc	66334	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/average_weights.cpython-312.pyc	2003	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-17.py312.2.nbc	66540	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/tune_decoder.cpython-312.pyc	4298	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-17.py312.3.nbc	62774	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.cpython-312.pyc	36179	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/filter_rules.cpython-312.pyc	3944	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/consistency.cpython-312.pyc	6716	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-50.py312.nbi	1106	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/ner.viterbi_path-46.py312.1.nbc	66536	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	code/__pycache__/boundary_rules.cpython-312.pyc	8364	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/tokenizer_config.json	379	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/special_tokens_map.json	112	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/config.json	560	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/tokenizer.json	446604	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/vocab.txt	225062	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/pytorch_model.bin	1334073393	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/.gitignore	1	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/tokenizer.json.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/tokenizer_config.json.metadata	100	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/special_tokens_map.json.metadata	101	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/tokenizer_config.json.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/vocab.txt.metadata	101	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/special_tokens_map.json.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/config.json.metadata	101	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/config.json.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/tokenizer.json.metadata	101	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/vocab.txt.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/pytorch_model.bin.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	biolinklarge/.cache/huggingface/download/pytorch_model.bin.metadata	124	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/all-four.log	175	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/large-test.npz	6358195	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/abstract-test.npz	5823003	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/three-submission.log	140	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/two-submission.log	105	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/base-test.npz	5329974	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/all-five.log	210	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/all/abstract.npz	5822167	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/all/aux.npz	6036298	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/all/mixed.npz	26149283	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/all/base.npz	5463799	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/all/large.npz	6147706	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/base-submission/test.tsv	481833	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/all-four/test.tsv	476656	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/all-five/test.tsv	481234	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/two-submission/test.tsv	483763	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	intermediate/three-submission/test.tsv	482563	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/tokenizer_config.json	28	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/config.json	385	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/vocab.txt	226150	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/pytorch_model.bin	440474434	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/.cache/huggingface/.gitignore	1	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/.cache/huggingface/download/tokenizer_config.json.metadata	100	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/.cache/huggingface/download/tokenizer_config.json.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/.cache/huggingface/download/vocab.txt.metadata	100	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/.cache/huggingface/download/config.json.metadata	101	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/.cache/huggingface/download/config.json.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/.cache/huggingface/download/vocab.txt.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/.cache/huggingface/download/pytorch_model.bin.lock	0	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	pretrained/.cache/huggingface/download/pytorch_model.bin.metadata	125	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-negative.tsv	571704	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-decoder.log	3219	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-smoothed.npz	6625196	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/two-early.log	23114	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-consistency.log	5428	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-smooth-decoder.log	3212	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/positive-train.json	490037	larger than 200 KB
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/boundaries-training.json	441484	larger than 200 KB
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/five.log	67186	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-positive.tsv	572053	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-positive.log	4192	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4.npz	6803195	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/two.log	23100	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/four.log	22711	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/three.log	70067	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-negative.log	1336	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/abstract/development.logits.npz	6756387	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/large-early/development.logits.npz	7420074	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/positive.log	4188	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/development.logits.npz	7339464	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/errors.json	9080	error analysis listing predicted/gold mention strings (annotation-derived)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/negative.log	1335	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/filtered.tsv	580449	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/consistency.log	5427	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/development.tsv	583503	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/negative.tsv	565146	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/positive.tsv	566631	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/evaluation.log	2796	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/early/consistency/development.tsv	595682	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/large/development.logits.npz	7373849	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-smooth-decoder/development.tsv	573285	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-consistency/development.tsv	582816	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/mixed/development.logits.npz	30455185	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/two-early/development.logits.npz	22589143	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/two-early/enzyme.log	1463	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/two-early/development.tsv	578033	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/two-early/enzyme.tsv	578071	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/three/development.logits.npz	21888832	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/three/development.tsv	572817	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/epoch4-decoder/development.tsv	572754	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/two/development.logits.npz	22499779	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/two/development.tsv	574405	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/aux/development.logits.npz	6970153	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/mixed-early/development.logits.npz	6181738	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/five/development.logits.npz	4476151	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/five/development.tsv	114232	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/refined.log	4052	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/split.log	1460	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/development.logits.npz	6202641	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/tuning.log	3215	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/negative.log	1334	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/boundary.tsv	573777	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/boundary.log	2570	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/development.tsv	569421	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/negative.tsv	568598	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/split.tsv	574993	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/base/refined/development.tsv	573475	data file (.tsv)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/four/development.logits.npz	4351002	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r3	validation/four/development.tsv	113006	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	check_format.py	1875	harness
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	guidelines.md	8628	harness
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	ssh-metadata	93	credential-like name (not opened)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	task.md	3518	harness
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	tokenizer/tokenizer_config.json	1292	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	tokenizer/special_tokens_map.json	125	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	tokenizer/tokenizer.json	706024	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	tokenizer/vocab.txt	226150	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/run_notes.md	2180	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/final_report.json	444	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/format_check.txt	50	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/predictions.tsv	487246	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/data_provenance.json	698	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/final_config.json	676	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/lexicon_stats.json	431481	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/requirements.txt	66	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/boundaries.py	2847	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/mutations.py	728	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/postprocess.py	6039	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/finalize.py	3959	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/lexicon.py	2485	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/ner.py	9585	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/ensemble.py	2384	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/evaluate.py	2501	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/calibrate.py	3990	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/average.py	794	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/viterbi.py	533	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/code/select_average.py	952	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/training_history/validation_fulltext.json	1817	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/training_history/final_abstracts.json	586	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/training_history/validation_abstracts.json	1558	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	output/training_history/final_fulltext.json	586	under output/
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/test_tokens.pkl	10548486	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/negative_training.json	653592	larger than 200 KB
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/development_tokens.pkl	12843919	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/evaluate.cpython-312.pyc	6097	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/boundaries.cpython-312.pyc	7028	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/viterbi.cpython-312.pyc	1230	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/ensemble.cpython-312.pyc	5964	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/trim.cpython-312.pyc	1882	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/average.cpython-312.pyc	1968	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/negative.cpython-312.pyc	4062	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/calibrate.cpython-312.pyc	10239	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/watch.cpython-312.pyc	1187	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/lexicon.cpython-312.pyc	6222	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/finalize.cpython-312.pyc	7562	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/postprocess.cpython-312.pyc	14535	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/ner.cpython-312.pyc	22801	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/analyze_errors.cpython-312.pyc	2615	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/lexcase_probe.cpython-312.pyc	5901	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/select_average.cpython-312.pyc	2501	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	code/__pycache__/mutations.cpython-312.pyc	2057	bytecode cache
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_b_dev.tsv	577332	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_c_dev.tsv	578103	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_a_test.log	21	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/lexcase_probe.log	1116	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_early.tsv	578468	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_a.log	8578	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_c.log	6857	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_a_dev.tsv	577365	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_b.log	5979	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_final_candidates.tsv	575340	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/baseline_predictions.tsv	274488	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_d.log	8146	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_final_candidates.log	485	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_early.log	489	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/ensemble_d_dev.tsv	576834	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/lexcase_probe_fixed.log	1113	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/final_generation.log	21	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/full2/test_scores.npz	4983587	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/full1/interim_finalize.log	21	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/full1/test_scores.npz	5051387	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/full1/average/test_scores.npz	5104637	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation2/test_scores.npz	5058204	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation2/dev_epoch4.npz	6201235	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation2/dev_epoch5.npz	5935540	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation2/dev_epoch6.npz	5851309	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation2/dev_epoch2.npz	6550488	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation2/dev_epoch3.npz	6194279	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation2/average/test_scores.npz	5186887	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation2/average/development_scores.npz	5999779	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/errors.tsv	1153045	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/single_ensemble.tsv	582726	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/checkpoint_ensemble34.log	483	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuned_epoch7.tsv	575295	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuned_epoch6.tsv	577402	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/boundary_rules.json	2126	table of corpus tokens and their gold sub-spans learned from training annotations (annotation-derived)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuned_epoch4.tsv	579223	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuned_epoch5.tsv	579645	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/test_scores.npz	4969056	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuned_epoch2.tsv	576038	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/boundaries.log	968	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuned_epoch3.tsv	578163	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/test_predictions.tsv	483506	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/dev_epoch4.npz	3024629	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuned.tsv	582726	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/calibration_epoch4.log	3083	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/negative_epoch1.log	2908	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/dev_epoch5.npz	2968596	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/fast_tuning.log	482	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/dev_epoch7.npz	2849628	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/boundaries_v2.log	1164	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/negative_epoch2.log	2457	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/dev_epoch6.npz	2919802	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/dev_epoch2.npz	3320804	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/dev_epoch3.npz	3211674	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/dev_epoch1.npz	3312233	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/dev_predictions.tsv	591570	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuning_epoch6.log	485	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/checkpoint_ensemble34.tsv	580602	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/processed_epoch7.tsv	579773	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuning_epoch7.log	484	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/fast.tsv	582726	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuning_epoch5.log	481	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/grid_epoch7.log	4233	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuning_epoch4.log	482	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/fast_tuned.tsv	582726	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/grid_epoch3.log	2238	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/postprocess_epoch2.log	4006	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/postprocess_epoch1_v2.log	4019	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuning_epoch3.log	486	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/processed_epoch3.tsv	584954	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/tuning_epoch2.log	485	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/postprocess_epoch1.log	2321	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/average/test_finalize.log	21	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/average/config.json	642	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/average/test_scores.npz	5043736	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/average/processed_dev.tsv	580833	data file (.tsv)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/average/grid.log	4020	extension not in allowlist (.log)
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	results/validation/average/development_scores.npz	5068388	model binary/weights
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	tokenizer_abstract/tokenizer_config.json	1292	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	tokenizer_abstract/special_tokens_map.json	125	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	tokenizer_abstract/tokenizer.json	678903	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-resume-gpt-6.1-sol-medium-r2	tokenizer_abstract/vocab.txt	225062	inside a saved/downloaded model directory
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	check_format.py	1875	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	guidelines.md	8628	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	task.md	3518	harness
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	artifacts/dev.docs.pkl	19163949	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	artifacts/cache.pkl	54752261	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	artifacts/dev-new.logits.pkl	19453558	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	artifacts/dev.logits.pkl	19453558	model binary/weights
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	artifacts/postprocess-late.log	2462	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	artifacts/lexicon-test.log	530	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	artifacts/postprocess-early.log	2456	extension not in allowlist (.log)
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	output/predictions.tsv	489624	under output/
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	code/__pycache__/ensemble.cpython-312.pyc	7469	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	code/__pycache__/final_train.cpython-312.pyc	5108	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	code/__pycache__/stacking.cpython-312.pyc	16652	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	code/__pycache__/lexicon.cpython-312.pyc	5575	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	code/__pycache__/case_ner.cpython-312.pyc	32017	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	code/__pycache__/postprocess.cpython-312.pyc	6228	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	code/__pycache__/ner.cpython-312.pyc	28091	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	code/__pycache__/lexical_features.cpython-312.pyc	4297	bytecode cache
+b-free-banonly-main-gcp-gpt-6.1-sol-medium-r2	code/__pycache__/decoding.cpython-312.pyc	3579	bytecode cache
+b-free-banonly-main-gpt-5.2-none-r1	check_format.py	1875	harness
+b-free-banonly-main-gpt-5.2-none-r1	guidelines.md	8628	harness
+b-free-banonly-main-gpt-5.2-none-r1	task.md	3512	harness
+b-free-banonly-main-gpt-5.2-none-r1	output/predictions.tsv	416046	under output/
+b-free-banonly-main-gpt-5.2-none-r1	__pycache__/chem_ner.cpython-312.pyc	10579	bytecode cache
+b-free-banonly-main-gpt-5.2-none-r1	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-5.2-none-r1	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-5.2-none-r1	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-5.2-none-r1	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-5.2-none-r1	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-5.2-none-r2	check_format.py	1875	harness
+b-free-banonly-main-gpt-5.2-none-r2	guidelines.md	8628	harness
+b-free-banonly-main-gpt-5.2-none-r2	task.md	3512	harness
+b-free-banonly-main-gpt-5.2-none-r2	output/predictions.tsv	417670	under output/
+b-free-banonly-main-gpt-5.2-none-r2	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-5.2-none-r2	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-5.2-none-r2	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-5.2-none-r2	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-5.2-none-r2	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-5.2-none-r3	check_format.py	1875	harness
+b-free-banonly-main-gpt-5.2-none-r3	guidelines.md	8628	harness
+b-free-banonly-main-gpt-5.2-none-r3	task.md	3512	harness
+b-free-banonly-main-gpt-5.2-none-r3	output/predictions.tsv	331544	under output/
+b-free-banonly-main-gpt-5.2-none-r3	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-5.2-none-r3	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-5.2-none-r3	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-5.2-none-r3	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-5.2-none-r3	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-5.2-medium-r1	tmp.crfsuite	1408380	model binary/weights
+b-free-banonly-main-gpt-5.2-medium-r1	check_format.py	1875	harness
+b-free-banonly-main-gpt-5.2-medium-r1	guidelines.md	8628	harness
+b-free-banonly-main-gpt-5.2-medium-r1	task.md	3512	harness
+b-free-banonly-main-gpt-5.2-medium-r1	output/predictions.tsv	390937	under output/
+b-free-banonly-main-gpt-5.2-medium-r1	output/chemner.crfsuite	2985880	under output/
+b-free-banonly-main-gpt-5.2-medium-r1	__pycache__/run_chemner.cpython-312.pyc	20997	bytecode cache
+b-free-banonly-main-gpt-5.2-medium-r1	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-5.2-medium-r1	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-5.2-medium-r1	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-5.2-medium-r1	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-5.2-medium-r1	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-5.2-medium-r2	check_format.py	1875	harness
+b-free-banonly-main-gpt-5.2-medium-r2	guidelines.md	8628	harness
+b-free-banonly-main-gpt-5.2-medium-r2	task.md	3512	harness
+b-free-banonly-main-gpt-5.2-medium-r2	output/predictions.tsv	393958	under output/
+b-free-banonly-main-gpt-5.2-medium-r2	__pycache__/make_predictions.cpython-312.pyc	22799	bytecode cache
+b-free-banonly-main-gpt-5.2-medium-r2	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-5.2-medium-r2	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-5.2-medium-r2	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-5.2-medium-r2	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-5.2-medium-r2	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-5.2-medium-r3	check_format.py	1875	harness
+b-free-banonly-main-gpt-5.2-medium-r3	guidelines.md	8628	harness
+b-free-banonly-main-gpt-5.2-medium-r3	task.md	3512	harness
+b-free-banonly-main-gpt-5.2-medium-r3	output/predictions.tsv	388872	under output/
+b-free-banonly-main-gpt-5.2-medium-r3	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-5.2-medium-r3	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-5.2-medium-r3	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-5.2-medium-r3	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-5.2-medium-r3	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-6-luna-none-r1	check_format.py	1875	harness
+b-free-banonly-main-gpt-6-luna-none-r1	guidelines.md	8628	harness
+b-free-banonly-main-gpt-6-luna-none-r1	task.md	3512	harness
+b-free-banonly-main-gpt-6-luna-none-r1	output/predictions.tsv	441628	under output/
+b-free-banonly-main-gpt-6-luna-none-r1	__pycache__/solve.cpython-312.pyc	13593	bytecode cache
+b-free-banonly-main-gpt-6-luna-none-r1	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-6-luna-none-r1	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-6-luna-none-r1	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-6-luna-none-r1	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-6-luna-none-r1	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-6-luna-none-r2	check_format.py	1875	harness
+b-free-banonly-main-gpt-6-luna-none-r2	guidelines.md	8628	harness
+b-free-banonly-main-gpt-6-luna-none-r2	task.md	3512	harness
+b-free-banonly-main-gpt-6-luna-none-r2	output/predictions.tsv	414961	under output/
+b-free-banonly-main-gpt-6-luna-none-r2	__pycache__/predict.cpython-312.pyc	7889	bytecode cache
+b-free-banonly-main-gpt-6-luna-none-r2	__pycache__/dict_tag.cpython-312.pyc	4489	bytecode cache
+b-free-banonly-main-gpt-6-luna-none-r2	model/config.json	288	model/tokenizer artifact (HF save or download), not agent-written
+b-free-banonly-main-gpt-6-luna-none-r2	model/vocab.txt	213450	inside a saved/downloaded model directory
+b-free-banonly-main-gpt-6-luna-none-r2	model/pytorch_model.bin	435780550	model binary/weights
+b-free-banonly-main-gpt-6-luna-none-r2	model/crf.pkl	3803206	model binary/weights
+b-free-banonly-main-gpt-6-luna-none-r2	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-6-luna-none-r2	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-6-luna-none-r2	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-6-luna-none-r2	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-6-luna-none-r2	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-6-luna-none-r3	check_format.py	1875	harness
+b-free-banonly-main-gpt-6-luna-none-r3	guidelines.md	8628	harness
+b-free-banonly-main-gpt-6-luna-none-r3	task.md	3512	harness
+b-free-banonly-main-gpt-6-luna-none-r3	output/predictions.tsv	453524	under output/
+b-free-banonly-main-gpt-6-luna-none-r3	__pycache__/solve.cpython-312.pyc	16957	bytecode cache
+b-free-banonly-main-gpt-6-luna-none-r3	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-6-luna-none-r3	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-6-luna-none-r3	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-6-luna-none-r3	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-6-luna-none-r3	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-6-luna-medium-r1	check_format.py	1875	harness
+b-free-banonly-main-gpt-6-luna-medium-r1	guidelines.md	8628	harness
+b-free-banonly-main-gpt-6-luna-medium-r1	task.md	3512	harness
+b-free-banonly-main-gpt-6-luna-medium-r1	output/tune_char_params.crfsuite	3495312	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/train_only.crfsuite	1891976	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/best_train.crfsuite	5349524	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/final.crfsuite	11909068	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/tune.crfsuite	1940468	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/model.crfsuite	3381620	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/predictions.tsv	402870	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/tune_char.crfsuite	7680756	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/best_train_rich.crfsuite	6323692	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/best_train_char.crfsuite	7680756	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/best_train_char_params.crfsuite	4797092	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	output/tune_rich.crfsuite	6323692	under output/
+b-free-banonly-main-gpt-6-luna-medium-r1	__pycache__/ner.cpython-312.pyc	16862	bytecode cache
+b-free-banonly-main-gpt-6-luna-medium-r1	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-6-luna-medium-r1	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-6-luna-medium-r1	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-6-luna-medium-r1	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-6-luna-medium-r1	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-6-luna-medium-r2	check_format.py	1875	harness
+b-free-banonly-main-gpt-6-luna-medium-r2	lexclf.pkl	5169631	model binary/weights
+b-free-banonly-main-gpt-6-luna-medium-r2	guidelines.md	8628	harness
+b-free-banonly-main-gpt-6-luna-medium-r2	task.md	3512	harness
+b-free-banonly-main-gpt-6-luna-medium-r2	lexclf_full.pkl	11627312	model binary/weights
+b-free-banonly-main-gpt-6-luna-medium-r2	lexclf_alias.pkl	6699091	model binary/weights
+b-free-banonly-main-gpt-6-luna-medium-r2	output/predictions.tsv	507783	under output/
+b-free-banonly-main-gpt-6-luna-medium-r2	__pycache__/lex_clf.cpython-312.pyc	14665	bytecode cache
+b-free-banonly-main-gpt-6-luna-medium-r2	__pycache__/lex_predict.cpython-312.pyc	2385	bytecode cache
+b-free-banonly-main-gpt-6-luna-medium-r2	__pycache__/train_ner.cpython-312.pyc	18247	bytecode cache
+b-free-banonly-main-gpt-6-luna-medium-r2	__pycache__/lex_clf_full.cpython-312.pyc	2264	bytecode cache
+b-free-banonly-main-gpt-6-luna-medium-r2	__pycache__/lex_eval.cpython-312.pyc	10200	bytecode cache
+b-free-banonly-main-gpt-6-luna-medium-r2	__pycache__/lex_clf_alias.cpython-312.pyc	3843	bytecode cache
+b-free-banonly-main-gpt-6-luna-medium-r2	__pycache__/lex_correct.cpython-312.pyc	5261	bytecode cache
+b-free-banonly-main-gpt-6-luna-medium-r2	__pycache__/hybrid_predict.cpython-312.pyc	4887	bytecode cache
+b-free-banonly-main-gpt-6-luna-medium-r2	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-6-luna-medium-r2	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-6-luna-medium-r2	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-6-luna-medium-r2	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-6-luna-medium-r2	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gpt-6-luna-medium-r3	check_format.py	1875	harness
+b-free-banonly-main-gpt-6-luna-medium-r3	guidelines.md	8628	harness
+b-free-banonly-main-gpt-6-luna-medium-r3	task.md	3512	harness
+b-free-banonly-main-gpt-6-luna-medium-r3	output/bert_ner.py	8772	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	output/dev_model.pkl	1440328	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	output/ensemble_eval.py	787	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	output/lex_eval.py	1657	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	output/predictions.tsv	506346	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	output/dev_predictions.tsv	430831	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	output/predict_bert.py	3654	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	output/solve.py	6817	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	output/__pycache__/predict_bert.cpython-312.pyc	8742	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	output/__pycache__/solve.cpython-312.pyc	14460	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	output/__pycache__/bert_ner.cpython-312.pyc	20615	under output/
+b-free-banonly-main-gpt-6-luna-medium-r3	data/training.annotations.txt	1162980	under data/
+b-free-banonly-main-gpt-6-luna-medium-r3	data/training.abstracts.txt	4922253	under data/
+b-free-banonly-main-gpt-6-luna-medium-r3	data/development.abstracts.txt	4903058	under data/
+b-free-banonly-main-gpt-6-luna-medium-r3	data/test.abstracts.txt	4232068	under data/
+b-free-banonly-main-gpt-6-luna-medium-r3	data/development.annotations.txt	1165059	under data/
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	check_format.py	1875	harness
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	oof_meta.pkl	4169568	model binary/weights
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	guidelines.md	8628	harness
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	oof_meta_partial.pkl	4169568	model binary/weights
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	chebi.obo.gz	47196973	extension not in allowlist (.gz)
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	dev_bert_probs.pkl	594573	model binary/weights
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	chebi_lexicon.pkl	8691565	model binary/weights
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	task.md	3518	harness
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	output/predictions.tsv	412413	under output/
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	__pycache__/chebi_eval.cpython-312.pyc	7482	bytecode cache
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	__pycache__/candidate_model.cpython-312.pyc	9936	bytecode cache
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	__pycache__/ner.cpython-312.pyc	15020	bytecode cache
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	__pycache__/meta_training.cpython-312.pyc	20061	bytecode cache
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r1	__pycache__/bert_ner.cpython-312.pyc	12686	bytecode cache
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r2	check_format.py	1875	harness
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r2	guidelines.md	8628	harness
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r2	task.md	3518	harness
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r2	output/predictions.tsv	568808	under output/
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r2	__pycache__/model.cpython-312.pyc	15031	bytecode cache
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r3	check_format.py	1875	harness
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r3	guidelines.md	8628	harness
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r3	task.md	3518	harness
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r3	output/predictions.tsv	525999	under output/
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r3	__pycache__/ner.cpython-312.pyc	14213	bytecode cache
+b-free-banonly-main-gcp-b128-gpt-6-luna-medium-r3	__pycache__/abbr.cpython-312.pyc	3657	bytecode cache

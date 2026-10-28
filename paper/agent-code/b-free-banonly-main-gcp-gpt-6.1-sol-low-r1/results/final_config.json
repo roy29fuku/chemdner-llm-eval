@@ -1,0 +1,34 @@
+{
+  "f1": 0.9285822084346441,
+  "bias": 0.0,
+  "begin_bias": -0.25,
+  "runs": [
+    "/workspace/run1",
+    "/workspace/run2",
+    "/workspace/run3",
+    "/workspace/run4",
+    "/workspace/run5"
+  ],
+  "average": "prob",
+  "weights": [
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    1.0
+  ],
+  "path": "/workspace/results/best5begin_1.tsv.dev",
+  "postprocessing": [
+    "abbreviations",
+    "filter",
+    "balance"
+  ],
+  "postprocessed_development_f1": 0.9298691738883127,
+  "final_runs": [
+    "/workspace/full1",
+    "/workspace/full2",
+    "/workspace/full3",
+    "/workspace/full4",
+    "/workspace/full5"
+  ]
+}

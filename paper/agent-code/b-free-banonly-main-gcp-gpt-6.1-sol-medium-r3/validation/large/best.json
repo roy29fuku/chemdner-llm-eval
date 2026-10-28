@@ -1,0 +1,1 @@
+{"epoch": 4, "score": 0.9158980462164038, "args": {"data": "/home/agent/data", "out": "/home/agent/vallarge", "model": "/home/agent/biolinklarge", "epochs": 6, "batch": 8, "length": 384, "seed": 42, "lr": 2e-05, "all": false, "predict": false, "bias": 0, "accum": 2, "checkpoint": false, "snapshots": true}}

@@ -1,0 +1,54 @@
+{
+  "deadline_utc": "2026-10-14 15:38:00",
+  "safe_finish_utc": "2026-10-14 15:30:00",
+  "vm": "chem-vm",
+  "ip": "35.238.100.23",
+  "project": "sa-agent-ws6",
+  "zone": "us-central1-a",
+  "ssh": "ssh chem-vm",
+  "current_best_ensemble": "runs/ensemble4",
+  "current_validation_f1": 0.931975178550521,
+  "models": [
+    [
+      "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+      "holdout-a"
+    ],
+    [
+      "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+      "holdout-b"
+    ],
+    [
+      "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+      "holdout-c"
+    ],
+    [
+      "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+      "typed-a"
+    ],
+    [
+      "microsoft/BiomedNLP-BiomedBERT-large-uncased-abstract",
+      "large-a"
+    ],
+    [
+      "michiyasunaga/BioLinkBERT-large",
+      "link-a"
+    ],
+    [
+      "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext",
+      "case-b"
+    ]
+  ],
+  "pipeline": [
+    "large.sh: typed-a then large-a",
+    "link.sh: wait large.sh, train link-a",
+    "case_only.sh: wait prior pipelines, train case-b",
+    "final_train.py --wait: wait pipelines, then runs/final-selection.json"
+  ],
+  "next_steps": [
+    "Fit ensemble5, 6, 7 once corresponding test logits exist; keep best validated predictions copied to /workspace/output/predictions.tsv",
+    "Choose final names from best ensemble config, write runs/final-selection.json, optionally adapt_names for larger models if needed for time",
+    "Retrain chosen neural models on all7000, predict test; combine using chosen validation stacker and final-ensemble.json",
+    "Save results, format-check, copy useful artifacts/models, delete VM"
+  ],
+  "important": "No test articles manually read. Public pretrained models are unlabeled, no external chemical annotations or LLM APIs."
+}
