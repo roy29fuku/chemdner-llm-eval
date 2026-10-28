@@ -6,15 +6,16 @@ Timeline notes (from the plan's own decision log and the run records):
 
 - Main comparison and the GCP re-run of the agent (Experiment 14): the re-run and the addition of GPT-6.1 sol were recorded at `87e76c8` (2026-10-14 15:27 JST). The test labels were first copied for scoring at 2026-10-15 03:56 JST (2026-10-14T18:56:22Z).
 - Example-shown control and the 128-example agent (Experiment 15, section 「追加の対照（実験 15）」): first added at `010e5e7` (2026-10-20 17:08 JST), i.e. after the main comparison had been scored. The Experiment 15 runs were frozen at 17:09 JST and scored from 19:45 JST the same day. `81209e7` and `a3bda4e` were committed after that scoring; they add to the decision log a clarification of the category rule (decided before scoring and implemented in code commit `e9efb7d`), the reconstruction of the b(128) run summaries, and the scoring record.
+- Two runs added after the Experiment 15 results were known (section 「追加（2026-10-26）」: similar examples for GPT-6.1 sol low and a same-day no-example rerun): planned at `e867666` (2026-10-26 14:32 JST) before running; the runs were frozen with tag `aprime-addendum-2026-10-26` at 14:32 JST, and their prediction hashes were committed at 14:49 JST (code commit `99f76ac`) before scoring. `b3b06c6` (14:53 JST) records the scoring in the decision log.
 
-Redactions (text not related to the analysis; each is marked 「[伏せた: …]」 in place, 23 in total):
+Redactions (text not related to the analysis; each is marked 「[伏せた: …]」 in place, 27 in total):
 
-- Line 3 of every version (20): an internal task-tracking number and a link to the authors' plan for revising the manuscript.
-- One row of the decision log in versions 18–20 (3): a decision about the manuscript submission procedure, not about the experiment.
+- Line 3 of every version (22): an internal task-tracking number and a link to the authors' plan for revising the manuscript.
+- One row of the decision log in versions 18–22 (5): a decision about the manuscript submission procedure, not about the experiment.
 
 Nothing else was changed. References to the authors' internal records (`dev_logs`, `review/`, and private repositories) are left as written; those records are not public.
 
-20 versions.
+22 versions.
 
 | # | Version time (JST) | Commit | File | Commit subject |
 |---|---|---|---|---|
@@ -38,6 +39,8 @@ Nothing else was changed. References to the authors' internal records (`dev_logs
 | 18 | 2026-10-20 17:08 | `010e5e7` | [2026-10-20T1708+0900_010e5e7.md](2026-10-20T1708+0900_010e5e7.md) | docs(protocol): 例を見せて答えさせる対照 a' と、128 件だけのエージェント b(128) を追記する（実験 15） |
 | 19 | 2026-10-20 19:51 | `81209e7` | [2026-10-20T1951+0900_81209e7.md](2026-10-20T1951+0900_81209e7.md) | docs(protocol): 実験 15 の採点の前に決めた区分の読み方と、b(128) の記録の組み立て直しと、採点を決定の記録に足す |
 | 20 | 2026-10-20 20:02 | `a3bda4e` | [2026-10-20T2002+0900_a3bda4e.md](2026-10-20T2002+0900_a3bda4e.md) | docs(protocol): 決定の記録の dev log の参照を、まとめ直した再実験 7 に直す |
+| 21 | 2026-10-26 14:32 | `e867666` | [2026-10-26T1432+0900_e867666.md](2026-10-26T1432+0900_e867666.md) | docs(protocol): gpt-6.1-sol low の似た例と、同じ日の例なしを足す計画を、走らせる前に記録する |
+| 22 | 2026-10-26 14:53 | `b3b06c6` | [2026-10-26T1453+0900_b3b06c6.md](2026-10-26T1453+0900_b3b06c6.md) | docs(protocol): 追加の 2 回（gpt-6.1-sol low の似た例と同じ日の例なし）の採点を決定の記録に足す |
 
 Full commit SHAs:
 
@@ -61,3 +64,5 @@ Full commit SHAs:
 - `010e5e7` = `010e5e7e22994da1d0e8feee3d7523064a4f1854`
 - `81209e7` = `81209e7795ee42706e53edb03ad414e2bbefb5d7`
 - `a3bda4e` = `a3bda4e20e113bed08f7c953be53970ece9a6144`
+- `e867666` = `e8676663e59cd5d5dfe3347c7bc695fee965df81`
+- `b3b06c6` = `b3b06c669d245ef600173b53c10073d321daf8f8`
